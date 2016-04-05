@@ -1,0 +1,28 @@
+ ######   #######  ########  ########
+##    ## ##     ## ##     ## ##
+##       ##     ## ##     ## ##
+##       ##     ## ########  ######
+##       ##     ## ##   ##   ##
+##    ## ##     ## ##    ##  ##
+ ######   #######  ##     ## ########
+
+name: ${project.artifactId}
+main: ${project.groupId}.${project.artifactId}
+version: ${project.version}
+author: ${project.author}
+website: ${project.website}
+database: false
+description: ${project.description}
+depend: [Lib]
+
+commands:
+  welcome:
+    usage: /<command>
+    description: Welcome the most recent player to the server
+    aliases: [welc]
+
+# WRITTEN BY ADAM "PACKET" EDWARDS
+# PERMISSION TO USE, DISTRIBUTE, OR
+# MODIFY MUST BE GRANTED DIRECTLY
+# FROM HIM. CONTACT: Skype:packetdev
+# OR EMAIL: packetdev@gmail.com
