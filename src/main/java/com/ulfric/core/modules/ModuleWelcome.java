@@ -103,6 +103,8 @@ public class ModuleWelcome extends Module {
 				return;
 			}
 
+			// TODO reward the sender
+
 			from.chat(Strings.format(message, player));
 		});
 	}
