@@ -1,9 +1,15 @@
 package com.ulfric.core.scoreboard;
 
-import com.ulfric.lib.coffee.event.HandlerMeta;
+import java.util.Objects;
+
 import com.ulfric.lib.coffee.event.Listener;
+import com.ulfric.lib.coffee.event.ListenerMeta;
 import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.craft.entity.player.Player;
+import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.event.player.PlayerJoinEvent;
+import com.ulfric.lib.craft.event.player.PlayerQuitEvent;
+import com.ulfric.lib.craft.scoreboard.Scoreboard;
 
 public class ModuleScoreboardImplementation extends Module {
 
@@ -18,11 +24,21 @@ public class ModuleScoreboardImplementation extends Module {
 		// TODO player configurability once Nate writes up his Data2 guide
 		this.addListener(new Listener(this)
 		{
-			@HandlerMeta
+			@ListenerMeta
 			public void onJoin(PlayerJoinEvent event)
 			{
+				Scoreboard scoreboard = event.getPlayer().scoreboard();
 				// TODO more elements, and have an element registry somewhere
-				event.getPlayer().scoreboard().addElement(new ElementGodmode());
+				scoreboard.addElement(new ElementGodmode(scoreboard));
+				scoreboard.addElement(new ElementPlayercount(scoreboard));
+
+				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::invalidate);
+			}
+
+			@ListenerMeta
+			public void onQuit(PlayerQuitEvent event)
+			{
+				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::invalidate);
 			}
 		});
 	}

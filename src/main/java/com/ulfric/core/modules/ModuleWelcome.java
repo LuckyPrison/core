@@ -4,15 +4,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang3.mutable.Mutable;
+import org.apache.commons.lang3.mutable.MutableObject;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.ulfric.lib.coffee.command.CommandSender;
-import com.ulfric.lib.coffee.event.HandlerMeta;
 import com.ulfric.lib.coffee.event.Listener;
+import com.ulfric.lib.coffee.event.ListenerMeta;
 import com.ulfric.lib.coffee.math.RandomUtils;
 import com.ulfric.lib.coffee.module.Module;
-import com.ulfric.lib.coffee.module.Wrapper;
 import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.player.PlayerFirstJoinEvent;
@@ -53,14 +55,14 @@ public class ModuleWelcome extends Module {
 	public void onFirstEnable()
 	{
 		Set<UUID> uuids = Sets.newHashSet();
-		Wrapper<String> name = new Wrapper<>();
+		Mutable<String> name = new MutableObject<>();
 
 		this.addListener(new Listener(this)
 		{
-			@HandlerMeta
+			@ListenerMeta
 			public void onJoin(PlayerFirstJoinEvent event)
 			{
-				name.set(event.getPlayer().getName());
+				name.setValue(event.getPlayer().getName());
 				uuids.clear();
 			}
 		});
@@ -76,7 +78,7 @@ public class ModuleWelcome extends Module {
 				return;
 			}
 
-			String player = name.get();
+			String player = name.getValue();
 
 			if (player == null)
 			{

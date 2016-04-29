@@ -1,19 +1,19 @@
 package com.ulfric.core.scoreboard;
 
-import com.ulfric.lib.craft.entity.player.Player;
-import com.ulfric.lib.craft.scoreboard.UpdatableScoreboardElement;
+import com.ulfric.lib.craft.scoreboard.Scoreboard;
+import com.ulfric.lib.craft.scoreboard.ScoreboardElement;
 
-class ElementGodmode extends UpdatableScoreboardElement {
+class ElementGodmode extends ScoreboardElement {
 
-	public ElementGodmode()
+	public ElementGodmode(Scoreboard board)
 	{
-		super(null, "godmode");
+		super(board, "godmode");
 	}
 
 	@Override
-	public String get(Player player)
+	public String getText()
 	{
-		if (!player.isInvulnerable()) return null;
+		if (!this.getScoreboard().getPlayer().health().isInvulnerable()) return null;
 
 		return "core.scoreboard_godmode";
 	}
