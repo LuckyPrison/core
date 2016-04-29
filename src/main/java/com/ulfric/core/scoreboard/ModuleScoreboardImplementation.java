@@ -32,13 +32,13 @@ public class ModuleScoreboardImplementation extends Module {
 				scoreboard.addElement(new ElementGodmode(scoreboard));
 				scoreboard.addElement(new ElementPlayercount(scoreboard));
 
-				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::invalidate);
+				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::update);
 			}
 
 			@ListenerMeta
 			public void onQuit(PlayerQuitEvent event)
 			{
-				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::invalidate);
+				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::update);
 			}
 		});
 	}
