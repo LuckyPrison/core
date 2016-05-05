@@ -6,8 +6,8 @@
 ##    ## ##     ## ##    ##  ##
  ######   #######  ##     ## ########
 
-name: ${project.artifactId}
-main: ${project.groupId}.${project.artifactId}
+name: ${project.name}
+main: ${project.groupId}.${project.name}
 version: ${project.version}
 author: ${project.author}
 website: ${project.website}
