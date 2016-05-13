@@ -16,7 +16,7 @@ class ElementPlayercount extends ScoreboardElement {
 	@Override
 	public String getText()
 	{
-		//if (!player.hasPermission("core.scoreboard.playercount")) return null;
+		if (!this.getPlayer().hasPermission("core.scoreboard.playercount")) return null;
 
 		return String.valueOf(PlayerUtils.countOnlinePlayers());
 	}

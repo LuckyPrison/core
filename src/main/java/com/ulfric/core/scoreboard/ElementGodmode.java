@@ -15,7 +15,7 @@ class ElementGodmode extends ScoreboardElement {
 	@Override
 	public String getText()
 	{
-		if (!this.getScoreboard().getPlayer().health().isInvulnerable()) return null;
+		if (!this.getPlayer().health().isInvulnerable()) return null;
 
 		return "core.scoreboard_godmode";
 	}

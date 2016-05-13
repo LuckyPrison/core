@@ -2,6 +2,7 @@ package com.ulfric.core.scoreboard;
 
 import java.util.Objects;
 
+import com.ulfric.lib.coffee.economy.BalanceChangeEvent;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.event.ListenerMeta;
 import com.ulfric.lib.coffee.module.Module;
@@ -29,6 +30,7 @@ public class ModuleScoreboardImplementation extends Module {
 			{
 				Scoreboard scoreboard = event.getPlayer().scoreboard();
 				// TODO more elements, and have an element registry somewhere
+				scoreboard.addElement(new ElementBalance(scoreboard));
 				scoreboard.addElement(new ElementGodmode(scoreboard));
 				scoreboard.addElement(new ElementPlayercount(scoreboard));
 
@@ -39,6 +41,22 @@ public class ModuleScoreboardImplementation extends Module {
 			public void onQuit(PlayerQuitEvent event)
 			{
 				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::update);
+			}
+
+			@ListenerMeta(ignoreCancelled = true)
+			public void onBalance(BalanceChangeEvent event)
+			{
+				if (event.getCurrency().getSymbol() != '$') return;
+
+				Player player = PlayerUtils.getPlayer(event.getAccount().getUniqueId());
+
+				if (player == null) return;
+
+				ElementBalance element = player.scoreboard().elementFromClazz(ElementBalance.class);
+
+				if (element == null) return;
+
+				element.update();
 			}
 		});
 	}

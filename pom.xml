@@ -1,24 +1,27 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>core</artifactId>
-  <name>Core</name>
-  <groupId>com.ulfric.core</groupId>
-  <description>Core features plugin</description>
-  <version>2.0.0-SNAPSHOT</version>
+    <groupId>com.ulfric.core</groupId>
+    <artifactId>core</artifactId>
+    <name>Core</name>
+    <description>LuckyPrison Core Plugin</description>
+    <version>1.0.0-SNAPSHOT</version>
 
-  <parent>
-    <groupId>com.ulfric</groupId>
-    <artifactId>parent</artifactId>
-    <version>2.0-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <groupId>com.ulfric</groupId>
+        <artifactId>parent</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.ulfric.lib.bukkit</groupId>
-      <artifactId>lib</artifactId>
-      <version>2.0.34-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>com.ulfric.lib.bukkit</groupId>
+            <artifactId>Lib</artifactId>
+            <version>2.0.52-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
