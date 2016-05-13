@@ -26,7 +26,7 @@ public class ModuleWelcome extends Module {
 		super("welcome", "A module to help welcome new players to the server", "1.0.0", "Packet");
 	}
 
-	List<String> messages = Lists.newArrayList();
+	private final List<String> messages = Lists.newArrayList();
 
 	@Override
 	public void onModuleEnable()
