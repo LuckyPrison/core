@@ -19,8 +19,8 @@
     <dependencies>
         <dependency>
             <groupId>com.ulfric.lib.bukkit</groupId>
-            <artifactId>Lib</artifactId>
-            <version>2.0.52-SNAPSHOT</version>
+            <artifactId>lib</artifactId>
+            <version>2.0.80-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

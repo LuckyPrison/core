@@ -38,7 +38,7 @@ public class ModuleTrash extends Module {
 
 				Player player = (Player) sender;
 
-				Panel.create(45, player.getLocalizedMessage("core.trash"))
+				Panel.createStandard(45, player.getLocalizedMessage("core.trash"))
 					 .addButton(Button.builder()
 							 		  .addSlot(44, ModuleTrash.this.item)
 							 		  .addAction(event ->
