@@ -13,7 +13,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleWelcome());
 		this.addModule(new ModuleScoreboardImplementation());
 		this.addModule(new ModuleTrash());
-        //this.addModule(new ModuleBackpack()); // TODO: Finish this module
+		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 
 }
