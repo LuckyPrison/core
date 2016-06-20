@@ -11,8 +11,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.ulfric.lib.coffee.command.CommandSender;
+import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
-import com.ulfric.lib.coffee.event.ListenerMeta;
 import com.ulfric.lib.coffee.math.RandomUtils;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.string.Strings;
@@ -34,7 +34,7 @@ public class ModuleWelcome extends Module {
 		for (String string : this.getModuleConfig().getStringList("messages", ImmutableList.of()))
 		{
 			string = string.trim();
-		
+
 			if (string.isEmpty()) continue;
 
 			this.messages.add(string);
@@ -59,7 +59,7 @@ public class ModuleWelcome extends Module {
 
 		this.addListener(new Listener(this)
 		{
-			@ListenerMeta
+			@Handler
 			public void onJoin(PlayerFirstJoinEvent event)
 			{
 				name.setValue(event.getPlayer().getName());

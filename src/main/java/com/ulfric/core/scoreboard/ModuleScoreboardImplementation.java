@@ -3,8 +3,8 @@ package com.ulfric.core.scoreboard;
 import java.util.Objects;
 
 import com.ulfric.lib.coffee.economy.BalanceChangeEvent;
+import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
-import com.ulfric.lib.coffee.event.ListenerMeta;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
@@ -25,7 +25,7 @@ public class ModuleScoreboardImplementation extends Module {
 		// TODO player configurability once Nate writes up his Data2 guide
 		this.addListener(new Listener(this)
 		{
-			@ListenerMeta
+			@Handler
 			public void onJoin(PlayerJoinEvent event)
 			{
 				Scoreboard scoreboard = event.getPlayer().scoreboard();
@@ -37,13 +37,13 @@ public class ModuleScoreboardImplementation extends Module {
 				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::update);
 			}
 
-			@ListenerMeta
+			@Handler
 			public void onQuit(PlayerQuitEvent event)
 			{
 				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::update);
 			}
 
-			@ListenerMeta(ignoreCancelled = true)
+			@Handler(ignoreCancelled = true)
 			public void onBalance(BalanceChangeEvent event)
 			{
 				if (event.getCurrency().getSymbol() != '$') return;
