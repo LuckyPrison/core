@@ -5,14 +5,19 @@ import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.location.Vector;
 import com.ulfric.lib.coffee.math.RandomUtils;
 import com.ulfric.lib.coffee.tuple.Weighted;
+import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.inventory.item.Material;
+import com.ulfric.lib.craft.location.LocationUtils;
 import com.ulfric.lib.craft.world.World;
 import com.ulfric.lib.data.document.Document;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Mines {
@@ -32,14 +37,31 @@ public class Mines {
 		@Override
 		public void run()
 		{
+			Map<Player, Set<String>> messages = new HashMap<>();
 			for (Mine mine : mines)
 			{
 				int totalWeight = mine.getContents().stream().mapToInt(Weighted::getWeight).sum();
 				MultiBlockChange operation = new MultiBlockChange();
 				mine.getRegion().getCuboid().forEach(v -> operation.addBlock(v, RandomUtils.randomValue(mine.getContents(), totalWeight)));
 				ThreadUtils.runAsync(operation);
-				PlayerUtils.getOnlinePlayers().stream().filter(mine::hasPermission).forEach(p -> p.sendLocalizedMessage("core.mines.reset." + mine.getName()));
+				PlayerUtils.getOnlinePlayers().stream().filter(mine::hasPermission).forEach(p ->
+				{
+					if (messages.containsKey(p))
+					{
+						messages.put(p, Sets.newHashSet(mine.getName()));
+					}
+					else
+					{
+						messages.get(p).add(mine.getName());
+					}
+
+					if (mine.getRegion().getCuboid().containsPoint(p.getLocation()))
+					{
+						p.teleport(LocationUtils.getLocationAt(p.getWorld(), p.getLocation().getIntX(), mine.getRegion().getCuboid().getMaxPoint().getIntY(), p.getLocation().getIntZ()));
+					}
+				});
 			}
+			messages.forEach((player, mines) -> player.sendLocalizedMessage("core.mines.reset", StringUtils.join(messages.values(), ", ")));
 		}
 	}
 
