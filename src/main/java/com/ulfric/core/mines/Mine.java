@@ -52,7 +52,8 @@ class Mine {
 		this.permissions = permissions;
 	}
 
-	public Set<String> getPermissions() {
+	public Set<String> getPermissions()
+	{
 		return permissions;
 	}
 

@@ -8,32 +8,38 @@ public class MineSelectorImpl implements IMineSelector {
 	private boolean selecting;
 
 	@Override
-	public Vector cornerA() {
+	public Vector cornerA()
+	{
 		return this.a;
 	}
 
 	@Override
-	public Vector cornerB() {
+	public Vector cornerB()
+	{
 		return this.b;
 	}
 
 	@Override
-	public void setCornerA(Vector a) {
+	public void setCornerA(Vector a)
+	{
 		this.a = a;
 	}
 
 	@Override
-	public void setCornerB(Vector b) {
+	public void setCornerB(Vector b)
+	{
 		this.b = b;
 	}
 
 	@Override
-	public boolean isSelecting() {
+	public boolean isSelecting()
+	{
 		return this.selecting;
 	}
 
 	@Override
-	public void toggleSelecting() {
+	public void toggleSelecting()
+	{
 		this.selecting = !this.selecting;
 	}
 }

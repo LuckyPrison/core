@@ -28,9 +28,6 @@ import java.util.stream.Collectors;
 
 public class Mines {
 
-	public static final String REGION_SELECT = "mine.region.select";
-	public static final String REGION_CORNER_A = "mine.region.a";
-	public static final String REGION_CORNER_B = "mine.region.b";
 	public static final Material AIR = Material.of("air");
 	public static final Pattern WEIGHTS = Pattern.compile("([A-z]+):([0-9]+)");
 	public static final Argument MINE_NAME = Argument.builder().setUsage("core.mines.name.usage").setPath("name").addResolver((s, a) -> a).build();
@@ -48,7 +45,8 @@ public class Mines {
 						return null;
 					}
 					int weight;
-					try {
+					try
+					{
 						weight = Integer.parseInt(m.group(2));
 					} catch (NumberFormatException e) {
 						sender.sendLocalizedMessage("core.mines.invalid_number", m.group(2));

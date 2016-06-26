@@ -20,7 +20,8 @@ public class CommandMines extends Command {
 
 	private Mines mines;
 
-	public CommandMines(ModuleMines owner) {
+	public CommandMines(ModuleMines owner)
+	{
 		super("mine", owner);
 		this.mines = owner.getMines();
 		this.addCommand(new CommandSelect(), CommandKey.builder().add("select").build());
@@ -33,11 +34,13 @@ public class CommandMines extends Command {
 	}
 
 	@Override
-	public void run() {
+	public void run()
+	{
 		getSender().sendLocalizedMessage("core.mines.info");
 	}
 
-	public Mines getMines() {
+	public Mines getMines()
+	{
 		return mines;
 	}
 
@@ -112,7 +115,8 @@ public class CommandMines extends Command {
 		}
 
 		@Override
-		public void run() {
+		public void run()
+		{
 			if (getSender().notHasPermission("core.mines.select_region")) return;
 			if (getSender() instanceof Player)
 			{

@@ -24,14 +24,16 @@ public class MineSelectListener extends Listener {
 
 			Validate.notNull(selector);
 
-			if (!event.getBlock().getType().equals(Mines.AIR)) return;
-			if (event.getAction().isLeftClick())
+			if (selector.isSelecting())
 			{
-				selector.setCornerA(event.getBlock().getLocation());
-			}
-			else if (event.getAction().isRightClick())
-			{
-				selector.setCornerB(event.getBlock().getLocation());
+				if (!event.getBlock().getType().equals(Mines.AIR)) return;
+				if (event.getAction().isLeftClick())
+				{
+					selector.setCornerA(event.getBlock().getLocation());
+				} else if (event.getAction().isRightClick())
+				{
+					selector.setCornerB(event.getBlock().getLocation());
+				}
 			}
 		}
 	}
