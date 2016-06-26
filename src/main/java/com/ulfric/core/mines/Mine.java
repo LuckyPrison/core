@@ -7,24 +7,19 @@ import com.ulfric.lib.craft.inventory.item.Material;
 
 import java.util.Set;
 
-public class Mine {
+class Mine {
 
 	private String name;
 	private Set<Weighted<Material>> contents;
 	private Region region;
 	private Set<String> permissions;
 
-	public Mine(String name, Set<Weighted<Material>> contents, Region region, Set<String> permissions)
+	protected Mine(String name, Set<Weighted<Material>> contents, Region region, Set<String> permissions)
 	{
 		this.name = name;
 		this.contents = contents;
 		this.region = region;
 		this.permissions = permissions;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
 	}
 
 	public String getName()
@@ -55,6 +50,10 @@ public class Mine {
 	public void setPermissions(Set<String> permissions)
 	{
 		this.permissions = permissions;
+	}
+
+	public Set<String> getPermissions() {
+		return permissions;
 	}
 
 	public boolean hasPermission(Player player)
