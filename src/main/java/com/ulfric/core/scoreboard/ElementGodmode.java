@@ -1,13 +1,11 @@
 package com.ulfric.core.scoreboard;
 
-import javax.annotation.Nonnull;
-
 import com.ulfric.lib.craft.scoreboard.Scoreboard;
 import com.ulfric.lib.craft.scoreboard.ScoreboardElement;
 
 class ElementGodmode extends ScoreboardElement {
 
-	public ElementGodmode(@Nonnull Scoreboard board)
+	public ElementGodmode(Scoreboard board)
 	{
 		super(board, "godmode");
 	}

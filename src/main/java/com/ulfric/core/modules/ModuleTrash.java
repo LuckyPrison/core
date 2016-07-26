@@ -21,7 +21,7 @@ public class ModuleTrash extends Module {
 	@Override
 	public void onModuleEnable()
 	{
-		this.item = ItemUtils.getItem(this.getModuleConfig().getValue("item", String.class, "ma.ironfence nac.&c&lEmpty<s>Trash"));
+		this.item = ItemUtils.getItem(this.getModuleConfig().getRoot().getString("item", "ma.ironfence nac.&c&lEmpty<s>Trash"));
 	}
 
 	@Override

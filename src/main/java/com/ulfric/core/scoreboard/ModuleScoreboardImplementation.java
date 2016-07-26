@@ -3,6 +3,7 @@ package com.ulfric.core.scoreboard;
 import java.util.Objects;
 
 import com.ulfric.lib.coffee.economy.BalanceChangeEvent;
+import com.ulfric.lib.coffee.economy.Currency;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
@@ -46,7 +47,7 @@ public class ModuleScoreboardImplementation extends Module {
 			@Handler(ignoreCancelled = true)
 			public void onBalance(BalanceChangeEvent event)
 			{
-				if (event.getCurrency().getSymbol() != '$') return;
+				if (event.getCurrency() != Currency.getDefaultCurrency()) return;
 
 				Player player = PlayerUtils.getPlayer(event.getAccount().getUniqueId());
 

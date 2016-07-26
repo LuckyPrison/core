@@ -31,7 +31,7 @@ public class ModuleWelcome extends Module {
 	@Override
 	public void onModuleEnable()
 	{
-		for (String string : this.getModuleConfig().getStringList("messages", ImmutableList.of()))
+		for (String string : this.getModuleConfig().getRoot().getStringList("messages", ImmutableList.of()))
 		{
 			string = string.trim();
 
