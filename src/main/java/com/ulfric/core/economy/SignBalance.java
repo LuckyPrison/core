@@ -8,9 +8,9 @@ import com.ulfric.lib.craft.block.Sign;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.SignListener;
 
-public class BalSign extends SignListener {
+public class SignBalance extends SignListener {
 
-	public BalSign(ModuleBase owner)
+	public SignBalance(ModuleBase owner)
 	{
 		super(owner, "balance");
 	}

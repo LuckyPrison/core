@@ -11,8 +11,8 @@ public class ModuleEconomyInterface extends Module {
 	@Override
 	public void onFirstEnable()
 	{
-		this.addCommand(new BalCommand(this));
-		this.addListener(new BalSign(this));
+		this.addCommand(new CommandBalance(this));
+		this.addListener(new SignBalance(this));
 	}
 
 }

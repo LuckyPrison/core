@@ -9,9 +9,9 @@ import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
 
-public class BalCommand extends Command {
+public class CommandBalance extends Command {
 
-	public BalCommand(ModuleBase module)
+	public CommandBalance(ModuleBase module)
 	{
 		super("bal", module, "money", "cash");
 		this.addArgument(Currency.ARGUMENT);
