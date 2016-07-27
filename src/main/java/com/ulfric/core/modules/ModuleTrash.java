@@ -6,6 +6,7 @@ import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.block.Sign;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.SignListener;
+import com.ulfric.lib.craft.event.inventory.InventoryClickEvent;
 import com.ulfric.lib.craft.event.player.PlayerUseSignEvent;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.ItemUtils;
@@ -58,13 +59,15 @@ public class ModuleTrash extends Module {
 		Panel.createStandard(45, player.getLocalizedMessage("core.trash"))
 			 .addButton(Button.builder()
 					 		  .addSlot(44, ModuleTrash.this.item)
-					 		  .addAction(event ->
-					 		  {
-					 			  event.getInventory().empty(0, 44);
-					 			  event.setCancelled(true);
-					 		  })
+					 		  .addAction(this::emptyTrash)
 					 		  .build())
 			 .open(player);
+	}
+
+	private void emptyTrash(InventoryClickEvent event)
+	{
+		event.getInventory().empty(0, 44);
+		event.setCancelled(true);
 	}
 
 }
