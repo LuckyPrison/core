@@ -8,7 +8,6 @@ import org.apache.commons.lang3.mutable.Mutable;
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.event.Handler;
@@ -26,23 +25,32 @@ public class ModuleWelcome extends Module {
 		super("welcome", "A module to help welcome new players to the server", "1.0.0", "Packet");
 	}
 
-	private final List<String> messages = Lists.newArrayList();
+	private List<String> messages;
 
 	@Override
 	public void onModuleEnable()
 	{
+		ImmutableList.Builder<String> builder = ImmutableList.builder();
+
+		boolean empty = true;
+
 		for (String string : this.getModuleConfig().getRoot().getStringList("messages", ImmutableList.of()))
 		{
 			string = string.trim();
 
 			if (string.isEmpty()) continue;
 
-			this.messages.add(string);
+			empty = false;
+
+			builder.add(string);
 		}
 
-		if (!this.messages.isEmpty()) return;
+		if (empty)
+		{
+			builder.add("Welcome, {0}!");
+		}
 
-		this.messages.add("Welcome, {0}!");
+		this.messages = builder.build();
 	}
 
 	@Override
