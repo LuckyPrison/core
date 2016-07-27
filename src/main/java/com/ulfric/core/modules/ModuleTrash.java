@@ -3,7 +3,10 @@ package com.ulfric.core.modules;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.craft.block.Sign;
 import com.ulfric.lib.craft.entity.player.Player;
+import com.ulfric.lib.craft.event.SignListener;
+import com.ulfric.lib.craft.event.player.PlayerUseSignEvent;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.ItemUtils;
 import com.ulfric.lib.craft.panel.Button;
@@ -36,20 +39,32 @@ public class ModuleTrash extends Module {
 
 				if (!(sender instanceof Player)) return;
 
-				Player player = (Player) sender;
-
-				Panel.createStandard(45, player.getLocalizedMessage("core.trash"))
-					 .addButton(Button.builder()
-							 		  .addSlot(44, ModuleTrash.this.item)
-							 		  .addAction(event ->
-							 		  {
-							 			  event.getInventory().empty(0, 44);
-							 			  event.setCancelled(true);
-							 		  })
-							 		  .build())
-					 .open(player);
+				ModuleTrash.this.openTrash((Player) sender);
 			}
 		});
+
+		this.addListener(new SignListener(this, "trash", PlayerUseSignEvent.Action.RIGHT_CLICK)
+		{
+			@Override
+			public void handle(Player player, Sign sign)
+			{
+				ModuleTrash.this.openTrash(player);
+			}
+		});
+	}
+
+	void openTrash(Player player)
+	{
+		Panel.createStandard(45, player.getLocalizedMessage("core.trash"))
+			 .addButton(Button.builder()
+					 		  .addSlot(44, ModuleTrash.this.item)
+					 		  .addAction(event ->
+					 		  {
+					 			  event.getInventory().empty(0, 44);
+					 			  event.setCancelled(true);
+					 		  })
+					 		  .build())
+			 .open(player);
 	}
 
 }
