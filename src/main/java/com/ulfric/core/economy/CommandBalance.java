@@ -13,7 +13,7 @@ public class CommandBalance extends Command {
 
 	public CommandBalance(ModuleBase module)
 	{
-		super("bal", module, "money", "cash");
+		super("bal", module, "money", "cash", "moneymoneymoneybitches");
 		this.addArgument(Currency.ARGUMENT);
 		this.addOptionalArgument(OfflinePlayer.ARGUMENT);
 		this.addEnforcer(Player.class::isInstance, "economy.player_only");
@@ -38,6 +38,7 @@ public class CommandBalance extends Command {
 			final String playerName = player.getName();
 			final Player sender = (Player) getSender();
 			Bank.getAccount(player.getUniqueId()).retrieveBalance(currency).whenComplete(ThreadUtils::runOnMain, (bal, error) -> {
+				bal = bal == null ? 0 : bal;
 				if (error != null)
 				{
 					error.printStackTrace();
