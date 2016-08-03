@@ -13,7 +13,7 @@ public class CommandBalance extends Command {
 
 	public CommandBalance(ModuleBase module)
 	{
-		super("bal", module, "money", "cash");
+		super("bal", module, "money", "cash", "moneymoneymoneybitches");
 		this.addArgument(Currency.ARGUMENT);
 		this.addOptionalArgument(OfflinePlayer.ARGUMENT);
 		this.addEnforcer(Player.class::isInstance, "economy.player_only");
@@ -38,13 +38,14 @@ public class CommandBalance extends Command {
 			final String playerName = player.getName();
 			final Player sender = (Player) getSender();
 			Bank.getAccount(player.getUniqueId()).retrieveBalance(currency).whenComplete(ThreadUtils::runOnMain, (bal, error) -> {
+				Long balance = bal == null ? 0L : bal;
 				if (error != null)
 				{
 					error.printStackTrace();
 				}
 				if (sender.isValid())
 				{
-					sender.sendLocalizedMessage("economy.bal", playerName, new MoneyFormatter(bal).dualFormatWord());
+					sender.sendLocalizedMessage("economy.bal", playerName, new MoneyFormatter(balance).dualFormatWord());
 				}
 			});
 		}
