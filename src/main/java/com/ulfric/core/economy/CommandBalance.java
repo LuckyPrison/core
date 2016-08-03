@@ -13,7 +13,7 @@ public class CommandBalance extends Command {
 
 	public CommandBalance(ModuleBase module)
 	{
-		super("bal", module, "money", "cash", "moneymoneymoneybitches");
+		super("bal", module, "balance", "money", "cash");
 		this.addArgument(Currency.ARGUMENT);
 		this.addOptionalArgument(OfflinePlayer.ARGUMENT);
 		this.addEnforcer(Player.class::isInstance, "economy.player_only");
