@@ -4,11 +4,16 @@ import java.util.function.Consumer;
 
 import org.apache.commons.lang3.Validate;
 
+import com.ulfric.config.Document;
+import com.ulfric.lib.coffee.numbers.NumberUtils;
 import com.ulfric.lib.coffee.string.NamedBase;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
+import com.ulfric.lib.craft.inventory.item.ItemUtils;
 import com.ulfric.lib.craft.inventory.item.Material;
 import com.ulfric.lib.craft.location.Destination;
+import com.ulfric.lib.craft.location.Location;
+import com.ulfric.lib.craft.location.LocationUtils;
 
 public final class Warp extends NamedBase implements Consumer<Player>, Comparable<Warp> {
 
@@ -23,6 +28,21 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 		Validate.notNull(destination);
 
 		return new Warp(name.trim(), destination, item == null ? Material.of("GRASS").toItem() : item, Math.abs(visits));
+	}
+
+	public static Warp fromDocument(String name, Document document)
+	{
+		ItemStack item = ItemUtils.getItem(document.getString("item"));
+		int visits = document.getInteger("visits", 0);
+
+		Document destinationDocument = document.getDocument("destination");
+
+		Location location = LocationUtils.getLocation(destinationDocument.getString("location"));
+		int delay = Math.abs(NumberUtils.getInt(destinationDocument.getInteger("delay", 0)));
+
+		Destination destination = Destination.newDestination(location, delay);
+
+		return Warp.newWarp(name, destination, item, visits);
 	}
 
 	private Warp(String name, Destination destination, ItemStack item)
@@ -46,6 +66,13 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 	public void accept(Player player)
 	{
 		this.destination.accept(player);
+
+		this.visits++;
+	}
+
+	public void accept(Player player, boolean attemptRelative)
+	{
+		this.destination.accept(player, attemptRelative);
 
 		this.visits++;
 	}

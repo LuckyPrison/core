@@ -1,16 +1,16 @@
 package com.ulfric.core.teleport;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.ulfric.config.Document;
 import com.ulfric.data.DataAddress;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
-import com.ulfric.lib.coffee.collection.ListUtils;
+import com.ulfric.lib.coffee.collection.SetUtils;
 import com.ulfric.lib.coffee.command.ArgFunction;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
@@ -19,26 +19,19 @@ import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.function.SortUtils;
 import com.ulfric.lib.coffee.module.Module;
-import com.ulfric.lib.coffee.numbers.NumberUtils;
 import com.ulfric.lib.coffee.string.SearchResult;
 import com.ulfric.lib.coffee.string.StringUtils;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
-import com.ulfric.lib.craft.inventory.item.ItemStack;
-import com.ulfric.lib.craft.inventory.item.ItemUtils;
-import com.ulfric.lib.craft.inventory.item.Material;
-import com.ulfric.lib.craft.location.Destination;
-import com.ulfric.lib.craft.location.Location;
-import com.ulfric.lib.craft.location.LocationUtils;
 
-public class ModuleHomes extends Module {
+public final class ModuleHomes extends Module {
 
 	public ModuleHomes()
 	{
 		super("homes", "Sethome/Home module", "1.0.0", "Packet");
 	}
 
-	Map<UUID, List<Warp>> homes;
+	Map<UUID, Set<Warp>> homes;
 	private MultiSubscription<UUID, Document> subscription;
 
 	@Override
@@ -53,6 +46,8 @@ public class ModuleHomes extends Module {
 	public void onModuleDisable()
 	{
 		this.subscription.unsubscribe();
+
+		// TODO serialize homes
 	}
 
 	@Override
@@ -68,23 +63,13 @@ public class ModuleHomes extends Module {
 			{
 				Document value = newValue.getValue();
 
-				List<Warp> homesList = Lists.newArrayList();
+				Set<Warp> homesList = Sets.newTreeSet();
 
 				for (String key : value.getKeys("homes", false))
 				{
 					Document homeToParse = value.getDocument(key);
 
-					ItemStack item = ItemUtils.getItem(homeToParse.getString("item"));
-					int visits = homeToParse.getInteger("visits", 0);
-
-					Document destinationDocument = homeToParse.getDocument("destination");
-
-					Location location = LocationUtils.getLocation(destinationDocument.getString("location"));
-					int delay = Math.abs(NumberUtils.getInt(destinationDocument.getInteger("delay", 0)));
-
-					Destination destination = Destination.newDestination(location, delay);
-
-					homesList.add(Warp.newWarp(key, destination, item, visits));
+					homesList.add(Warp.fromDocument(key, homeToParse));
 				}
 
 				this.homes.put(newValue.getAddress().getId(), homesList);
@@ -112,9 +97,9 @@ public class ModuleHomes extends Module {
 					uuid = fetch.getUniqueId();
 				}
 
-				List<Warp> foundHomes = ModuleHomes.this.homes.get(uuid);
+				Set<Warp> foundHomes = ModuleHomes.this.homes.get(uuid);
 
-				if (ListUtils.isEmpty(foundHomes))
+				if (SetUtils.isEmpty(foundHomes))
 				{
 					sender.sendLocalizedMessage("homes.no_homes");
 
@@ -126,7 +111,7 @@ public class ModuleHomes extends Module {
 
 				if (homeName != null)
 				{
-					SearchResult<String, Warp> result = StringUtils.getClosest(foundHomes, homeName);
+					SearchResult<String, Warp> result = StringUtils.getClosestNamed(foundHomes, homeName);
 					home = result.getValue();
 
 					if (home == null)
@@ -159,8 +144,8 @@ public class ModuleHomes extends Module {
 
 				home.accept((Player) sender);
 			}
-		}.addArgument(Argument.builder().setPath("home").addResolver(ArgFunction.STRING_FUNCTION).build())
-		 .addArgument(Argument.builder().setPath("player").addResolver(PlayerUtils::getOnlinePlayer).setPermission("home.others").build()));
+		}.addOptionalArgument(Argument.builder().setPath("home").addResolver(ArgFunction.STRING_FUNCTION).build())
+		 .addOptionalArgument(Argument.builder().setPath("player").addResolver(PlayerUtils::getOnlinePlayer).setPermission("home.others").build()));
 
 		// TODO sethome - Adam Edwards @ 8/2/2016
 		/*this.addCommand(new Command("sethome", this, "shome", "sethme", "shme", "createhome", "makehome", "chome", "mhome", "newhome", "nhome")
