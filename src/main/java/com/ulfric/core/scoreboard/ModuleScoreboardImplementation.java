@@ -10,8 +10,10 @@ import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.event.player.PlayerJoinEvent;
+import com.ulfric.lib.craft.event.player.PlayerPostVanishEvent;
 import com.ulfric.lib.craft.event.player.PlayerQuitEvent;
 import com.ulfric.lib.craft.scoreboard.Scoreboard;
+import com.ulfric.lib.craft.scoreboard.ScoreboardElement;
 
 public class ModuleScoreboardImplementation extends Module {
 
@@ -33,6 +35,7 @@ public class ModuleScoreboardImplementation extends Module {
 				// TODO more elements, and have an element registry somewhere
 				scoreboard.addElement(new ElementBalance(scoreboard));
 				scoreboard.addElement(new ElementGodmode(scoreboard));
+				scoreboard.addElement(new ElementVanish(scoreboard));
 				scoreboard.addElement(new ElementPlayercount(scoreboard));
 
 				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::update);
@@ -53,7 +56,19 @@ public class ModuleScoreboardImplementation extends Module {
 
 				if (player == null) return;
 
-				ElementBalance element = player.scoreboard().elementFromClazz(ElementBalance.class);
+				ScoreboardElement element = player.scoreboard().elementFromClazz(ElementBalance.class);
+
+				if (element == null) return;
+
+				element.update();
+			}
+
+			@Handler
+			public void onVanish(PlayerPostVanishEvent event)
+			{
+				Player player = event.getPlayer();
+
+				ScoreboardElement element = player.scoreboard().elementFromClazz(ElementVanish.class);
 
 				if (element == null) return;
 
