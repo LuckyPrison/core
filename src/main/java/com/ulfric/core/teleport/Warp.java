@@ -6,6 +6,7 @@ import org.apache.commons.lang3.Validate;
 
 import com.ulfric.config.Document;
 import com.ulfric.lib.coffee.numbers.NumberUtils;
+import com.ulfric.lib.coffee.object.HashUtils;
 import com.ulfric.lib.coffee.string.NamedBase;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
@@ -27,7 +28,7 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 		Validate.notBlank(name);
 		Validate.notNull(destination);
 
-		return new Warp(name.trim(), destination, item == null ? Material.of("GRASS").toItem() : item, Math.abs(visits));
+		return new Warp(name.trim(), destination, item == null ? Material.of("GRASS").toItem() : item.copy(), Math.abs(visits));
 	}
 
 	public static Warp fromDocument(String name, Document document)
@@ -61,25 +62,44 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 	private final Destination destination;
 	private final ItemStack item;
 	private int visits;
+	private boolean modified;
+	private int hashCode = -1;
+
+	public String locationToString()
+	{
+		return this.destination.locationToString();
+	}
 
 	@Override
 	public void accept(Player player)
 	{
 		this.destination.accept(player);
 
-		this.visits++;
+		this.incrementVisits();
 	}
 
 	public void accept(Player player, boolean attemptRelative)
 	{
 		this.destination.accept(player, attemptRelative);
 
+		this.incrementVisits();
+	}
+
+	private void incrementVisits()
+	{
 		this.visits++;
+
+		this.modified = true;
 	}
 
 	public ItemStack copyItem()
 	{
 		return this.item.copy();
+	}
+
+	public String itemToString()
+	{
+		return this.item.toString();
 	}
 
 	public int getVisits()
@@ -92,10 +112,30 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 		return this.destination.getDelay();
 	}
 
+	public boolean hasBeenModified()
+	{
+		return this.modified;
+	}
+
 	@Override
 	public int compareTo(Warp other)
 	{
 		return Integer.compare(this.visits, other.visits);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		if (this.hashCode != -1) return this.hashCode;
+
+		int hash = HashUtils.hash(31, this.destination);
+
+		hash = HashUtils.hash(hash, this.item);
+		hash = HashUtils.hash(hash, this.getName());
+
+		this.hashCode = hash;
+
+		return hash;
 	}
 
 }
