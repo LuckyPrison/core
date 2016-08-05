@@ -1,5 +1,6 @@
 package com.ulfric.core.teleport;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -20,10 +21,13 @@ import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.function.SortUtils;
 import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.coffee.permission.Permissible;
 import com.ulfric.lib.coffee.string.SearchResult;
 import com.ulfric.lib.coffee.string.StringUtils;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
+import com.ulfric.lib.craft.inventory.item.Material;
+import com.ulfric.lib.craft.location.Destination;
 
 public final class ModuleHomes extends Module {
 
@@ -103,19 +107,9 @@ public final class ModuleHomes extends Module {
 			})
 			.subscribe();
 
-		// TODO sethome - Adam Edwards @ 8/2/2016
-		/*this.addCommand(new Command("sethome", this, "shome", "sethme", "shme", "createhome", "makehome", "chome", "mhome", "newhome", "nhome")
-		{
-			@Override
-			public void run()
-			{
-				String home = (String) this.getObject("name");
-				Material material = (Material) this.getObject("material");
-
-				
-			}
-		}.addArgument(Argument.builder().setPath("name").setDefaultValue("home").addResolver(ArgFunction.STRING_FUNCTION).setPermission("sethome.multiple").build())
-		 .addArgument(Argument.builder().setPath("material").setDefaultValue(Material.of("GRASS")).addResolver((sen, str) -> Material.of(str)).setPermission("sethome.itemtype").build()));*/
+		this.addCommand(new CommandHome());
+		this.addCommand(new CommandDeleteHome());
+		this.addCommand(new CommandSetHome());
 	}
 
 	Warp getHome(CommandSender sender, UUID uuid, String argument, boolean getHighest)
@@ -165,13 +159,118 @@ public final class ModuleHomes extends Module {
 		return home;
 	}
 
+	final class CommandSetHome extends Command
+	{
+		public CommandSetHome()
+		{
+			super("sethome", ModuleHomes.this, "shome", "createhome", "chome", "makehome", "mhome");
+
+			this.addArgument(Argument.builder().setPath("home").setDefaultValue("home").addResolver(ArgFunction.STRING_FUNCTION).build());
+			this.addArgument(Argument.builder().setPath("material").setDefaultValue(Material.of("GRASS")).addResolver((sen, str) ->
+			{
+				Material material = Material.of(str);
+
+				if (Material.isNotBlock(material)) return null;
+
+				return material;
+			}).setPermission("sethome.itemtype").build());
+			this.addOptionalArgument(Argument.builder().setPath("player").addResolver(PlayerUtils::getOnlinePlayer).setPermission("sethome.others").build());
+		}
+
+		@Override
+		public void run()
+		{
+			CommandSender sender = this.getSender();
+
+			if (!(sender instanceof Player))
+			{
+				sender.sendLocalizedMessage("sethome.must_be_player");
+
+				return;
+			}
+
+			Player player = (Player) this.getObject("player");
+
+			UUID uuid = (player == null ? sender : player).getUniqueId();
+
+			if (uuid == null)
+			{
+				sender.sendLocalizedMessage("sethome.specify_player");
+
+				return;
+			}
+
+			String name = (String) this.getObject("home");
+			String lowerName = name.toLowerCase();
+			Material material = (Material) this.getObject("material");
+
+			WarpSet warps = ModuleHomes.this.homes.get(uuid);
+
+			int visits = 0;
+
+			if (warps == null)
+			{
+				warps = new WarpSet();
+
+				ModuleHomes.this.homes.put(uuid, warps);
+			}
+
+			else
+			{
+				Permissible permissible = player == null ? sender : player;
+
+				Iterator<Warp> iterator = warps.iterator();
+
+				boolean found = false;
+
+				while (iterator.hasNext())
+				{
+					Warp warp = iterator.next();
+
+					if (!warp.getName().toLowerCase().equals(lowerName)) continue;
+
+					warps.remove(warp);
+
+					found = true;
+
+					visits = warp.getVisits();
+
+					break;
+				}
+
+				if (!found)
+				{
+					int limit = permissible.getLimit("homes");
+
+					if (limit <= warps.size())
+					{
+						if (permissible == sender || player == null)
+						{
+							sender.sendLocalizedMessage("sethome.limit_reached", limit);
+
+							return;
+						}
+
+						sender.sendLocalizedMessage("sethome.limit_reached_other", player.getName(), limit);
+
+						return;
+					}
+				}
+			}
+
+			Warp warp = Warp.newWarp(lowerName, Destination.newDestination(((Player) sender).getLocation(), 5), material.toItem(), visits);
+
+			warps.add(warp);
+		}
+	}
+
 	final class CommandDeleteHome extends Command
 	{
 		public CommandDeleteHome()
 		{
 			super("deletehome", ModuleHomes.this, "delhome", "dhome");
 
-			this.addOptionalArgument(Argument.builder().setPath("home").addResolver(ArgFunction.STRING_FUNCTION).build());
+			this.addArgument(Argument.builder().setPath("home").setDefaultValue("home").addResolver(ArgFunction.STRING_FUNCTION).build());
 			this.addOptionalArgument(Argument.builder().setPath("player").addResolver(PlayerUtils::getOnlinePlayer).setPermission("delhome.others").build());
 		}
 
