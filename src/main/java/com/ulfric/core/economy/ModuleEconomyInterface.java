@@ -12,6 +12,8 @@ public class ModuleEconomyInterface extends Module {
 	public void onFirstEnable()
 	{
 		this.addCommand(new CommandBalance(this));
+		this.addCommand(new CommandPay(this));
+
 		this.addListener(new SignBalance(this));
 	}
 
