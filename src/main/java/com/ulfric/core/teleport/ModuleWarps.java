@@ -1,11 +1,15 @@
 package com.ulfric.core.teleport;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
 
 import com.ulfric.config.Document;
+import com.ulfric.config.MutableDocument;
+import com.ulfric.config.SimpleDocument;
 import com.ulfric.data.DataAddress;
+import com.ulfric.data.DataContainer;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.ReferenceCountedScope;
 import com.ulfric.lib.coffee.command.Argument;
@@ -137,9 +141,26 @@ public final class ModuleWarps extends Module {
 	{
 		this.panel = null;
 
-		// TODO serialize warps
+		this.subscription.unsubscribe(); // TODO before or after??
 
-		this.subscription.unsubscribe();
+		for (Entry<String, Warp> entry : this.warps.entrySet())
+		{
+			Warp warp = entry.getValue();
+
+			DataContainer<String, Document> container = this.subscription.get(entry.getKey());
+
+			MutableDocument document = new SimpleDocument();
+
+			document.set("item", warp.itemToString());
+			document.set("visits", warp.getVisits());
+
+			MutableDocument destinationDocument = document.createDocument("destination");
+
+			destinationDocument.set("location", warp.locationToString());
+			destinationDocument.set("delay", warp.getDelay());
+
+			container.setValue(document);
+		}
 	}
 
 }
