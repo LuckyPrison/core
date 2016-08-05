@@ -12,6 +12,7 @@ import com.ulfric.data.DataAddress;
 import com.ulfric.data.DataContainer;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.ReferenceCountedScope;
+import com.ulfric.lib.coffee.command.ArgFunction;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
@@ -21,6 +22,8 @@ import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.string.StringUtils;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
+import com.ulfric.lib.craft.inventory.item.Material;
+import com.ulfric.lib.craft.location.Destination;
 import com.ulfric.lib.craft.panel.Panel;
 
 public final class ModuleWarps extends Module {
@@ -51,6 +54,7 @@ public final class ModuleWarps extends Module {
 
 		this.addCommand(new CommandWarp());
 		this.addCommand(new CommandWarps());
+		this.addCommand(new CommandSetWarp());
 	}
 
 	void displayWarpsMenu(CommandSender sender)
@@ -108,6 +112,50 @@ public final class ModuleWarps extends Module {
 		public void run()
 		{
 			ModuleWarps.this.displayWarpsMenu(this.getSender());
+		}
+	}
+
+	final class CommandSetWarp extends Command
+	{
+		public CommandSetWarp()
+		{
+			super("setwarp", ModuleWarps.this, "swarp", "createwarp", "cwarp", "makewarp", "mwarp");
+
+			this.addPermission("setwarp.use");
+
+			this.addArgument(Argument.builder().setPath("warp").addResolver(ArgFunction.STRING_FUNCTION).build());
+			this.addArgument(Argument.builder().setPath("override").addResolver((sen, str) -> str.toLowerCase().equals("-o")).build());
+		}
+
+		@Override
+		public void run()
+		{
+			CommandSender sender = this.getSender();
+
+			if (!(sender instanceof Player))
+			{
+				sender.sendLocalizedMessage("setwarp.must_be_player");
+
+				return;
+			}
+
+			String warpName = (String) this.getObject("warp");
+
+			Warp existing = ModuleWarps.this.warps.get(warpName);
+
+			if (existing != null)
+			{
+				if (!this.hasObject("override"))
+				{
+					sender.sendLocalizedMessage("setwarp.warp_exists", warpName);
+
+					return;
+				}
+			}
+
+			Warp warp = Warp.newWarp(warpName, Destination.newDestination(((Player) sender).getLocation(), 5), Material.of("GRASS").toItem());
+
+			ModuleWarps.this.warps.put(warpName, warp);
 		}
 	}
 
