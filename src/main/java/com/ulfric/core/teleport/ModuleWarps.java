@@ -103,7 +103,7 @@ public final class ModuleWarps extends Module {
 			
 						if (warp == null)
 						{
-							warp = this.warps.get(StringUtils.getClosest(this.warps.keySet(), str).getValue());
+							warp = this.warps.get(StringUtils.getClosest(this.warps.keySet(), str, 3).getValue());
 						}
 			
 						if (warp == null) return null;
