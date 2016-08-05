@@ -30,7 +30,7 @@ public final class ModuleWarps extends Module {
 		super("warps", "Warping module", "1.0.0", "Packet");
 	}
 
-	private Map<String, Warp> warps;
+	Map<String, Warp> warps;
 	private MultiSubscription<String, Document> subscription;
 	private Panel panel;
 
@@ -49,74 +49,8 @@ public final class ModuleWarps extends Module {
 									   })
 									   .subscribe();
 
-		this.addCommand(new Command("warps", this)
-		{
-			@Override
-			public void run()
-			{
-				ModuleWarps.this.displayWarpsMenu(this.getSender());
-			}
-		});
-
-		this.addCommand(new Command("warp", this)
-		{
-			@Override
-			public void run()
-			{
-				CommandSender sender = this.getSender();
-
-				Warp warp = (Warp) this.getObject("warp");
-
-				if (warp == null)
-				{
-					ModuleWarps.this.displayWarpsMenu(sender);
-
-					return;
-				}
-
-				Player player = (Player) this.getObject("player");
-
-				if (player == null)
-				{
-					if (!(sender instanceof Player))
-					{
-						sender.sendLocalizedMessage("warp.specify_player");
-
-						return;
-					}
-
-					player = (Player) sender;
-				}
-				else if (!player.getUniqueId().equals(sender.getUniqueId()))
-				{
-					sender.sendLocalizedMessage("warp.warping_player", player.getName(), warp.getName());
-				}
-
-				player.sendLocalizedMessage("warp.warping", warp.getName(), warp.getDelay());
-
-				if (RandomUtils.percentChance(0.20))
-				{
-					player.sendLocalizedMessage("warp.total_visits", warp.getName(), warp.getVisits());
-				}
-
-				warp.accept(player);
-			}
-		}.addOptionalArgument(Argument.builder().setPath("warp").addResolver((sen, str) ->
-					{
-						Warp warp = this.warps.get(str);
-			
-						if (warp == null)
-						{
-							warp = this.warps.get(StringUtils.getClosest(this.warps.keySet(), str, 3).getValue());
-						}
-			
-						if (warp == null) return null;
-			
-						if (!sen.hasPermission("warps." + warp.getName())) return null;
-			
-						return warp;
-					}).build())
-		.addOptionalArgument(Argument.builder().setPath("player").setPermission("warp.others").addResolver(PlayerUtils::getOnlinePlayer).build()));
+		this.addCommand(new CommandWarp());
+		this.addCommand(new CommandWarps());
 	}
 
 	void displayWarpsMenu(CommandSender sender)
@@ -160,6 +94,87 @@ public final class ModuleWarps extends Module {
 			destinationDocument.set("delay", warp.getDelay());
 
 			container.setValue(document);
+		}
+	}
+
+	final class CommandWarps extends Command
+	{
+		public CommandWarps()
+		{
+			super("warps", ModuleWarps.this, "warpslist", "warplist");
+		}
+
+		@Override
+		public void run()
+		{
+			ModuleWarps.this.displayWarpsMenu(this.getSender());
+		}
+	}
+
+	final class CommandWarp extends Command
+	{
+		public CommandWarp()
+		{
+			super("warp", ModuleWarps.this, "warpto", "goto");
+
+			this.addOptionalArgument(Argument.builder().setPath("warp").addResolver((sen, str) ->
+			{
+				Warp warp = ModuleWarps.this.warps.get(str);
+	
+				if (warp == null)
+				{
+					warp = ModuleWarps.this.warps.get(StringUtils.getClosest(ModuleWarps.this.warps.keySet(), str, 3).getValue());
+				}
+	
+				if (warp == null) return null;
+	
+				if (!sen.hasPermission("warps." + warp.getName())) return null;
+	
+				return warp;
+			}).build());
+			this.addOptionalArgument(Argument.builder().setPath("player").setPermission("warp.others").addResolver(PlayerUtils::getOnlinePlayer).build());
+		}
+
+		@Override
+		public void run()
+		{
+			CommandSender sender = this.getSender();
+
+			Warp warp = (Warp) this.getObject("warp");
+
+			if (warp == null)
+			{
+				ModuleWarps.this.displayWarpsMenu(sender);
+
+				return;
+			}
+
+			Player player = (Player) this.getObject("player");
+
+			if (player == null)
+			{
+				if (!(sender instanceof Player))
+				{
+					sender.sendLocalizedMessage("warp.specify_player");
+
+					return;
+				}
+
+				player = (Player) sender;
+			}
+			else if (!player.getUniqueId().equals(sender.getUniqueId()))
+			{
+				sender.sendLocalizedMessage("warp.warping_player", player.getName(), warp.getName());
+			}
+
+			player.sendLocalizedMessage("warp.warping", warp.getName(), warp.getDelay());
+
+			if (RandomUtils.percentChance(0.20))
+			{
+				player.sendLocalizedMessage("warp.total_visits", warp.getName(), warp.getVisits());
+			}
+
+			warp.accept(player);
 		}
 	}
 
