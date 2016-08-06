@@ -1,6 +1,7 @@
 package com.ulfric.core;
 
 import com.ulfric.core.economy.ModuleEconomyInterface;
+import com.ulfric.core.modules.ModuleNameplates;
 import com.ulfric.core.modules.ModuleTrash;
 import com.ulfric.core.modules.ModuleWelcome;
 import com.ulfric.core.scoreboard.ModuleScoreboardImplementation;
@@ -14,6 +15,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleEconomyInterface());
 		this.addModule(new ModuleWelcome());
 		this.addModule(new ModuleScoreboardImplementation());
+		this.addModule(new ModuleNameplates());
 		this.addModule(new ModuleTrash());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
