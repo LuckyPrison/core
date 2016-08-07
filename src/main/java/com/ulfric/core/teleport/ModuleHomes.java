@@ -42,7 +42,7 @@ public final class ModuleHomes extends Module {
 	@Override
 	public void onModuleEnable()
 	{
-		if (this.subscription.isSusbcribed()) return;
+		if (this.subscription.isSubscribed()) return;
 
 		ThreadUtils.runAsync(this.subscription::subscribe);
 	}

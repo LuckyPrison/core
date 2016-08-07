@@ -49,7 +49,7 @@ public class ModuleNameplates extends Module {
 	@Override
 	public void onModuleEnable()
 	{
-		if (!this.subscription.isSusbcribed())
+		if (!this.subscription.isSubscribed())
 		{
 			this.subscription.subscribe();
 		}

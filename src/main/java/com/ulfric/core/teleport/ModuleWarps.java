@@ -69,7 +69,7 @@ public final class ModuleWarps extends Module {
 	{
 		this.panel = Panel.createStandard(this.getModuleConfig("warp-menu").getRoot());
 
-		if (!this.subscription.isSusbcribed())
+		if (!this.subscription.isSubscribed())
 
 		this.subscription.subscribe();
 	}
