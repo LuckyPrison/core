@@ -1,8 +1,10 @@
 package com.ulfric.core.modules;
 
+import com.ulfric.config.Document;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.coffee.numbers.NumberUtils;
 import com.ulfric.lib.craft.block.Sign;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.SignListener;
@@ -20,12 +22,15 @@ public class ModuleTrash extends Module {
 		super("trash", "A module to help players throw items away", "1.0.0", "Packet");
 	}
 
-	protected ItemStack item;
+	ItemStack item;
+	int size;
 
 	@Override
 	public void onModuleEnable()
 	{
-		this.item = ItemUtils.getItem(this.getModuleConfig().getRoot().getString("item", "ma.ironfence nac.&c&lEmpty<s>Trash"));
+		Document document = this.getModuleConfig().getRoot();
+		this.item = ItemUtils.getItem(document.getString("item", "ma.ironfence nac.&c&lEmpty<s>Trash"));
+		this.size = NumberUtils.roundUp(document.getInteger("size", 45), 9);
 	}
 
 	@Override
@@ -56,9 +61,9 @@ public class ModuleTrash extends Module {
 
 	void openTrash(Player player)
 	{
-		Panel.createStandard(45, player.getLocalizedMessage("core.trash"))
+		Panel.createStandard(this.size, player.getLocalizedMessage("core.trash"))
 			 .addButton(Button.builder()
-					 		  .addSlot(44, ModuleTrash.this.item)
+					 		  .addSlot(this.size-1, ModuleTrash.this.item)
 					 		  .addAction(this::emptyTrash)
 					 		  .build())
 			 .open(player);
@@ -66,7 +71,7 @@ public class ModuleTrash extends Module {
 
 	private void emptyTrash(InventoryClickEvent event)
 	{
-		event.getInventory().empty(0, 44);
+		event.getInventory().empty(0, this.size-1);
 		event.setCancelled(true);
 	}
 
