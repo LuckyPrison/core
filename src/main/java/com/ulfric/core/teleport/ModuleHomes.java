@@ -18,7 +18,6 @@ import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.concurrent.ThreadUtils;
-import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.function.SortUtils;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.permission.Permissible;
@@ -86,26 +85,25 @@ public final class ModuleHomes extends Module {
 	{
 		this.homes = Maps.newConcurrentMap();
 
-		DataManager.get()
-			.getDatabase("homes")
-			.multi(Document.class, PlayerScopes.ONLINE, new DataAddress<>("homes", null, null))
-			.blockOnSubscribe(true)
-			.onChange((oldValue, newValue) ->
-			{
-				Document value = newValue.getValue();
+		PlayerUtils.getPlayerData()
+				   .multi(Document.class, PlayerScopes.ONLINE, new DataAddress<>("homes", null, null))
+				   .blockOnSubscribe(true)
+				   .onChange((oldValue, newValue) ->
+				   {
+					   Document value = newValue.getValue();
 
-				WarpSet homesList = new WarpSet();
+					   WarpSet homesList = new WarpSet();
 
-				for (String key : value.getKeys("homes", false))
-				{
-					Document homeToParse = value.getDocument(key);
+					   for (String key : value.getKeys("homes", false))
+					   {
+						   Document homeToParse = value.getDocument(key);
 
-					homesList.add(Warp.fromDocument(key, homeToParse));
-				}
+						   homesList.add(Warp.fromDocument(key, homeToParse));
+					   }
 
-				this.homes.put(newValue.getAddress().getId(), homesList);
-			})
-			.subscribe();
+					   this.homes.put(newValue.getAddress().getId(), homesList);
+				   })
+				   .subscribe();
 
 		this.addCommand(new CommandHome());
 		this.addCommand(new CommandDeleteHome());

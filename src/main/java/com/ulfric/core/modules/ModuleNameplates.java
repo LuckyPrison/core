@@ -15,7 +15,6 @@ import com.ulfric.data.DataAddress;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
 import com.ulfric.lib.coffee.command.Command;
-import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
@@ -183,8 +182,7 @@ public class ModuleNameplates extends Module {
 		this.nameplates = Maps.newHashMap();
 		this.playerNameplates = Maps.newHashMap();
 
-		this.subscription = DataManager.get()
-									   .getDatabase("nameplates")
+		this.subscription = PlayerUtils.getPlayerData()
 						 			   .multi(String.class, PlayerScopes.ONLINE, new DataAddress<>("nameplates", null, null))
 						 			   .onChange((oldValue, newValue) ->
 						 			   {
