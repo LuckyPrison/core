@@ -129,7 +129,9 @@ public class ModulePlayerSigns extends Module {
 
 				if (!Signs.isSign(block)) return;
 
-				ModulePlayerSigns.this.removedSigns.remove(block.getLocation());
+				if (!ModulePlayerSigns.this.signs.remove(block)) return;
+
+				ModulePlayerSigns.this.removedSigns.add(block.getLocation());
 			}
 		});
 	}
