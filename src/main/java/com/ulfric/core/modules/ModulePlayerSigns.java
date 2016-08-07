@@ -40,6 +40,8 @@ public class ModulePlayerSigns extends Module {
 		{
 			this.subscription.subscribe();
 		}
+
+		// TODO load the signs
 	}
 
 	@Override
@@ -49,6 +51,8 @@ public class ModulePlayerSigns extends Module {
 		{
 			this.subscription.unsubscribe();
 		}
+
+		// TODO serialize the signs
 	}
 
 	@Override
