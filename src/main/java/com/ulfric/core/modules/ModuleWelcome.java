@@ -8,6 +8,7 @@ import org.apache.commons.lang3.mutable.Mutable;
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.event.Handler;
@@ -30,8 +31,6 @@ public class ModuleWelcome extends Module {
 	@Override
 	public void onModuleEnable()
 	{
-		ImmutableList.Builder<String> builder = ImmutableList.builder();
-
 		boolean empty = true;
 
 		for (String string : this.getModuleConfig().getRoot().getStringList("messages", ImmutableList.of()))
@@ -42,15 +41,13 @@ public class ModuleWelcome extends Module {
 
 			empty = false;
 
-			builder.add(string);
+			this.messages.add(string);
 		}
 
 		if (empty)
 		{
-			builder.add("Welcome, {0}!");
+			this.messages.add("Welcome, {0}!");
 		}
-
-		this.messages = builder.build();
 	}
 
 	@Override
@@ -62,6 +59,8 @@ public class ModuleWelcome extends Module {
 	@Override
 	public void onFirstEnable()
 	{
+		this.messages = Lists.newArrayList();
+
 		Set<UUID> uuids = Sets.newHashSet();
 		Mutable<String> name = new MutableObject<>();
 
