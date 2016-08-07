@@ -1,5 +1,10 @@
 package com.ulfric.core.backpack;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.bukkit.Material;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
@@ -12,9 +17,6 @@ import com.ulfric.lib.craft.inventory.item.ItemUtils;
 import com.ulfric.lib.craft.inventory.item.meta.ItemMeta;
 import com.ulfric.lib.craft.panel.Button;
 import com.ulfric.lib.craft.panel.Panel;
-import java.util.HashMap;
-import java.util.Map;
-import org.bukkit.Material;
 
 class Backpack extends Panel {
 	private final static ItemStack NEXT = setName(ItemUtils.getItem(Material.ARROW), "Next Page");
