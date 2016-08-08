@@ -28,7 +28,6 @@ public class CommandPay extends Command {
 	@Override
 	public void run()
 	{
-		System.out.println("1");
 		CommandSender sender = this.getSender();
 		UUID uuid = sender.getUniqueId();
 
@@ -88,22 +87,11 @@ public class CommandPay extends Command {
 			});
 		}
 
-		System.out.println("2");
 		Player online = player.toPlayer();
 
-		System.out.println("3: " + player.getName());
+		UUID playerUuid = player.getUniqueId();
 
-		OfflineBankAccount account = online == null ? Bank.getAccount(player.getUniqueId()) : Bank.getOnlineAccount(player.getUniqueId());
-
-		try {
-			System.out.println("4: " + account.retrieveBalance(amount.getCurrency()).get());
-		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		System.out.println("5: " + amount.getCurrency().getName());
-		System.out.println("6: " + amount.getAmount());
+		OfflineBankAccount account = online == null ? Bank.getAccount(playerUuid) : Bank.getOnlineAccount(playerUuid);
 
 		String senderName = sender.getName();
 

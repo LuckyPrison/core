@@ -16,7 +16,6 @@ public class CommandBalance extends Command {
 		super("bal", module, "balance", "money", "cash");
 		this.addArgument(Currency.ARGUMENT);
 		this.addOptionalArgument(OfflinePlayer.ARGUMENT);
-		this.addEnforcer(Player.class::isInstance, "economy.player_only");
 	}
 
 	@Override

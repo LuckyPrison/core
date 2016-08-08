@@ -47,10 +47,10 @@ public class ModuleScoreboardImplementation extends Module {
 				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::update);
 			}
 
-			@Handler(ignoreCancelled = true)
+			@Handler
 			public void onBalance(BalanceChangeEvent event)
 			{
-				if (event.getCurrency() != Currency.getDefaultCurrency()) return;
+				if (!event.getCurrency().equals(Currency.getDefaultCurrency())) return;
 
 				Player player = PlayerUtils.getPlayer(event.getAccount().getUniqueId());
 
