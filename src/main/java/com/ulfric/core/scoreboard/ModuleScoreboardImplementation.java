@@ -33,7 +33,6 @@ public class ModuleScoreboardImplementation extends Module {
 				Scoreboard scoreboard = event.getPlayer().scoreboard();
 				// TODO more elements, and have an element registry somewhere
 				scoreboard.addElement(new ElementBalance(scoreboard));
-				scoreboard.addElement(new ElementGodmode(scoreboard));
 				scoreboard.addElement(new ElementPlayercount(scoreboard));
 
 				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::update);
