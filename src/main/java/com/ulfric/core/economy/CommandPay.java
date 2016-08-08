@@ -23,12 +23,12 @@ public class CommandPay extends Command {
 		super("pay", module);
 		this.addArgument(CurrencyAmount.ARGUMENT);
 		this.addArgument(OfflinePlayer.ARGUMENT);
-		this.addEnforcer(Player.class::isInstance, "economy.player_only");
 	}
 
 	@Override
 	public void run()
 	{
+		System.out.println("1");
 		CommandSender sender = this.getSender();
 		UUID uuid = sender.getUniqueId();
 
@@ -88,27 +88,48 @@ public class CommandPay extends Command {
 			});
 		}
 
+		System.out.println("2");
 		Player online = player.toPlayer();
+
+		System.out.println("3: " + player.getName());
 
 		OfflineBankAccount account = online == null ? Bank.getAccount(player.getUniqueId()) : Bank.getOnlineAccount(player.getUniqueId());
 
+		try {
+			System.out.println("4: " + account.retrieveBalance(amount.getCurrency()).get());
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println("5: " + amount.getCurrency().getName());
+		System.out.println("6: " + amount.getAmount());
+
 		String senderName = sender.getName();
 
-		account.give(amount, "Payment from " + senderName).whenComplete((l, t) ->
+		try
 		{
-			if (online == null) return;
+			account.give(amount, "Payment from " + senderName).get();
+		}
+		catch (InterruptedException|ExecutionException exception)
+		{
+			exception.printStackTrace();
 
-			try
-			{
-				online.sendLocalizedMessage("pay.you_got_money", senderName, amountFormat, new MoneyFormatter(account.retrieveBalance(amount.getCurrency()).get()));
-			}
-			catch (InterruptedException|ExecutionException exception)
-			{
-				online.sendLocalizedMessage("pay.you_got_money_backup", senderName, amountFormat);
+			return;
+		}
 
-				exception.printStackTrace();
-			}
-		});
+		if (online == null) return;
+
+		try
+		{
+			online.sendLocalizedMessage("pay.you_got_money", senderName, amountFormat, new MoneyFormatter(account.retrieveBalance(amount.getCurrency()).get()));
+		}
+		catch (InterruptedException|ExecutionException exception)
+		{
+			online.sendLocalizedMessage("pay.you_got_money_backup", senderName, amountFormat);
+
+			exception.printStackTrace();
+		}
 	}
 
 }
