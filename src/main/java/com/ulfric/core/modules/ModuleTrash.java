@@ -31,6 +31,8 @@ public class ModuleTrash extends Module {
 		Document document = this.getModuleConfig().getRoot();
 		this.item = ItemUtils.getItem(document.getString("item", "ma.ironfence nac.&c&lEmpty<s>Trash"));
 		this.size = NumberUtils.roundUp(document.getInteger("size", 45), 9);
+
+		this.log("Setting trash size to " + this.size);
 	}
 
 	@Override
