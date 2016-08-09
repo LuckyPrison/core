@@ -113,6 +113,7 @@ public final class ModuleWarps extends Module {
 
 			destinationDocument.set("location", warp.locationToString());
 			destinationDocument.set("delay", warp.getDelay());
+			destinationDocument.set("closed", warp.isClosed());
 
 			container.setValue(document);
 		}
