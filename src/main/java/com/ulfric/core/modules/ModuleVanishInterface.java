@@ -12,6 +12,7 @@ import com.ulfric.lib.craft.event.player.PlayerJoinEvent;
 import com.ulfric.lib.craft.event.player.PlayerPostVanishEvent;
 import com.ulfric.lib.craft.scoreboard.Scoreboard;
 import com.ulfric.lib.craft.scoreboard.ScoreboardElement;
+import com.ulfric.lib.craft.string.ChatColor;
 
 public class ModuleVanishInterface extends Module {
 
@@ -40,7 +41,11 @@ public class ModuleVanishInterface extends Module {
 			{
 				Player player = event.getPlayer();
 
-				ScoreboardElement element = player.scoreboard().elementFromClazz(ElementVanish.class);
+				Scoreboard scoreboard = player.scoreboard();
+
+				scoreboard.setBelowName(ChatColor.of("GRAY").toString() + "VANISHED");
+
+				ScoreboardElement element = scoreboard.elementFromClazz(ElementVanish.class);
 
 				if (element == null) return;
 
