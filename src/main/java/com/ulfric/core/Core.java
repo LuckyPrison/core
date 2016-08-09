@@ -5,6 +5,7 @@ import com.ulfric.core.control.ModuleCloseInventory;
 import com.ulfric.core.control.ModuleKill;
 import com.ulfric.core.control.ModulePunishments;
 import com.ulfric.core.economy.ModuleEconomyInterface;
+import com.ulfric.core.modules.ModuleEmailInterface;
 import com.ulfric.core.modules.ModuleGodmodeInterface;
 import com.ulfric.core.modules.ModuleNameplates;
 import com.ulfric.core.modules.ModuleTrash;
@@ -31,6 +32,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleCloseInventory());
 		this.addModule(new ModuleKill());
 		this.addModule(new ModulePunishments());
+		this.addModule(new ModuleEmailInterface());
 		//this.addModule(new ModulePlayerSigns());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
