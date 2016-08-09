@@ -1,6 +1,7 @@
 package com.ulfric.core;
 
 import com.ulfric.core.control.ModuleClearChat;
+import com.ulfric.core.control.ModuleCloseInventory;
 import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.modules.ModuleGodmodeInterface;
 import com.ulfric.core.modules.ModuleNameplates;
@@ -25,6 +26,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleGodmodeInterface());
 		this.addModule(new ModuleWarps());
 		this.addModule(new ModuleClearChat());
+		this.addModule(new ModuleCloseInventory());
 		//this.addModule(new ModulePlayerSigns());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
