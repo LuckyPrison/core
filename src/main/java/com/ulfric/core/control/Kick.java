@@ -104,7 +104,7 @@ class Kick extends Punishment {
 
 	private void kick(Player player)
 	{
-		player.connection().disconnect(this.getKickReason(player));
+		player.connection().kick(this.getKickReason(player));
 	}
 
 }

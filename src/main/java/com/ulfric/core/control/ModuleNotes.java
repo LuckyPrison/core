@@ -3,6 +3,7 @@ package com.ulfric.core.control;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
@@ -12,6 +13,7 @@ import com.ulfric.data.DataAddress;
 import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MapSubscription;
 import com.ulfric.lib.coffee.collection.ListUtils;
+import com.ulfric.lib.coffee.collection.SetUtils;
 import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.module.Module;
 
@@ -35,11 +37,11 @@ public class ModuleNotes extends Module {
 
 		for (NoteType type : NoteType.values())
 		{
-			String name = type.name().toLowerCase();
+			String name = type.name().replace("_", "").toLowerCase();
 
 			manager.ensureTableCreated(store, name);
 
-			this.documents.put(type, store.document(new DataAddress<>(name, null)).blockOnSubscribe(true).subscribe());
+			this.documents.put(type, store.document(new DataAddress<>(name, "notes")).subscribe());
 		}
 
 		this.addCommand(new CommandNote(this));
@@ -64,7 +66,13 @@ public class ModuleNotes extends Module {
 
 			Document document = subscription.getValue();
 
-			for (String key : document.getKeys(false))
+			if (document == null) continue;
+
+			Set<String> keys = document.getKeys(false);
+
+			if (SetUtils.isEmpty(keys)) continue;
+
+			for (String key : keys)
 			{
 				Document noteDoc = document.getDocument(key);
 

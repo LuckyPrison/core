@@ -8,7 +8,7 @@ class CommandKick extends PunishmentBaseCommand {
 
 	public CommandKick(ModuleBase owner)
 	{
-		super("kick", owner);
+		super("kick", owner, "kickp");
 	}
 
 	@Override

@@ -17,26 +17,16 @@ public final class Notes {
 		return Notes.INSTANCE;
 	}
 
-	private Notes() { }
-
 	private final AtomicInteger counter = new AtomicInteger();
 	private final Map<String, NoteHolder> holders = Maps.newHashMap();
 	private final Map<NoteType, Map<Integer, Note>> notes = MapUtils.enumMapAllOf(NoteType.class, Maps::newHashMap);
+	private final Map<Integer, Note> allNotes = Maps.newHashMap();
+
+	private Notes() { }
 
 	public Note getNote(int id)
 	{
-		Integer idInteger = id;
-
-		for (Map<Integer, Note> map : this.notes.values())
-		{
-			Note note = map.get(idInteger);
-
-			if (note == null) continue;
-
-			return note;
-		}
-
-		return null;
+		return this.allNotes.get(id);
 	}
 
 	public List<Note> getAllNotes(NoteType type)
@@ -73,7 +63,7 @@ public final class Notes {
 		int id = note.getID();
 		Integer idInteger = id;
 
-		this.notes.get(null).put(idInteger, note);
+		this.allNotes.put(idInteger, note);
 		this.notes.get(note.getType()).put(idInteger, note);
 
 		if (id <= this.counter.get()) return;
@@ -83,7 +73,8 @@ public final class Notes {
 
 	void dump()
 	{
-		this.notes.clear();
+		this.allNotes.clear();
+		this.notes.values().forEach(Map::clear);
 		this.holders.clear();
 	}
 

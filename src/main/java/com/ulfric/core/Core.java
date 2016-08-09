@@ -33,7 +33,6 @@ public class Core extends Plugin {
 		this.addModule(new ModuleKill());
 		this.addModule(new ModulePunishments());
 		this.addModule(new ModuleEmailInterface());
-		//this.addModule(new ModulePlayerSigns());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 

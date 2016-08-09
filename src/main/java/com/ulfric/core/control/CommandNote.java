@@ -14,7 +14,7 @@ public class CommandNote extends Command {
 
 	public CommandNote(ModuleBase owner)
 	{
-		super("note", owner);
+		super("note", owner, "notes");
 
 		Command add = new CommandAdd(owner);
 		this.addCommand(add, CommandKey.builder().add(add.getName()).add("new").add("create").build());

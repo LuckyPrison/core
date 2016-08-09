@@ -166,6 +166,9 @@ public final class Punishments {
 	private final AtomicInteger counter = new AtomicInteger();
 	private final Map<Object, PunishmentHolder> holders = Maps.newHashMap();
 	private final Map<PunishmentType, Map<Integer, Punishment>> punishments = MapUtils.enumMapAllOf(PunishmentType.class, Maps::newHashMap);
+	private final Map<Integer, Punishment> allPunishments = Maps.newHashMap();
+
+	private Punishments() { }
 
 	int getAndIncrementCounter()
 	{
@@ -199,23 +202,17 @@ public final class Punishments {
 
 	public List<Punishment> getAllPunishments(PunishmentType type)
 	{
+		if (type == null)
+		{
+			return Lists.newArrayList(this.allPunishments.values());
+		}
+
 		return Lists.newArrayList(this.punishments.get(type).values());
 	}
 
 	public Punishment getPunishment(int id)
 	{
-		Integer idInteger = id;
-
-		for (Map<Integer, Punishment> map : this.punishments.values())
-		{
-			Punishment punishment = map.get(idInteger);
-
-			if (punishment == null) continue;
-
-			return punishment;
-		}
-
-		return null;
+		return this.allPunishments.get(id);
 	}
 
 	void registerPunishment(Punishment punishment)
@@ -223,7 +220,7 @@ public final class Punishments {
 		int id = punishment.getID();
 		Integer idInteger = id;
 
-		this.punishments.get(null).put(idInteger, punishment);
+		this.allPunishments.put(idInteger, punishment);
 		this.punishments.get(punishment.getType()).put(idInteger, punishment);
 
 		if (id <= this.counter.get()) return;
@@ -233,8 +230,8 @@ public final class Punishments {
 
 	void dump()
 	{
+		this.allPunishments.clear();
 		this.holders.clear();
-
 		this.punishments.values().forEach(Map::clear);
 	}
 

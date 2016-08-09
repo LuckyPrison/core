@@ -118,7 +118,7 @@ class Ban extends TimedPunishment {
 
 	private void kickBan(Player player)
 	{
-		player.connection().disconnect(this.getKickReason(player));
+		player.connection().kick(this.getKickReason(player));
 	}
 
 }

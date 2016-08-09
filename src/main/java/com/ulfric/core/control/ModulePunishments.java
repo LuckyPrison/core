@@ -15,6 +15,7 @@ import com.ulfric.data.DataAddress;
 import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MapSubscription;
 import com.ulfric.lib.coffee.collection.ListUtils;
+import com.ulfric.lib.coffee.collection.SetUtils;
 import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
@@ -45,11 +46,11 @@ public class ModulePunishments extends Module {
 
 		for (PunishmentType type : PunishmentType.values())
 		{
-			String name = type.name().toLowerCase();
+			String name = type.name().replace("_", "").toLowerCase();
 
 			manager.ensureTableCreated(store, name);
 
-			this.documents.put(type, store.document(new DataAddress<>(name, null)).blockOnSubscribe(true).subscribe());
+			this.documents.put(type, store.document(new DataAddress<>(name, "punishments")).subscribe());
 		}
 
 		this.allowedCommandMutes = Sets.newHashSet();
@@ -151,7 +152,13 @@ public class ModulePunishments extends Module {
 
 			Document document = subscription.getValue();
 
-			for (String key : document.getKeys(false))
+			if (document == null) continue;
+
+			Set<String> keys = document.getKeys(false);
+
+			if (SetUtils.isEmpty(keys)) continue;
+
+			for (String key : keys)
 			{
 				Document punishmentDoc = document.getDocument(key);
 
