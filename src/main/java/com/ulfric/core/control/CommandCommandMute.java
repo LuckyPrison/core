@@ -32,11 +32,7 @@ class CommandCommandMute extends TimedPunishmentBaseCommand {
 
 		String reason = this.buildUnusedArgs();
 
-		Punishments punishments = Punishments.getInstance();
-
-		int id = punishments.getAndIncrementCounter();
-
-		Punishment punishment = Punishments.newCommandMute(id, holder, punisher, reason, expiry, referenced, silent);
+		Punishment punishment = Punishments.newCommandMute(holder, punisher, reason, expiry, referenced, silent);
 
 		punishment.run();
 	}

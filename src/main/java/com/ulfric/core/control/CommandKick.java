@@ -27,11 +27,7 @@ class CommandKick extends PunishmentBaseCommand {
 
 		String reason = this.buildUnusedArgs();
 
-		Punishments punishments = Punishments.getInstance();
-
-		int id = punishments.getAndIncrementCounter();
-
-		Punishment punishment = Punishments.newKick(id, holder, punisher, reason, referenced, silent);
+		Punishment punishment = Punishments.newKick(holder, punisher, reason, referenced, silent);
 
 		punishment.run();
 	}

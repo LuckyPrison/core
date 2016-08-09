@@ -29,7 +29,7 @@ class ShadowMute extends TimedPunishment {
 			referenced[x] = referencedList.get(x);
 		}
 
-		return Punishments.newMute(id, holder, punisher, reason, creation, expiry, referenced, false);
+		return new ShadowMute(id, holder, punisher, reason, creation, expiry, referenced);
 	}
 
 	ShadowMute(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, Instant expiry, int[] referenced)

@@ -38,11 +38,7 @@ class CommandWarn extends TimedPunishmentBaseCommand {
 		Instant expiry = this.getExpiry();
 		Validate.notNull(expiry);
 
-		Punishments punishments = Punishments.getInstance();
-
-		int id = punishments.getAndIncrementCounter();
-
-		Punishment punishment = Punishments.newWarn(id, holder, punisher, reason, expiry, referenced);
+		Punishment punishment = Punishments.newWarn(holder, punisher, reason, expiry, referenced);
 
 		punishment.run();
 	}

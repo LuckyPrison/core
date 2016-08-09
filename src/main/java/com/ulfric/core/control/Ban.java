@@ -29,7 +29,7 @@ class Ban extends TimedPunishment {
 			referenced[x] = referencedList.get(x);
 		}
 
-		return Punishments.newBan(id, holder, punisher, reason, creation, expiry, referenced, false);
+		return new Ban(id, holder, punisher, reason, creation, expiry, referenced);
 	}
 
 	Ban(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, Instant expiry, int[] referenced)

@@ -24,10 +24,17 @@ public final class Punishments {
 		return Punishments.INSTANCE;
 	}
 
-	public static Punishment newMute(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant creation, Instant expiry, int[] referenced, boolean silent)
+	public static Punishment newMute(PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced, boolean silent)
 	{
-		Validate.isTrue(id >= 0);
+		return Punishments.newMute(holder, punisher, reason, Instant.now(), expiry, referenced, silent);
+	}
+
+	public static Punishment newMute(PunishmentHolder holder, Punisher punisher, String reason, Instant creation, Instant expiry, int[] referenced, boolean silent)
+	{
 		Validate.notNull(holder);
+		Validate.notNull(punisher);
+
+		int id = Punishments.getInstance().getAndIncrementCounter();
 
 		String realReason = StringUtils.isBlank(reason) ? Locale.getDefault().getRawMessage("mute.default_reason") : reason.trim();
 		Instant realCreation = creation == null ? Instant.now() : creation;
@@ -42,15 +49,17 @@ public final class Punishments {
 		return new Mute(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
 	}
 
-	public static Punishment newCommandMute(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced, boolean silent)
+	public static Punishment newCommandMute(PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced, boolean silent)
 	{
-		return Punishments.newCommandMute(id, holder, punisher, reason, Instant.now(), expiry, referenced, silent);
+		return Punishments.newCommandMute(holder, punisher, reason, Instant.now(), expiry, referenced, silent);
 	}
 
-	public static Punishment newCommandMute(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant creation, Instant expiry, int[] referenced, boolean silent)
+	public static Punishment newCommandMute(PunishmentHolder holder, Punisher punisher, String reason, Instant creation, Instant expiry, int[] referenced, boolean silent)
 	{
-		Validate.isTrue(id >= 0);
 		Validate.notNull(holder);
+		Validate.notNull(punisher);
+
+		int id = Punishments.getInstance().getAndIncrementCounter();
 
 		String realReason = StringUtils.isBlank(reason) ? Locale.getDefault().getRawMessage("command_mute.default_reason") : reason.trim();
 		Instant realCreation = creation == null ? Instant.now() : creation;
@@ -65,20 +74,17 @@ public final class Punishments {
 		return new CmdMute(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
 	}
 
-	public static Punishment newMute(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced, boolean silent)
+	public static Punishment newShadowMute(PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced)
 	{
-		return Punishments.newMute(id, holder, punisher, reason, Instant.now(), expiry, referenced, silent);
+		return Punishments.newShadowMute(holder, punisher, reason, Instant.now(), expiry, referenced);
 	}
 
-	public static Punishment newShadowMute(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced)
+	public static Punishment newShadowMute(PunishmentHolder holder, Punisher punisher, String reason, Instant creation, Instant expiry, int[] referenced)
 	{
-		return Punishments.newShadowMute(id, holder, punisher, reason, Instant.now(), expiry, referenced);
-	}
-
-	public static Punishment newShadowMute(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant creation, Instant expiry, int[] referenced)
-	{
-		Validate.isTrue(id >= 0);
 		Validate.notNull(holder);
+		Validate.notNull(punisher);
+
+		int id = Punishments.getInstance().getAndIncrementCounter();
 
 		String realReason = StringUtils.isBlank(reason) ? Locale.getDefault().getRawMessage("shadowmute.default_reason") : reason.trim();
 		Instant realCreation = creation == null ? Instant.now() : creation;
@@ -88,10 +94,17 @@ public final class Punishments {
 		return new ShadowMute(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
 	}
 
-	public static Punishment newBan(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant creation, Instant expiry, int[] referenced, boolean silent)
+	public static Punishment newBan(PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced, boolean silent)
 	{
-		Validate.isTrue(id >= 0);
+		return Punishments.newBan(holder, punisher, reason, Instant.now(), expiry, referenced, silent);
+	}
+
+	public static Punishment newBan(PunishmentHolder holder, Punisher punisher, String reason, Instant creation, Instant expiry, int[] referenced, boolean silent)
+	{
 		Validate.notNull(holder);
+		Validate.notNull(punisher);
+
+		int id = Punishments.getInstance().getAndIncrementCounter();
 
 		String realReason = StringUtils.isBlank(reason) ? Locale.getDefault().getRawMessage("ban.default_reason") : reason.trim();
 		Instant realCreation = creation == null ? Instant.now() : creation;
@@ -106,15 +119,17 @@ public final class Punishments {
 		return new Ban(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
 	}
 
-	public static Punishment newWarn(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced)
+	public static Punishment newWarn(PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced)
 	{
-		return Punishments.newWarn(id, holder, punisher, reason, Instant.now(), expiry, referenced);
+		return Punishments.newWarn(holder, punisher, reason, Instant.now(), expiry, referenced);
 	}
 
-	public static Punishment newWarn(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant creation, Instant expiry, int[] referenced)
+	public static Punishment newWarn(PunishmentHolder holder, Punisher punisher, String reason, Instant creation, Instant expiry, int[] referenced)
 	{
-		Validate.isTrue(id >= 0);
 		Validate.notNull(holder);
+		Validate.notNull(punisher);
+
+		int id = Punishments.getInstance().getAndIncrementCounter();
 
 		String realReason = StringUtils.isBlank(reason) ? Locale.getDefault().getRawMessage("warn.default_reason") : reason.trim();
 		Instant realCreation = creation == null ? Instant.now() : creation;
@@ -124,20 +139,17 @@ public final class Punishments {
 		return new Warn(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
 	}
 
-	public static Punishment newBan(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced, boolean silent)
+	public static Punishment newKick(PunishmentHolder holder, Punisher punisher, String reason, int[] referenced, boolean silent)
 	{
-		return Punishments.newBan(id, holder, punisher, reason, Instant.now(), expiry, referenced, silent);
+		return Punishments.newKick(holder, punisher, reason, Instant.now(), referenced, silent);
 	}
 
-	public static Punishment newKick(int id, PunishmentHolder holder, Punisher punisher, String reason, int[] referenced, boolean silent)
+	public static Punishment newKick(PunishmentHolder holder, Punisher punisher, String reason, Instant creation, int[] referenced, boolean silent)
 	{
-		return Punishments.newKick(id, holder, punisher, reason, Instant.now(), referenced, silent);
-	}
-
-	public static Punishment newKick(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant creation, int[] referenced, boolean silent)
-	{
-		Validate.isTrue(id >= 0);
 		Validate.notNull(holder);
+		Validate.notNull(punisher);
+
+		int id = Punishments.getInstance().getAndIncrementCounter();
 
 		String realReason = StringUtils.isBlank(reason) ? Locale.getDefault().getRawMessage("kick.default_reason") : reason.trim();
 		Instant realCreation = creation == null ? Instant.now() : creation;

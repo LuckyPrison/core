@@ -32,11 +32,7 @@ class CommandBan extends TimedPunishmentBaseCommand {
 
 		String reason = this.buildUnusedArgs();
 
-		Punishments punishments = Punishments.getInstance();
-
-		int id = punishments.getAndIncrementCounter();
-
-		Punishment punishment = Punishments.newBan(id, holder, punisher, reason, expiry, referenced, silent);
+		Punishment punishment = Punishments.newBan(holder, punisher, reason, expiry, referenced, silent);
 
 		punishment.run();
 	}

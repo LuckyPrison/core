@@ -18,9 +18,6 @@ class Kick extends Punishment {
 		String reason = document.getString("reason");
 		Instant creation = Instant.ofEpochMilli(document.getLong("creation"));
 
-		long expiryValue = document.getLong("expiry");
-		Instant expiry = expiryValue == -1 ? Instant.MAX : Instant.ofEpochMilli(expiryValue);
-
 		List<Integer> referencedList = document.getIntegerList("referenced");
 		int size = referencedList.size();
 		int[] referenced = new int[size];
@@ -29,7 +26,7 @@ class Kick extends Punishment {
 			referenced[x] = referencedList.get(x);
 		}
 
-		return Punishments.newBan(id, holder, punisher, reason, creation, expiry, referenced, false);
+		return new Kick(id, holder, punisher, reason, creation, referenced);
 	}
 
 	Kick(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, int[] referenced)

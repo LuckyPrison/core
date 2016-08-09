@@ -29,7 +29,7 @@ class Warn extends TimedPunishment {
 			referenced[x] = referencedList.get(x);
 		}
 
-		return Punishments.newWarn(id, holder, punisher, reason, creation, expiry, referenced);
+		return new Warn(id, holder, punisher, reason, creation, expiry, referenced);
 	}
 
 	Warn(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, Instant expiry, int[] referenced)

@@ -30,11 +30,7 @@ class CommandShadowMute extends TimedPunishmentBaseCommand {
 
 		String reason = this.buildUnusedArgs();
 
-		Punishments punishments = Punishments.getInstance();
-
-		int id = punishments.getAndIncrementCounter();
-
-		Punishment punishment = Punishments.newShadowMute(id, holder, punisher, reason, expiry, referenced);
+		Punishment punishment = Punishments.newShadowMute(holder, punisher, reason, expiry, referenced);
 
 		punishment.run();
 	}

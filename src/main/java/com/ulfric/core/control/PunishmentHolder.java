@@ -57,7 +57,9 @@ public final class PunishmentHolder extends Punisher implements Noteable {
 
 			if (holder != null) return holder;
 
-			holder = new PunishmentHolder(uuid, player.getName());
+			String name = player.getName();
+
+			holder = new PunishmentHolder(uuid, name == null ? "*UNKNOWN*" : name);
 
 			cache.registerHolder(holder);
 
@@ -65,13 +67,19 @@ public final class PunishmentHolder extends Punisher implements Noteable {
 		}
 	}
 
-	public static PunishmentHolder fromUUID(UUID uuid)
+	public static PunishmentHolder valueOf(UUID uuid, String name)
 	{
-		Validate.notNull(uuid);
+		Punishments cache = Punishments.getInstance();
 
-		OfflinePlayer player = PlayerUtils.getOfflinePlayer(uuid);
+		PunishmentHolder holder = cache.getHolder(uuid);
 
-		return new PunishmentHolder(uuid, player == null ? "UNKNOWN (" + uuid.toString() + ')' : player.getName());
+		if (holder != null) return holder;
+
+		holder = new PunishmentHolder(uuid, name);
+
+		cache.registerHolder(holder);
+
+		return holder;
 	}
 
 	private PunishmentHolder(UUID uuid, String name)
