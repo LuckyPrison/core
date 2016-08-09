@@ -3,6 +3,8 @@ package com.ulfric.core.control;
 import java.time.Instant;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ulfric.config.Document;
 import com.ulfric.lib.coffee.locale.Locale;
 import com.ulfric.lib.craft.entity.player.Player;
@@ -29,12 +31,20 @@ class Ban extends TimedPunishment {
 			referenced[x] = referencedList.get(x);
 		}
 
-		return new Ban(id, holder, punisher, reason, creation, expiry, referenced);
+		Punisher updater = null;
+		String updaterStr = document.getString("updater");
+
+		if (!StringUtils.isBlank(updaterStr))
+		{
+			updater = Punisher.valueOf(updaterStr);
+		}
+
+		return new Ban(id, holder, punisher, reason, creation, expiry, updater, referenced);
 	}
 
-	Ban(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, Instant expiry, int[] referenced)
+	Ban(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, Instant expiry, Punisher updater, int[] referenced)
 	{
-		super(id, PunishmentType.BAN, holder, punisher, reason, placed, expiry, referenced);
+		super(id, PunishmentType.BAN, holder, punisher, reason, placed, expiry, updater, referenced);
 	}
 
 	@Override

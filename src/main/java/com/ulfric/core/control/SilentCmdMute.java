@@ -10,7 +10,7 @@ final class SilentCmdMute extends CmdMute {
 
 	SilentCmdMute(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, Instant expiry, int[] referenced)
 	{
-		super(id, holder, punisher, reason, placed, expiry, referenced);
+		super(id, holder, punisher, reason, placed, expiry, null, referenced);
 	}
 
 	@Override

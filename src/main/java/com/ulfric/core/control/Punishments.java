@@ -41,12 +41,20 @@ public final class Punishments {
 		Instant realExpiry = expiry == null ? Instant.MAX : expiry;
 		int[] realReferenced = referenced == null ? new int[0] : referenced;
 
+		Punishment punishment;
+
 		if (silent)
 		{
-			return new SilentMute(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
+			punishment = new SilentMute(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
+		}
+		else
+		{
+			punishment = new Mute(id, holder, punisher, realReason, realCreation, realExpiry, null, realReferenced);
 		}
 
-		return new Mute(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
+		punishment.setNeedsWrite(true);
+
+		return punishment;
 	}
 
 	public static Punishment newCommandMute(PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced, boolean silent)
@@ -66,12 +74,20 @@ public final class Punishments {
 		Instant realExpiry = expiry == null ? Instant.MAX : expiry;
 		int[] realReferenced = referenced == null ? new int[0] : referenced;
 
+		Punishment punishment;
+
 		if (silent)
 		{
-			return new SilentCmdMute(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
+			punishment = new SilentCmdMute(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
+		}
+		else
+		{
+			punishment = new CmdMute(id, holder, punisher, realReason, realCreation, realExpiry, null, realReferenced);
 		}
 
-		return new CmdMute(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
+		punishment.setNeedsWrite(true);
+
+		return punishment;
 	}
 
 	public static Punishment newShadowMute(PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced)
@@ -91,7 +107,9 @@ public final class Punishments {
 		Instant realExpiry = expiry == null ? Instant.MAX : expiry;
 		int[] realReferenced = referenced == null ? new int[0] : referenced;
 
-		return new ShadowMute(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
+		Punishment punishment = new ShadowMute(id, holder, punisher, realReason, realCreation, realExpiry, null, realReferenced);
+		punishment.setNeedsWrite(true);
+		return punishment;
 	}
 
 	public static Punishment newBan(PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced, boolean silent)
@@ -111,12 +129,20 @@ public final class Punishments {
 		Instant realExpiry = expiry == null ? Instant.MAX : expiry;
 		int[] realReferenced = referenced == null ? new int[0] : referenced;
 
+		Punishment punishment;
+
 		if (silent)
 		{
-			return new SilentBan(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
+			punishment = new SilentBan(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
+		}
+		else
+		{
+			punishment = new Ban(id, holder, punisher, realReason, realCreation, realExpiry, null, realReferenced);
 		}
 
-		return new Ban(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
+		punishment.setNeedsWrite(true);
+
+		return punishment;
 	}
 
 	public static Punishment newWarn(PunishmentHolder holder, Punisher punisher, String reason, Instant expiry, int[] referenced)
@@ -136,7 +162,9 @@ public final class Punishments {
 		Instant realExpiry = expiry == null ? Instant.MAX : expiry;
 		int[] realReferenced = referenced == null ? new int[0] : referenced;
 
-		return new Warn(id, holder, punisher, realReason, realCreation, realExpiry, realReferenced);
+		Punishment punishment = new Warn(id, holder, punisher, realReason, realCreation, realExpiry, null, realReferenced);
+		punishment.setNeedsWrite(true);
+		return punishment;
 	}
 
 	public static Punishment newKick(PunishmentHolder holder, Punisher punisher, String reason, int[] referenced, boolean silent)
@@ -160,7 +188,9 @@ public final class Punishments {
 			return new SilentKick(id, holder, punisher, realReason, realCreation, realReferenced);
 		}
 
-		return new Kick(id, holder, punisher, realReason, realCreation, realReferenced);
+		Punishment punishment = new Kick(id, holder, punisher, realReason, realCreation, realReferenced);
+		punishment.setNeedsWrite(true);
+		return punishment;
 	}
 
 	private final AtomicInteger counter = new AtomicInteger();

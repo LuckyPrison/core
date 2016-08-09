@@ -25,7 +25,7 @@ import com.ulfric.lib.craft.event.player.AsyncPlayerChatEvent;
 import com.ulfric.lib.craft.event.player.AsyncPreLoginEvent;
 import com.ulfric.lib.craft.event.player.PlayerCommandPreProcessEvent;
 
-public class ModulePunishments extends Module {
+public final class ModulePunishments extends Module {
 
 	public ModulePunishments()
 	{
@@ -64,6 +64,8 @@ public class ModulePunishments extends Module {
 		this.addCommand(new CommandShadowMute(this));
 		this.addCommand(new CommandWarn(this));
 		this.addCommand(new CommandWarns(this));
+		this.addCommand(new CommandLift(this));
+		this.addCommand(new CommandPardon(this));
 
 		this.addListener(new Listener(this)
 		{
