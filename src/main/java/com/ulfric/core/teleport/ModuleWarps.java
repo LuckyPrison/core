@@ -10,6 +10,7 @@ import com.ulfric.config.MutableDocument;
 import com.ulfric.config.SimpleDocument;
 import com.ulfric.data.DataAddress;
 import com.ulfric.data.DataContainer;
+import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.ReferenceCountedScope;
 import com.ulfric.lib.coffee.command.ArgFunction;
@@ -56,16 +57,17 @@ public final class ModuleWarps extends Module {
 	public void onFirstEnable()
 	{
 		this.warps = new CaseInsensitiveMap<>();
-		this.subscription = DataManager.get()
-									   .getDatabase("warps")
-									   .multi(Document.class, new ReferenceCountedScope<String>(), new DataAddress<>("warps", null, null))
-									   .blockOnSubscribe(true)
-									   .onChange((oldValue, newValue) ->
-									   {
-										   String key = newValue.getAddress().getId();
-										   this.warps.put(key, Warp.fromDocument(key, newValue.getValue()));
-									   })
-									   .subscribe();
+
+		DocumentStore store = DataManager.get().getEnsuredDatabase("warps");
+
+		this.subscription = store.multi(Document.class, new ReferenceCountedScope<String>(), new DataAddress<>("warps", null, null))
+								 .blockOnSubscribe(true)
+								 .onChange((oldValue, newValue) ->
+								 {
+									 String key = newValue.getAddress().getId();
+									 this.warps.put(key, Warp.fromDocument(key, newValue.getValue()));
+								 })
+								 .subscribe();
 
 		this.addCommand(new CommandWarp());
 		this.addCommand(new CommandWarps());
@@ -142,7 +144,7 @@ public final class ModuleWarps extends Module {
 			this.addPermission("setwarp.use");
 
 			this.addArgument(Argument.builder().setPath("warp").addResolver(ArgFunction.STRING_FUNCTION).build());
-			this.addArgument(Argument.builder().setPath("override").addResolver((sen, str) -> str.toLowerCase().equals("-o")).build());
+			this.addOptionalArgument(Argument.builder().setPath("override").addResolver((sen, str) -> str.toLowerCase().equals("-o")).build());
 		}
 
 		@Override
