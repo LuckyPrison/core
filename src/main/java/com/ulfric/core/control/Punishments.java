@@ -193,6 +193,13 @@ public final class Punishments {
 	void registerHolder(PunishmentHolder holder)
 	{
 		this.holders.put(holder.hasUniqueId() ? holder.getUniqueId() : holder.getIP(), holder);
+
+		for (Punishment punishment : this.allPunishments.values())
+		{
+			if (punishment.getHolder() != holder) continue;
+
+			holder.addPunishment(punishment);
+		}
 	}
 
 	public Punisher getPunisher(UUID uuid)
@@ -222,6 +229,8 @@ public final class Punishments {
 
 		this.allPunishments.put(idInteger, punishment);
 		this.punishments.get(punishment.getType()).put(idInteger, punishment);
+
+		punishment.getHolder().addPunishment(punishment);
 
 		if (id <= this.counter.get()) return;
 
