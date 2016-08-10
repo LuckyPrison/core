@@ -112,7 +112,8 @@ class Backpack extends Panel {
 			// Add next button
 			addButton(this.buttons.get(1), player.getLocalizedMessage("core.backpack.next"), this.page + 2);
 		}
-		return player.inv().open(this.inventory);
+		player.openInventory(this.inventory);
+		return true;
 	}
 
 	private void addButton(Button button, String lore, int page)

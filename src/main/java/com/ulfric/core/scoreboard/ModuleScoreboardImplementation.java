@@ -1,7 +1,5 @@
 package com.ulfric.core.scoreboard;
 
-import java.util.Objects;
-
 import com.ulfric.lib.coffee.economy.BalanceChangeEvent;
 import com.ulfric.lib.coffee.economy.Currency;
 import com.ulfric.lib.coffee.event.Handler;
@@ -30,18 +28,34 @@ public class ModuleScoreboardImplementation extends Module {
 			@Handler
 			public void onJoin(PlayerJoinEvent event)
 			{
-				Scoreboard scoreboard = event.getPlayer().scoreboard();
+				Scoreboard scoreboard = event.getPlayer().getScoreboard();
 				// TODO more elements, and have an element registry somewhere
 				scoreboard.addElement(new ElementBalance(scoreboard));
 				scoreboard.addElement(new ElementPlayercount(scoreboard));
 
-				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::update);
+				for (Player allPlayers : PlayerUtils.getOnlinePlayers())
+				{
+					Scoreboard sb = allPlayers.getScoreboard();
+					ElementPlayercount element = sb.elementFromClazz(ElementPlayercount.class);
+
+					if (element == null) continue;
+
+					element.update(allPlayers);
+				}
 			}
 
 			@Handler
 			public void onQuit(PlayerQuitEvent event)
 			{
-				PlayerUtils.streamOnlinePlayers().map(Player::scoreboard).map(sb -> sb.elementFromClazz(ElementPlayercount.class)).filter(Objects::nonNull).forEach(ElementPlayercount::update);
+				for (Player allPlayers : PlayerUtils.getOnlinePlayers())
+				{
+					Scoreboard sb = allPlayers.getScoreboard();
+					ElementPlayercount element = sb.elementFromClazz(ElementPlayercount.class);
+
+					if (element == null) continue;
+
+					element.update(allPlayers);
+				}
 			}
 
 			@Handler
@@ -53,11 +67,11 @@ public class ModuleScoreboardImplementation extends Module {
 
 				if (player == null) return;
 
-				ScoreboardElement element = player.scoreboard().elementFromClazz(ElementBalance.class);
+				ScoreboardElement element = player.getScoreboard().elementFromClazz(ElementBalance.class);
 
 				if (element == null) return;
 
-				element.update();
+				element.update(player);
 			}
 		});
 	}

@@ -31,7 +31,7 @@ public class ModuleVanishInterface extends Module {
 			@Handler
 			public void onJoin(PlayerJoinEvent event)
 			{
-				Scoreboard scoreboard = event.getPlayer().scoreboard();
+				Scoreboard scoreboard = event.getPlayer().getScoreboard();
 
 				scoreboard.addElement(new ElementVanish(scoreboard));
 			}
@@ -41,15 +41,15 @@ public class ModuleVanishInterface extends Module {
 			{
 				Player player = event.getPlayer();
 
-				Scoreboard scoreboard = player.scoreboard();
+				Scoreboard scoreboard = player.getScoreboard();
 
-				scoreboard.setBelowName(ChatColor.of("GRAY").toString() + "VANISHED");
+				scoreboard.setBelowName(player, ChatColor.of("GRAY").toString() + "VANISHED");
 
 				ScoreboardElement element = scoreboard.elementFromClazz(ElementVanish.class);
 
 				if (element == null) return;
 
-				element.update();
+				element.update(player);
 			}
 		});
 	}
@@ -62,9 +62,9 @@ public class ModuleVanishInterface extends Module {
 		}
 
 		@Override
-		public String getText()
+		public String getText(Player updater)
 		{
-			if (this.getPlayer().isNotVanished()) return null;
+			if (updater.isNotVanished()) return null;
 
 			return "core.scoreboard_vanish";
 		}

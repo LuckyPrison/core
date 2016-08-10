@@ -97,7 +97,7 @@ public final class ModulePunishments extends Module {
 
 				if (ModulePunishments.this.noChat(event, holder)) return;
 
-				holder = cache.getHolder(player.connection().getIP());
+				holder = cache.getHolder(player.getIP());
 
 				ModulePunishments.this.noChat(event, holder);
 			}
@@ -109,7 +109,7 @@ public final class ModulePunishments extends Module {
 
 				Punishments cache = Punishments.getInstance();
 
-				PunishmentHolder holder = cache.getHolder(player.connection().getIP());
+				PunishmentHolder holder = cache.getHolder(player.getIP());
 
 				if (ModulePunishments.this.shadowChat(event, holder)) return;
 
@@ -129,7 +129,7 @@ public final class ModulePunishments extends Module {
 
 				if (ModulePunishments.this.noCommand(event, holder)) return;
 
-				holder = cache.getHolder(player.connection().getIP());
+				holder = cache.getHolder(player.getIP());
 
 				ModulePunishments.this.noCommand(event, holder);
 			}

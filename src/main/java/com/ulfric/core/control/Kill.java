@@ -82,7 +82,7 @@ class Kill extends Punishment {
 
 	private void kill(Player player)
 	{
-		player.health().kill();
+		player.kill();
 	}
 
 }

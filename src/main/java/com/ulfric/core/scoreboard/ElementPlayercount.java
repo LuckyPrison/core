@@ -1,5 +1,6 @@
 package com.ulfric.core.scoreboard;
 
+import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.scoreboard.Scoreboard;
 import com.ulfric.lib.craft.scoreboard.ScoreboardElement;
@@ -12,9 +13,9 @@ class ElementPlayercount extends ScoreboardElement {
 	}
 
 	@Override
-	public String getText()
+	public String getText(Player updater)
 	{
-		if (!this.getPlayer().hasPermission("core.scoreboard.playercount")) return null;
+		if (!updater.hasPermission("core.scoreboard.playercount")) return null;
 
 		return String.valueOf(PlayerUtils.countOnlinePlayers());
 	}

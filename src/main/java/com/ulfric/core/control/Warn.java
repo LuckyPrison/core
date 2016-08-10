@@ -99,7 +99,7 @@ class Warn extends TimedPunishment {
 
 	private void warn(Player player)
 	{
-		player.title().send(player.getLocalizedMessage("warned.title"), null, 9, 200, 11);
+		player.sendTitle(player.getLocalizedMessage("warned.title"), null, 9, 200, 11);
 	}
 
 }

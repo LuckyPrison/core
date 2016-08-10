@@ -77,13 +77,13 @@ public class ModuleNameplates extends Module {
 			{
 				if (allPlayers == player) continue;
 
-				Scoreboard scoreboard = allPlayers.scoreboard();
+				Scoreboard scoreboard = allPlayers.getScoreboard();
 
-				ScoreboardTeam team = scoreboard.getTeam(plateName);
+				ScoreboardTeam team = scoreboard.getTeam(allPlayers, plateName);
 
 				if (team == null)
 				{
-					team = scoreboard.createTeam(plateName);
+					team = scoreboard.createTeam(allPlayers, plateName);
 
 					team.setPrefix(prefix);
 				}
@@ -94,9 +94,9 @@ public class ModuleNameplates extends Module {
 
 		Consumer<Player> youConsumer = player ->
 		{
-			Scoreboard scoreboard = player.scoreboard();
+			Scoreboard scoreboard = player.getScoreboard();
 
-			ScoreboardTeam self = scoreboard.getOrCreateTeam("_self");
+			ScoreboardTeam self = scoreboard.getOrCreateTeam(player, "_self");
 			self.setPrefix(player.getLocalizedMessage("nameplate.self"));
 			self.addEntry(player.getName());
 		};
@@ -315,7 +315,7 @@ public class ModuleNameplates extends Module {
 						key.setKey(entry.getKey());
 					}
 
-					clicker.inv().close();
+					clicker.closeInventory();
 
 					ModuleNameplates.this.consumer.accept(clicker, entry.getValue());
 				}).build());
