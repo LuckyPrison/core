@@ -15,14 +15,6 @@ database: false
 description: ${project.description}
 depend: [Lib]
 
-commands:
-  welcome:
-    description: Welcome the most recent player to the server
-    aliases: [welc]
-  trash:
-    description: Opens the garbage menu
-    aliases: [garbage]
-
 # WRITTEN BY ADAM "PACKET" EDWARDS
 # PERMISSION TO USE, DISTRIBUTE, OR
 # MODIFY MUST BE GRANTED DIRECTLY

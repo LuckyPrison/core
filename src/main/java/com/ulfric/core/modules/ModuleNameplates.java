@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 import com.ulfric.config.ConfigFile;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.data.DataAddress;
+import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
 import com.ulfric.lib.coffee.command.Command;
@@ -45,6 +46,84 @@ public class ModuleNameplates extends Module {
 	Map<UUID, NameplateKey> playerNameplates;
 	private MultiSubscription<UUID, String> subscription;
 	BiConsumer<Player, Nameplate> consumer;
+
+	@Override
+	public void onFirstEnable()
+	{
+		this.nameplates = Maps.newHashMap();
+		this.playerNameplates = Maps.newHashMap();
+
+		DocumentStore db = PlayerUtils.getPlayerData();
+
+		DataManager.get().ensureTableCreated(db, "nameplates");
+
+		this.subscription = db.multi(String.class, PlayerScopes.ONLINE, new DataAddress<>("nameplates", "key"))
+						 	  .onChange((oldValue, newValue) ->
+						 	  {
+						 		  this.playerNameplates.put(newValue.getAddress().getId(), new NameplateKey(newValue.getValue(), false));
+						 	  })
+						 	  .blockOnSubscribe(true)
+						 	  .subscribe();
+
+		Executor executor = Executors.newSingleThreadExecutor();
+
+		this.consumer = (player, plate) ->
+		{
+			String prefix = plate.getPrefix();
+			String plateName = plate.getName();
+			String name = player.getName();
+
+			for (Player allPlayers : PlayerUtils.getOnlinePlayers())
+			{
+				if (allPlayers == player) continue;
+
+				Scoreboard scoreboard = allPlayers.scoreboard();
+
+				ScoreboardTeam team = scoreboard.getTeam(plateName);
+
+				if (team == null)
+				{
+					team = scoreboard.createTeam(plateName);
+
+					team.setPrefix(prefix);
+				}
+
+				team.addEntry(name);
+			}
+		};
+
+		Consumer<Player> youConsumer = player ->
+		{
+			Scoreboard scoreboard = player.scoreboard();
+
+			ScoreboardTeam self = scoreboard.getOrCreateTeam("_self");
+			self.setPrefix(player.getLocalizedMessage("nameplate.self"));
+			self.addEntry(player.getName());
+		};
+
+		this.addListener(new Listener(this)
+		{
+			@Handler
+			public void onJoin(PlayerJoinEvent event)
+			{
+				Player player = event.getPlayer();
+
+				executor.execute(() -> youConsumer.accept(player));
+
+				NameplateKey key = ModuleNameplates.this.playerNameplates.get(player.getUniqueId());
+
+				if (key == null) return;
+
+				Nameplate nameplate = ModuleNameplates.this.nameplates.get(key.getKey());
+
+				if (nameplate == null) return;
+
+				ModuleNameplates.this.consumer.accept(player, nameplate);
+			}
+		});
+
+		this.addCommand(new CommandNameplates());
+	}
 
 	@Override
 	public void onModuleEnable()
@@ -175,83 +254,6 @@ public class ModuleNameplates extends Module {
 		{
 			return !this.isModified();
 		}
-	}
-
-	@Override
-	public void onFirstEnable()
-	{
-		this.nameplates = Maps.newHashMap();
-		this.playerNameplates = Maps.newHashMap();
-
-		DataManager.get().ensureTableCreated(PlayerUtils.getPlayerData(), "nameplates");
-
-		this.subscription = PlayerUtils.getPlayerData()
-						 			   .multi(String.class, PlayerScopes.ONLINE, new DataAddress<>("nameplates", null, null))
-						 			   .onChange((oldValue, newValue) ->
-						 			   {
-						 				   this.playerNameplates.put(newValue.getAddress().getId(), new NameplateKey(newValue.getValue(), false));
-						 			   })
-						 			   .blockOnSubscribe(true)
-						 			   .subscribe();
-
-		Executor executor = Executors.newSingleThreadExecutor();
-
-		this.consumer = (player, plate) ->
-		{
-			String prefix = plate.getPrefix();
-			String plateName = plate.getName();
-			String name = player.getName();
-
-			for (Player allPlayers : PlayerUtils.getOnlinePlayers())
-			{
-				if (allPlayers == player) continue;
-
-				Scoreboard scoreboard = allPlayers.scoreboard();
-
-				ScoreboardTeam team = scoreboard.getTeam(plateName);
-
-				if (team == null)
-				{
-					team = scoreboard.createTeam(plateName);
-
-					team.setPrefix(prefix);
-				}
-
-				team.addEntry(name);
-			}
-		};
-
-		Consumer<Player> youConsumer = player ->
-		{
-			Scoreboard scoreboard = player.scoreboard();
-
-			ScoreboardTeam self = scoreboard.getOrCreateTeam("_self");
-			self.setPrefix(player.getLocalizedMessage("nameplate.self"));
-			self.addEntry(player.getName());
-		};
-
-		this.addListener(new Listener(this)
-		{
-			@Handler
-			public void onJoin(PlayerJoinEvent event)
-			{
-				Player player = event.getPlayer();
-
-				executor.execute(() -> youConsumer.accept(player));
-
-				NameplateKey key = ModuleNameplates.this.playerNameplates.get(player.getUniqueId());
-
-				if (key == null) return;
-
-				Nameplate nameplate = ModuleNameplates.this.nameplates.get(key.getKey());
-
-				if (nameplate == null) return;
-
-				ModuleNameplates.this.consumer.accept(player, nameplate);
-			}
-		});
-
-		this.addCommand(new CommandNameplates());
 	}
 
 	private class CommandNameplates extends Command

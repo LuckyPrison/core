@@ -20,15 +20,15 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 
 	public static Warp newWarp(String name, Destination destination, ItemStack item)
 	{
-		return Warp.newWarp(name, destination, item, 0);
+		return Warp.newWarp(name, destination, item, 0, false);
 	}
 
-	public static Warp newWarp(String name, Destination destination, ItemStack item, int visits)
+	public static Warp newWarp(String name, Destination destination, ItemStack item, int visits, boolean closed)
 	{
 		Validate.notBlank(name);
 		Validate.notNull(destination);
 
-		return new Warp(name.trim(), destination, item == null ? Material.of("GRASS").toItem() : item.copy(), Math.abs(visits));
+		return new Warp(name.trim(), destination, item == null ? Material.of("GRASS").toItem() : item.copy(), Math.abs(visits), closed);
 	}
 
 	public static Warp fromDocument(String name, Document document)
@@ -40,28 +40,31 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 
 		Location location = LocationUtils.getLocation(destinationDocument.getString("location"));
 		int delay = Math.abs(NumberUtils.getInt(destinationDocument.getInteger("delay", 0)));
+		boolean closed = destinationDocument.getBoolean("closed", false);
 
 		Destination destination = Destination.newDestination(location, delay);
 
-		return Warp.newWarp(name, destination, item, visits);
+		return Warp.newWarp(name, destination, item, visits, closed);
 	}
 
 	private Warp(String name, Destination destination, ItemStack item)
 	{
-		this(name, destination, item, 0);
+		this(name, destination, item, 0, false);
 	}
 
-	private Warp(String name, Destination destination, ItemStack item, int visits)
+	private Warp(String name, Destination destination, ItemStack item, int visits, boolean closed)
 	{
 		super(name);
 		this.destination = destination;
 		this.item = item;
 		this.visits = visits;
+		this.closed = closed;
 	}
 
 	private final Destination destination;
 	private final ItemStack item;
 	private int visits;
+	private boolean closed;
 	private boolean modified;
 	private int hashCode = -1;
 
@@ -88,6 +91,25 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 	private void incrementVisits()
 	{
 		this.visits++;
+
+		this.modified = true;
+	}
+
+	public boolean isClosed()
+	{
+		return this.closed;
+	}
+
+	public boolean isNotClosed()
+	{
+		return !this.isClosed();
+	}
+
+	public void setClosed(boolean close)
+	{
+		if (this.closed == close) return;
+
+		this.closed = close;
 
 		this.modified = true;
 	}

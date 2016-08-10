@@ -10,6 +10,7 @@ import com.ulfric.config.MutableDocument;
 import com.ulfric.config.SimpleDocument;
 import com.ulfric.data.DataAddress;
 import com.ulfric.data.DataContainer;
+import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.ReferenceCountedScope;
 import com.ulfric.lib.coffee.command.ArgFunction;
@@ -36,25 +37,43 @@ public final class ModuleWarps extends Module {
 	Map<String, Warp> warps;
 	private MultiSubscription<String, Document> subscription;
 	private Panel panel;
+	final Argument warpArgument = Argument.builder().setPath("warp").addResolver((sen, str) ->
+	{
+		Warp warp = ModuleWarps.this.warps.get(str);
+
+		if (warp == null)
+		{
+			warp = ModuleWarps.this.warps.get(StringUtils.getClosest(ModuleWarps.this.warps.keySet(), str, 3).getValue());
+		}
+
+		if (warp == null) return null;
+
+		if (!sen.hasPermission("warps." + warp.getName())) return null;
+
+		return warp;
+	}).build();
 
 	@Override
 	public void onFirstEnable()
 	{
 		this.warps = new CaseInsensitiveMap<>();
-		this.subscription = DataManager.get()
-									   .getDatabase("warps")
-									   .multi(Document.class, new ReferenceCountedScope<String>(), new DataAddress<>("warps", null, null))
-									   .blockOnSubscribe(true)
-									   .onChange((oldValue, newValue) ->
-									   {
-										   String key = newValue.getAddress().getId();
-										   this.warps.put(key, Warp.fromDocument(key, newValue.getValue()));
-									   })
-									   .subscribe();
+
+		DocumentStore store = DataManager.get().getEnsuredDatabase("warps");
+
+		this.subscription = store.multi(Document.class, new ReferenceCountedScope<String>(), new DataAddress<>("warps", null, null))
+								 .blockOnSubscribe(true)
+								 .onChange((oldValue, newValue) ->
+								 {
+									 String key = newValue.getAddress().getId();
+									 this.warps.put(key, Warp.fromDocument(key, newValue.getValue()));
+								 })
+								 .subscribe();
 
 		this.addCommand(new CommandWarp());
 		this.addCommand(new CommandWarps());
 		this.addCommand(new CommandSetWarp());
+		this.addCommand(new CommandWarpOpen());
+		this.addCommand(new CommandWarpClose());
 	}
 
 	void displayWarpsMenu(CommandSender sender)
@@ -96,6 +115,7 @@ public final class ModuleWarps extends Module {
 
 			destinationDocument.set("location", warp.locationToString());
 			destinationDocument.set("delay", warp.getDelay());
+			destinationDocument.set("closed", warp.isClosed());
 
 			container.setValue(document);
 		}
@@ -124,7 +144,7 @@ public final class ModuleWarps extends Module {
 			this.addPermission("setwarp.use");
 
 			this.addArgument(Argument.builder().setPath("warp").addResolver(ArgFunction.STRING_FUNCTION).build());
-			this.addArgument(Argument.builder().setPath("override").addResolver((sen, str) -> str.toLowerCase().equals("-o")).build());
+			this.addOptionalArgument(Argument.builder().setPath("override").addResolver((sen, str) -> str.toLowerCase().equals("-o")).build());
 		}
 
 		@Override
@@ -165,21 +185,7 @@ public final class ModuleWarps extends Module {
 		{
 			super("warp", ModuleWarps.this, "warpto", "goto");
 
-			this.addOptionalArgument(Argument.builder().setPath("warp").addResolver((sen, str) ->
-			{
-				Warp warp = ModuleWarps.this.warps.get(str);
-	
-				if (warp == null)
-				{
-					warp = ModuleWarps.this.warps.get(StringUtils.getClosest(ModuleWarps.this.warps.keySet(), str, 3).getValue());
-				}
-	
-				if (warp == null) return null;
-	
-				if (!sen.hasPermission("warps." + warp.getName())) return null;
-	
-				return warp;
-			}).build());
+			this.addOptionalArgument(ModuleWarps.this.warpArgument);
 			this.addOptionalArgument(Argument.builder().setPath("player").setPermission("warp.others").addResolver(PlayerUtils::getOnlinePlayer).build());
 		}
 
@@ -195,6 +201,18 @@ public final class ModuleWarps extends Module {
 				ModuleWarps.this.displayWarpsMenu(sender);
 
 				return;
+			}
+
+			if (warp.isClosed())
+			{
+				if (!sender.hasPermission("warp.closed"))
+				{
+					sender.sendLocalizedMessage("warp.closed", warp.getName());
+
+					return;
+				}
+
+				sender.sendLocalizedMessage("warp.closed_bypass", warp.getName());
 			}
 
 			Player player = (Player) this.getObject("player");
@@ -223,6 +241,66 @@ public final class ModuleWarps extends Module {
 			}
 
 			warp.accept(player);
+		}
+	}
+
+	final class CommandWarpOpen extends Command
+	{
+		public CommandWarpOpen()
+		{
+			super("warpopen", ModuleWarps.this, "openwarp", "owarp", "warpo");
+
+			this.addArgument(ModuleWarps.this.warpArgument);
+
+			this.addPermission("warp.open");
+		}
+
+		@Override
+		public void run()
+		{
+			CommandSender sender = this.getSender();
+			Warp warp = (Warp) this.getObject("warp");
+
+			if (warp.isNotClosed())
+			{
+				sender.sendLocalizedMessage("warp.already_open", warp.getName());
+
+				return;
+			}
+
+			warp.setClosed(false);
+
+			sender.sendLocalizedMessage("warp.opened", warp.getName());
+		}
+	}
+
+	final class CommandWarpClose extends Command
+	{
+		public CommandWarpClose()
+		{
+			super("warpclose", ModuleWarps.this, "closewarp", "cwarp", "warpc");
+
+			this.addArgument(ModuleWarps.this.warpArgument);
+
+			this.addPermission("warp.close");
+		}
+
+		@Override
+		public void run()
+		{
+			CommandSender sender = this.getSender();
+			Warp warp = (Warp) this.getObject("warp");
+
+			if (warp.isClosed())
+			{
+				sender.sendLocalizedMessage("warp.already_closed", warp.getName());
+
+				return;
+			}
+
+			warp.setClosed(true);
+
+			sender.sendLocalizedMessage("warp.closed", warp.getName());
 		}
 	}
 

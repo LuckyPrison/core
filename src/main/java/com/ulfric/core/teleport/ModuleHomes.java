@@ -205,6 +205,7 @@ public final class ModuleHomes extends Module {
 			WarpSet warps = ModuleHomes.this.homes.get(uuid);
 
 			int visits = 0;
+			boolean closed = false;
 
 			if (warps == null)
 			{
@@ -233,6 +234,8 @@ public final class ModuleHomes extends Module {
 
 					visits = warp.getVisits();
 
+					closed = warp.isClosed();
+
 					break;
 				}
 
@@ -256,7 +259,7 @@ public final class ModuleHomes extends Module {
 				}
 			}
 
-			Warp warp = Warp.newWarp(lowerName, Destination.newDestination(((Player) sender).getLocation(), 5), material.toItem(), visits);
+			Warp warp = Warp.newWarp(lowerName, Destination.newDestination(((Player) sender).getLocation(), 5), material.toItem(), visits, closed);
 
 			warps.add(warp);
 		}
@@ -345,6 +348,13 @@ public final class ModuleHomes extends Module {
 			Warp home = ModuleHomes.this.getHome(sender, uuid, (String) this.getObject("home"), true);
 
 			if (home == null) return;
+
+			if (home.isClosed())
+			{
+				sender.sendLocalizedMessage("home.closed", home.getName());
+
+				return;
+			}
 
 			sender.sendLocalizedMessage("home.teleporting", home.getName(), home.getDelay());
 
