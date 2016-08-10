@@ -13,7 +13,8 @@ public enum PunishmentType {
 	MUTE(Mute::fromDocument),
 	COMMAND_MUTE(CmdMute::fromDocument),
 	SHADOW_MUTE(ShadowMute::fromDocument),
-	WARN(Warn::fromDocument);
+	WARN(Warn::fromDocument),
+	KILL(Kill::fromDocument);
 
 	private final Function<Document, Punishment> function;
 

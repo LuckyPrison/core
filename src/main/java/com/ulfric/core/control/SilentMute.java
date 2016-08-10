@@ -10,7 +10,7 @@ final class SilentMute extends Mute {
 
 	SilentMute(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, Instant expiry, int[] referenced)
 	{
-		super(id, holder, punisher, reason, placed, expiry, null, referenced);
+		super(id, holder, punisher, reason, placed, expiry, null, null, referenced);
 	}
 
 	@Override

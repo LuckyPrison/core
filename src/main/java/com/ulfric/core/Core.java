@@ -2,7 +2,6 @@ package com.ulfric.core;
 
 import com.ulfric.core.control.ModuleClearChat;
 import com.ulfric.core.control.ModuleCloseInventory;
-import com.ulfric.core.control.ModuleKill;
 import com.ulfric.core.control.ModulePunishments;
 import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.modules.ModuleEmailInterface;
@@ -30,7 +29,6 @@ public class Core extends Plugin {
 		this.addModule(new ModuleWarps());
 		this.addModule(new ModuleClearChat());
 		this.addModule(new ModuleCloseInventory());
-		this.addModule(new ModuleKill());
 		this.addModule(new ModulePunishments());
 		this.addModule(new ModuleEmailInterface());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module

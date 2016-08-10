@@ -49,7 +49,7 @@ public final class Punishments {
 		}
 		else
 		{
-			punishment = new Mute(id, holder, punisher, realReason, realCreation, realExpiry, null, realReferenced);
+			punishment = new Mute(id, holder, punisher, realReason, realCreation, realExpiry, null, null, realReferenced);
 		}
 
 		punishment.setNeedsWrite(true);
@@ -82,7 +82,7 @@ public final class Punishments {
 		}
 		else
 		{
-			punishment = new CmdMute(id, holder, punisher, realReason, realCreation, realExpiry, null, realReferenced);
+			punishment = new CmdMute(id, holder, punisher, realReason, realCreation, realExpiry, null, null, realReferenced);
 		}
 
 		punishment.setNeedsWrite(true);
@@ -107,7 +107,7 @@ public final class Punishments {
 		Instant realExpiry = expiry == null ? Instant.MAX : expiry;
 		int[] realReferenced = referenced == null ? new int[0] : referenced;
 
-		Punishment punishment = new ShadowMute(id, holder, punisher, realReason, realCreation, realExpiry, null, realReferenced);
+		Punishment punishment = new ShadowMute(id, holder, punisher, realReason, realCreation, realExpiry, null, null, realReferenced);
 		punishment.setNeedsWrite(true);
 		return punishment;
 	}
@@ -137,7 +137,7 @@ public final class Punishments {
 		}
 		else
 		{
-			punishment = new Ban(id, holder, punisher, realReason, realCreation, realExpiry, null, realReferenced);
+			punishment = new Ban(id, holder, punisher, realReason, realCreation, realExpiry, null, null, realReferenced);
 		}
 
 		punishment.setNeedsWrite(true);
@@ -162,7 +162,7 @@ public final class Punishments {
 		Instant realExpiry = expiry == null ? Instant.MAX : expiry;
 		int[] realReferenced = referenced == null ? new int[0] : referenced;
 
-		Punishment punishment = new Warn(id, holder, punisher, realReason, realCreation, realExpiry, null, realReferenced);
+		Punishment punishment = new Warn(id, holder, punisher, realReason, realCreation, realExpiry, null, null, realReferenced);
 		punishment.setNeedsWrite(true);
 		return punishment;
 	}
@@ -183,13 +183,51 @@ public final class Punishments {
 		Instant realCreation = creation == null ? Instant.now() : creation;
 		int[] realReferenced = referenced == null ? new int[0] : referenced;
 
+		Punishment punishment;
+
 		if (silent)
 		{
-			return new SilentKick(id, holder, punisher, realReason, realCreation, realReferenced);
+			punishment = new SilentKick(id, holder, punisher, realReason, realCreation, realReferenced);
+		}
+		else
+		{
+			punishment = new Kick(id, holder, punisher, realReason, realCreation, realReferenced);
 		}
 
-		Punishment punishment = new Kick(id, holder, punisher, realReason, realCreation, realReferenced);
 		punishment.setNeedsWrite(true);
+
+		return punishment;
+	}
+
+	public static Punishment newKill(PunishmentHolder holder, Punisher punisher, String reason, int[] referenced, boolean silent)
+	{
+		return Punishments.newKill(holder, punisher, reason, Instant.now(), referenced, silent);
+	}
+
+	public static Punishment newKill(PunishmentHolder holder, Punisher punisher, String reason, Instant creation, int[] referenced, boolean silent)
+	{
+		Validate.notNull(holder);
+		Validate.notNull(punisher);
+
+		int id = Punishments.getInstance().getAndIncrementCounter();
+
+		String realReason = StringUtils.isBlank(reason) ? Locale.getDefault().getRawMessage("kill.default_reason") : reason.trim();
+		Instant realCreation = creation == null ? Instant.now() : creation;
+		int[] realReferenced = referenced == null ? new int[0] : referenced;
+
+		Punishment punishment;
+
+		if (silent)
+		{
+			punishment = new SilentKill(id, holder, punisher, realReason, realCreation, realReferenced);
+		}
+		else
+		{
+			punishment = new Kill(id, holder, punisher, realReason, realCreation, realReferenced);
+		}
+
+		punishment.setNeedsWrite(true);
+
 		return punishment;
 	}
 

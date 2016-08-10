@@ -39,12 +39,14 @@ class CmdMute extends TimedPunishment {
 			updater = Punisher.valueOf(updaterStr);
 		}
 
-		return new CmdMute(id, holder, punisher, reason, creation, expiry, updater, referenced);
+		String updateReason = document.getString("update-reason");
+
+		return new CmdMute(id, holder, punisher, reason, creation, expiry, updater, updateReason, referenced);
 	}
 
-	CmdMute(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, Instant expiry, Punisher updater, int[] referenced)
+	CmdMute(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, Instant expiry, Punisher updater, String updateReason, int[] referenced)
 	{
-		super(id, PunishmentType.COMMAND_MUTE, holder, punisher, reason, placed, expiry, updater, referenced);
+		super(id, PunishmentType.COMMAND_MUTE, holder, punisher, reason, placed, expiry, updater, updateReason, referenced);
 	}
 
 	@Override

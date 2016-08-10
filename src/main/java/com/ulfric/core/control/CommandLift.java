@@ -52,7 +52,9 @@ public class CommandLift extends Command {
 
 		Punisher updater = Punisher.valueOf(sender);
 
-		timed.setExpiry(updater, null);
+		String updateReason = this.buildUnusedArgs();
+
+		timed.setExpiry(updater, updateReason, null);
 
 		sender.sendLocalizedMessage("life.lifted", punishment.getID());
 	}

@@ -55,13 +55,14 @@ public final class ModulePunishments extends Module {
 
 		this.allowedCommandMutes = Sets.newHashSet();
 
-		this.addModule(new ModuleNotes());
+		//this.addModule(new ModuleNotes());
 
 		this.addCommand(new CommandKick(this));
 		this.addCommand(new CommandBan(this));
 		this.addCommand(new CommandMute(this));
 		this.addCommand(new CommandCommandMute(this));
 		this.addCommand(new CommandShadowMute(this));
+		this.addCommand(new CommandKill(this));
 		this.addCommand(new CommandWarn(this));
 		this.addCommand(new CommandWarns(this));
 		this.addCommand(new CommandLift(this));
@@ -182,13 +183,6 @@ public final class ModulePunishments extends Module {
 	{
 		this.allowedCommandMutes.clear();
 
-		for (MapSubscription<Document> subscription : this.documents.values())
-		{
-			if (!subscription.isSubscribed()) continue;
-
-			subscription.unsubscribe();
-		}
-
 		Punishments punishments = Punishments.getInstance();
 
 		for (PunishmentType type : PunishmentType.values())
@@ -214,7 +208,7 @@ public final class ModulePunishments extends Module {
 				{
 					changed = true;
 
-					mut = new SimpleDocument(document.deepCopy());
+					mut = document == null ? new SimpleDocument() : new SimpleDocument(document.deepCopy());
 				}
 
 				String punishmentPath = "p" + punishment.getID();
@@ -235,6 +229,13 @@ public final class ModulePunishments extends Module {
 		}
 
 		punishments.dump();
+
+		for (MapSubscription<Document> subscription : this.documents.values())
+		{
+			if (!subscription.isSubscribed()) continue;
+
+			subscription.unsubscribe();
+		}
 	}
 
 	boolean kickBan(AsyncPreLoginEvent event, PunishmentHolder holder)

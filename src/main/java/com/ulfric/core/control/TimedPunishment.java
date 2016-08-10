@@ -13,7 +13,7 @@ abstract class TimedPunishment extends Punishment {
 
 	public static final Argument TIME_ARGUMENT = Argument.builder().setPath("time").addSimpleResolver(TimeUtils::future).setDefaultValue(Instant.MAX).build();
 
-	protected TimedPunishment(int id, PunishmentType type, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, Instant expiry, Punisher updater, int[] referenced)
+	protected TimedPunishment(int id, PunishmentType type, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, Instant expiry, Punisher updater, String updateReason, int[] referenced)
 	{
 		super(id, type, holder, punisher, reason, placed, referenced);
 
@@ -23,13 +23,14 @@ abstract class TimedPunishment extends Punishment {
 
 	private Instant expiry;
 	private Punisher updater;
+	private String uupdateReason;
 
 	public final Instant getExpiry()
 	{
 		return this.expiry;
 	}
 
-	public final void setExpiry(Punisher updater, Instant instant)
+	public final void setExpiry(Punisher updater, String updateReason, Instant instant)
 	{
 		Instant oldValue = this.expiry;
 
@@ -79,9 +80,12 @@ abstract class TimedPunishment extends Punishment {
 
 		document.set("expiry", this.hasExpiry() ? this.expiry.toEpochMilli() : -1);
 
-		if (this.updater == null) return;
+		if (this.updater != null)
+		{
+			document.set("updater", this.updater.toString());
 
-		document.set("updater", this.updater.toString());
+			document.set("update-reason", this.uupdateReason);
+		}
 	}
 
 }

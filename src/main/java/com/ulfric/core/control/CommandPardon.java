@@ -40,6 +40,8 @@ class CommandPardon extends Command {
 
 		List<Integer> ids = Lists.newArrayList();
 
+		String updateReason = this.buildUnusedArgs();
+
 		for (Punishment punishment : punishments)
 		{
 			if (!(punishment instanceof TimedPunishment)) continue;
@@ -48,7 +50,7 @@ class CommandPardon extends Command {
 
 			if (ban.isExpired()) continue;
 
-			ban.setExpiry(updater, null);
+			ban.setExpiry(updater, updateReason, null);
 
 			ids.add(punishment.getID());
 		}

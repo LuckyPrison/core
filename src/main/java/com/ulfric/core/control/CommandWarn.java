@@ -1,10 +1,12 @@
 package com.ulfric.core.control;
 
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
+import com.ulfric.lib.coffee.math.TimeUtils;
 import com.ulfric.lib.coffee.module.ModuleBase;
 
 class CommandWarn extends TimedPunishmentBaseCommand {
@@ -36,6 +38,12 @@ class CommandWarn extends TimedPunishmentBaseCommand {
 		Validate.notNull(referenced);
 
 		Instant expiry = this.getExpiry();
+
+		if (expiry == Instant.MAX)
+		{
+			expiry = TimeUtils.future(1, TimeUnit.DAYS);
+		}
+
 		Validate.notNull(expiry);
 
 		Punishment punishment = Punishments.newWarn(holder, punisher, reason, expiry, referenced);

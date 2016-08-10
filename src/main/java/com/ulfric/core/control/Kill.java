@@ -3,14 +3,12 @@ package com.ulfric.core.control;
 import java.time.Instant;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.ulfric.config.Document;
 import com.ulfric.lib.coffee.locale.Locale;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 
-class Warn extends TimedPunishment {
+class Kill extends Punishment {
 
 	public static Punishment fromDocument(Document document)
 	{
@@ -20,9 +18,6 @@ class Warn extends TimedPunishment {
 		String reason = document.getString("reason");
 		Instant creation = Instant.ofEpochMilli(document.getLong("creation"));
 
-		long expiryValue = document.getLong("expiry");
-		Instant expiry = expiryValue == -1 ? Instant.MAX : Instant.ofEpochMilli(expiryValue);
-
 		List<Integer> referencedList = document.getIntegerList("referenced");
 		int size = referencedList.size();
 		int[] referenced = new int[size];
@@ -31,22 +26,12 @@ class Warn extends TimedPunishment {
 			referenced[x] = referencedList.get(x);
 		}
 
-		Punisher updater = null;
-		String updaterStr = document.getString("updater");
-
-		if (!StringUtils.isBlank(updaterStr))
-		{
-			updater = Punisher.valueOf(updaterStr);
-		}
-
-		String updateReason = document.getString("update-reason");
-
-		return new Warn(id, holder, punisher, reason, creation, expiry, updater, updateReason, referenced);
+		return new Kill(id, holder, punisher, reason, creation, referenced);
 	}
 
-	Warn(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, Instant expiry, Punisher updater, String updateReason, int[] referenced)
+	Kill(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, int[] referenced)
 	{
-		super(id, PunishmentType.WARN, holder, punisher, reason, placed, expiry, updater, updateReason, referenced);
+		super(id, PunishmentType.WARN, holder, punisher, reason, placed, referenced);
 	}
 
 	@Override
@@ -54,7 +39,6 @@ class Warn extends TimedPunishment {
 	{
 		String punisher = this.getPunisher().getName();
 		String reason = this.getReason();
-		String expiry = this.hasExpiry() ? this.expiryToString() : null;
 		String referenced = this.getReferencedString();
 
 		for (Player player : PlayerUtils.getOnlinePlayers())
@@ -65,13 +49,12 @@ class Warn extends TimedPunishment {
 
 			String punished = this.getHolder().getName(player);
 
-			builder.append(locale.getFormattedMessage("warn.header", punished, punisher));
-			builder.append(locale.getFormattedMessage("warn.reason", reason));
-			builder.append(expiry == null ? locale.getRawMessage("warn.expiry_never") : locale.getFormattedMessage("warn.expiry", expiry));
+			builder.append(locale.getFormattedMessage("kill.header", punished, punisher));
+			builder.append(locale.getFormattedMessage("kill.reason", reason));
 
 			if (referenced != null)
 			{
-				builder.append(locale.getFormattedMessage("warn.referenced", referenced));
+				builder.append(locale.getFormattedMessage("kill.referenced", referenced));
 			}
 
 			player.sendMessage(builder.toString());
@@ -85,7 +68,7 @@ class Warn extends TimedPunishment {
 
 		if (holder.hasIP())
 		{
-			PlayerUtils.getOnlinePlayers(holder.getIP()).forEach(this::warn);
+			PlayerUtils.getOnlinePlayers(holder.getIP()).forEach(this::kill);
 		}
 
 		if (!holder.hasUniqueId()) return;
@@ -94,12 +77,12 @@ class Warn extends TimedPunishment {
 
 		if (player == null) return;
 
-		this.warn(player);
+		this.kill(player);
 	}
 
-	private void warn(Player player)
+	private void kill(Player player)
 	{
-		player.title().send(player.getLocalizedMessage("warned.title"), null, 9, 200, 11);
+		player.health().kill();
 	}
 
 }
