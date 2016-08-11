@@ -33,7 +33,7 @@ public class Punisher extends NamedBase implements Unique {
 	{
 		if (contextual.equals(Punisher.AGENT_NAME)) return Punisher.AGENT;
 
-		if (contextual.equalsIgnoreCase("console")) return Punisher.CONSOLE;
+		if (contextual.equals(Punisher.CONSOLE.getName())) return Punisher.CONSOLE;
 
 		return PunishmentHolder.valueOf(contextual);
 	}
@@ -61,7 +61,7 @@ public class Punisher extends NamedBase implements Unique {
 	@Override
 	public String toString()
 	{
-		return String.valueOf(this.uuid);
+		return this.uuid == null ? this.getName() : this.uuid.toString();
 	}
 
 	@Override

@@ -40,7 +40,7 @@ abstract class TimedPunishment extends Punishment {
 
 		this.updater = updater;
 
-		this.setNeedsWrite(true);
+		this.write();
 	}
 
 	public final boolean hasExpiry()

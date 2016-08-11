@@ -12,6 +12,10 @@ import org.apache.commons.lang3.Validate;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.ulfric.config.Document;
+import com.ulfric.config.MutableDocument;
+import com.ulfric.config.SimpleDocument;
+import com.ulfric.data.MapSubscription;
 import com.ulfric.lib.coffee.collection.MapUtils;
 import com.ulfric.lib.coffee.locale.Locale;
 
@@ -52,7 +56,7 @@ public final class Punishments {
 			punishment = new Mute(id, holder, punisher, realReason, realCreation, realExpiry, null, null, realReferenced);
 		}
 
-		punishment.setNeedsWrite(true);
+		punishment.write();
 
 		return punishment;
 	}
@@ -85,7 +89,7 @@ public final class Punishments {
 			punishment = new CmdMute(id, holder, punisher, realReason, realCreation, realExpiry, null, null, realReferenced);
 		}
 
-		punishment.setNeedsWrite(true);
+		punishment.write();
 
 		return punishment;
 	}
@@ -108,7 +112,7 @@ public final class Punishments {
 		int[] realReferenced = referenced == null ? new int[0] : referenced;
 
 		Punishment punishment = new ShadowMute(id, holder, punisher, realReason, realCreation, realExpiry, null, null, realReferenced);
-		punishment.setNeedsWrite(true);
+		punishment.write();
 		return punishment;
 	}
 
@@ -140,7 +144,7 @@ public final class Punishments {
 			punishment = new Ban(id, holder, punisher, realReason, realCreation, realExpiry, null, null, realReferenced);
 		}
 
-		punishment.setNeedsWrite(true);
+		punishment.write();
 
 		return punishment;
 	}
@@ -163,7 +167,7 @@ public final class Punishments {
 		int[] realReferenced = referenced == null ? new int[0] : referenced;
 
 		Punishment punishment = new Warn(id, holder, punisher, realReason, realCreation, realExpiry, null, null, realReferenced);
-		punishment.setNeedsWrite(true);
+		punishment.write();
 		return punishment;
 	}
 
@@ -194,7 +198,7 @@ public final class Punishments {
 			punishment = new Kick(id, holder, punisher, realReason, realCreation, realReferenced);
 		}
 
-		punishment.setNeedsWrite(true);
+		punishment.write();
 
 		return punishment;
 	}
@@ -226,7 +230,7 @@ public final class Punishments {
 			punishment = new Kill(id, holder, punisher, realReason, realCreation, realReferenced);
 		}
 
-		punishment.setNeedsWrite(true);
+		punishment.write();
 
 		return punishment;
 	}
@@ -235,8 +239,25 @@ public final class Punishments {
 	private final Map<Object, PunishmentHolder> holders = Maps.newHashMap();
 	private final Map<PunishmentType, Map<Integer, Punishment>> punishments = MapUtils.enumMapAllOf(PunishmentType.class, Maps::newHashMap);
 	private final Map<Integer, Punishment> allPunishments = Maps.newHashMap();
+	private Map<PunishmentType, MapSubscription<Document>> documents;
 
 	private Punishments() { }
+
+	void setDocuments(Map<PunishmentType, MapSubscription<Document>> documents)
+	{
+		this.documents = documents;
+	}
+
+	void write(Punishment punishment)
+	{
+		MapSubscription<Document> subscription = this.documents.get(punishment.getType());
+
+		MutableDocument document = new SimpleDocument();
+
+		punishment.into(document);
+
+		subscription.setField("p" + punishment.getID(), document);
+	}
 
 	public int currentID()
 	{

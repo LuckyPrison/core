@@ -14,7 +14,7 @@ class Kick extends Punishment {
 	{
 		int id = document.getInteger("id");
 		PunishmentHolder holder = PunishmentHolder.valueOf(document.getString("holder"));
-		Punisher punisher = PunishmentHolder.valueOf(document.getString("punisher"));
+		Punisher punisher = Punisher.valueOf(document.getString("punisher"));
 		String reason = document.getString("reason");
 		Instant creation = Instant.ofEpochMilli(document.getLong("creation"));
 

@@ -8,8 +8,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.ulfric.config.Document;
-import com.ulfric.config.MutableDocument;
-import com.ulfric.config.SimpleDocument;
 import com.ulfric.data.DataAddress;
 import com.ulfric.data.DataSubscription;
 import com.ulfric.data.DocumentStore;
@@ -40,6 +38,8 @@ public final class ModulePunishments extends Module {
 	{
 		this.documents = Maps.newEnumMap(PunishmentType.class);
 
+		Punishments.getInstance().setDocuments(this.documents);
+
 		DataManager manager = DataManager.get();
 
 		DocumentStore store = manager.getEnsuredDatabase("punishments");
@@ -50,7 +50,7 @@ public final class ModulePunishments extends Module {
 
 			manager.ensureTableCreated(store, name);
 
-			this.documents.put(type, store.document(new DataAddress<>(name, "punishments", null)).subscribe());
+			this.documents.put(type, store.document(new DataAddress<>(name, "punishments", null)).blockOnSubscribe(true).subscribe());
 		}
 
 		this.allowedCommandMutes = Sets.newHashSet();
@@ -179,49 +179,6 @@ public final class ModulePunishments extends Module {
 		this.allowedCommandMutes.clear();
 
 		Punishments punishments = Punishments.getInstance();
-
-		for (PunishmentType type : PunishmentType.values())
-		{
-			List<Punishment> punishmentTable = punishments.getAllPunishments(type);
-
-			if (ListUtils.isEmpty(punishmentTable)) continue;
-
-			this.log("Saving punishment type " + type.name().toLowerCase() + ", counted: " + punishmentTable.size());
-
-			MapSubscription<Document> subscription = this.documents.get(type);
-
-			Document document = subscription.getValue();
-			MutableDocument mut = null;
-
-			boolean changed = false;
-
-			for (Punishment punishment : punishmentTable)
-			{
-				if (!punishment.needsWrite()) continue;
-
-				if (mut == null)
-				{
-					changed = true;
-
-					mut = document == null ? new SimpleDocument() : new SimpleDocument(document.deepCopy());
-				}
-
-				String punishmentPath = "p" + punishment.getID();
-
-				MutableDocument punishmentDoc = mut.getDocument(punishmentPath);
-
-				if (punishmentDoc == null)
-				{
-					punishmentDoc = mut.createDocument(punishmentPath);
-				}
-
-				punishment.into(punishmentDoc);
-			}
-
-			if (!changed) continue;
-
-			subscription.setValue(mut);
-		}
 
 		punishments.dump();
 
