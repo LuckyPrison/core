@@ -31,7 +31,7 @@ class Kill extends Punishment {
 
 	Kill(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, int[] referenced)
 	{
-		super(id, PunishmentType.WARN, holder, punisher, reason, placed, referenced);
+		super(id, PunishmentType.KILL, holder, punisher, reason, placed, referenced);
 	}
 
 	@Override
