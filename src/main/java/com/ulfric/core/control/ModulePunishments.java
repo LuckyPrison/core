@@ -2,7 +2,6 @@ package com.ulfric.core.control;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
@@ -12,6 +11,7 @@ import com.ulfric.config.Document;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.config.SimpleDocument;
 import com.ulfric.data.DataAddress;
+import com.ulfric.data.DataSubscription;
 import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MapSubscription;
 import com.ulfric.lib.coffee.collection.ListUtils;
@@ -50,7 +50,7 @@ public final class ModulePunishments extends Module {
 
 			manager.ensureTableCreated(store, name);
 
-			this.documents.put(type, store.document(new DataAddress<>(name, "punishments")).subscribe());
+			this.documents.put(type, store.document(new DataAddress<>(name, "punishments", null)).subscribe());
 		}
 
 		this.allowedCommandMutes = Sets.newHashSet();
@@ -139,16 +139,11 @@ public final class ModulePunishments extends Module {
 	@Override
 	public void onModuleEnable()
 	{
-		for (MapSubscription<Document> subscription : this.documents.values())
-		{
-			if (subscription.isSubscribed()) continue;
-
-			subscription.subscribe();
-		}
+		this.documents.values().forEach(DataSubscription::subscribe);
 
 		Punishments punishments = Punishments.getInstance();
 
-		for (Entry<PunishmentType, MapSubscription<Document>> entry : this.documents.entrySet())
+		for (Map.Entry<PunishmentType, MapSubscription<Document>> entry : this.documents.entrySet())
 		{
 			PunishmentType type = entry.getKey();
 			MapSubscription<Document> subscription = entry.getValue();
@@ -230,12 +225,7 @@ public final class ModulePunishments extends Module {
 
 		punishments.dump();
 
-		for (MapSubscription<Document> subscription : this.documents.values())
-		{
-			if (!subscription.isSubscribed()) continue;
-
-			subscription.unsubscribe();
-		}
+		this.documents.values().forEach(DataSubscription::unsubscribe);
 	}
 
 	boolean kickBan(AsyncPreLoginEvent event, PunishmentHolder holder)
