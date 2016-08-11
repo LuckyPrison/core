@@ -50,16 +50,16 @@ public class ModuleBeheading extends Module {
 				if (weapon == WeaponType.SWORD)
 				{
 					chance = 0.23;
-					sound = PlayableSound.builder().setSound(Sound.of("")).setVolume(10).setPitch(5).build();
 				}
 				else if (weapon == WeaponType.AXE)
 				{
 					chance = 0.34;
+					sound = PlayableSound.builder().setSound(Sound.of("ANVIL_BREAK")).setVolume(10).setPitch(5).build();
 				}
 				else if (weapon == WeaponType.BOW)
 				{
 					chance = 0.10;
-					sound = PlayableSound.builder().setSound(Sound.of("ENTITY_BAT_TAKEOFF")).setVolume(10).setPitch(5).build();
+					sound = PlayableSound.builder().setSound(Sound.of("BAT_TAKEOFF")).setVolume(10).setPitch(5).build();
 				}
 				else if (weapon == WeaponType.FIST)
 				{
