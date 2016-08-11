@@ -1,2 +1,10 @@
 *.iml
-target
+
+target/
+bin/
+.classpath
+.project
+.gitignore
+.settings/
+.idea/
+dependency-reduced-pom.xml
