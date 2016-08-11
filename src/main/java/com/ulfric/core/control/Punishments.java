@@ -238,6 +238,11 @@ public final class Punishments {
 
 	private Punishments() { }
 
+	public int currentID()
+	{
+		return this.counter.get();
+	}
+
 	int getAndIncrementCounter()
 	{
 		return this.counter.getAndIncrement();

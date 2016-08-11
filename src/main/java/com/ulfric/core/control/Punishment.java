@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.lib.coffee.command.Argument;
+import com.ulfric.lib.coffee.locale.Locale;
 import com.ulfric.lib.coffee.numbers.NumberUtils;
 
 public abstract class Punishment implements Runnable, Comparable<Punishment>, Noteable {
@@ -31,7 +32,7 @@ public abstract class Punishment implements Runnable, Comparable<Punishment>, No
 
 		String[] split = match.split("[^0-9]+");
 
-		List<Integer> parsed = Lists.newArrayListWithExpectedSize(split.length);
+		List<Integer> parsed = Lists.newArrayListWithCapacity(split.length);
 
 		Punishments punishments = Punishments.getInstance();
 
@@ -207,7 +208,12 @@ public abstract class Punishment implements Runnable, Comparable<Punishment>, No
 		document.set("punisher", this.punisher.toString());
 		document.set("reason", this.reason);
 		document.set("creation", this.creation.toEpochMilli());
-		document.set("referenced", Lists.newArrayList(this.referenced));
+		document.set("referenced", Lists.newArrayList(this.referenced)); // TODO is the list needed?
+	}
+
+	public String quickInspect(Locale locale)
+	{
+		return locale.getFormattedMessage("punishment.inspect_quick", this.getID(), this.getHolder(), this.getReason());
 	}
 
 	@Override
