@@ -21,7 +21,7 @@ public class EnchantmentMagic extends PrisonEnchantment {
 	@Override
 	public int getMaxLevel()
 	{
-		return 4;
+		return 5;
 	}
 
 }
