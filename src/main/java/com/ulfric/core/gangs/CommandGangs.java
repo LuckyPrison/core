@@ -27,6 +27,9 @@ public class CommandGangs extends Command {
 
 		command = new SubCommandUninvite(owner);
 		this.addCommand(command, CommandKey.builder().add(command.getName()).add("deinvite").build());
+
+		command = new SubCommandInvites(owner);
+		this.addCommand(command, CommandKey.builder().add(command.getName()).add("listinvites").build());
 	}
 
 	@Override

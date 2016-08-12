@@ -241,6 +241,11 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 		this.save();
 	}
 
+	public List<UUID> getInvites()
+	{
+		return ImmutableList.copyOf(this.invites);
+	}
+
 	public void setHome(Location location)
 	{
 		if (location == null)
