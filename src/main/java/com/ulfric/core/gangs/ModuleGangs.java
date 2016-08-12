@@ -26,7 +26,7 @@ public class ModuleGangs extends Module {
 
 		manager.ensureTableCreated(database, "gangs");
 
-		this.subscription = database.document(new DataAddress<>("gangs", null, null)).blockOnSubscribe(true).subscribe();
+		this.subscription = database.document(new DataAddress<>("gangs", "gangs", null)).blockOnSubscribe(true).subscribe();
 
 		Gangs.getInstance().setSubscription(this.subscription);
 
