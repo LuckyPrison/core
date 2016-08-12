@@ -37,7 +37,7 @@ public class CommandBalance extends Command {
 			final String playerName = player.getName();
 			final Player sender = (Player) getSender();
 			Bank.getAccount(player.getUniqueId()).retrieveBalance(currency).whenComplete(ThreadUtils::runOnMain, (bal, error) -> {
-				Long balance = bal == null ? 0L : bal;
+				long balance = bal == null ? 0L : bal;
 				if (error != null)
 				{
 					error.printStackTrace();
