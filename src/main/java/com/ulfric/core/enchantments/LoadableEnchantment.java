@@ -53,5 +53,4 @@ public abstract class LoadableEnchantment extends Enchantment implements Named {
 	{
 		entity.addPotionEffect(level == 0 ? this.getBaseEffect() : new PotionEffect(this.getEffect(), Integer.MAX_VALUE, level, false, false), false);
 	}
-
 }

@@ -3,14 +3,16 @@ package com.ulfric.core.enchantments.loader;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.ulfric.core.Core;
-import com.ulfric.core.enchantments.StateEnchantment;
+import com.ulfric.core.enchantments.*;
+import com.ulfric.core.gui.PanelEnchants;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.craft.entity.player.Player;
+import com.ulfric.lib.craft.inventory.item.enchant.EnchantUtils;
+import com.ulfric.lib.craft.inventory.item.enchant.Enchantment;
+import com.ulfric.lib.craft.inventory.item.meta.ItemMeta;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.Map;
@@ -28,6 +30,19 @@ public class ModuleEnchantLoader extends Module {
     @Override
     public void onFirstEnable()
     {
+
+        EnchantUtils.setAcceptingNewEnchantsMutable(true);
+
+        /*
+        EnchantUtils.registerCustomEnchantments(EnchantmentFlight.get(),
+                EnchantmentBlasting.get(),
+                EnchantmentNeverbreaking.get(),
+                EnchantmentSpeedygonzales.get(),
+                EnchantmentMagic.get(),
+                EnchantmentAutoSell.get()
+        );
+
+         */
         EnchantmentLoader.impl = new EnchantmentLoader.IEnchantmentLoader() {
             private final Map<EnchantmentType, Set<? extends Enchantment>> enchants = Maps.newEnumMap(EnchantmentType.class);
 
@@ -71,25 +86,10 @@ public class ModuleEnchantLoader extends Module {
             @Override
             public boolean shouldAct(Player player)
             {
-                if (player.getItemInHand() != null)
-                {
-                    ItemMeta meta = player.getItemInHand().getItemMeta();
+                if(player.inv().getMainHand() != null){
+                    ItemMeta meta = player.inv().getMainHand().getMeta();
 
-                    Set<StateEnchantment> enchs = EnchantmentLoader.getEnchants(EnchantmentType.STATE);
-
-                    for (Enchantment ench : meta.getEnchants().keySet())
-                    {
-                        if (!(ench instanceof StateEnchantment)) continue;
-
-                        if (!enchs.contains(ench)) continue;
-
-                        StateEnchantment stateEnchantment = ((StateEnchantment) ench);
-
-                        if (meta.getEnchantLevel(stateEnchantment) == 1)
-                        {
-                            return true;
-                        }
-                    }
+                    // TODO redo
                 }
                 return false;
             }
@@ -106,7 +106,8 @@ public class ModuleEnchantLoader extends Module {
         @Override
         public void run()
         {
-            // TODO
+          Player player = (Player) this.getSender();
+            PanelEnchants.get().open(player);
         }
     }
 }

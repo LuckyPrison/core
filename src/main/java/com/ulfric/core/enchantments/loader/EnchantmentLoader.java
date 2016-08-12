@@ -1,6 +1,6 @@
 package com.ulfric.core.enchantments.loader;
 
-import org.bukkit.enchantments.Enchantment;
+import com.ulfric.lib.craft.inventory.item.enchant.Enchantment;
 
 import java.util.Set;
 
