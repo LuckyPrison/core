@@ -33,6 +33,9 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 		Validate.notNull(document);
 
 		UUID uuid = UUID.fromString(document.getString("uuid"));
+
+		if (uuid == null) return null;
+
 		String name = document.getString("name");
 
 		Instant created = Instant.ofEpochMilli(document.getLong("created"));
@@ -280,6 +283,7 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 
 	public void into(MutableDocument document)
 	{
+		document.set("uuid", this.uuid.toString());
 		document.set("name", this.name);
 		document.set("created", this.created.toEpochMilli());
 		document.set("home", this.home == null ? null : this.home.locationToString());

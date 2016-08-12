@@ -1,7 +1,9 @@
 package com.ulfric.core.gangs;
 
+import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
 import com.ulfric.config.Document;
 import com.ulfric.data.DataAddress;
 import com.ulfric.data.DocumentStore;
@@ -53,6 +55,8 @@ public class ModuleGangs extends Module {
 
 		Gangs gangs = Gangs.getInstance();
 
+		List<String> delete = Lists.newArrayList();
+
 		for (String key : keys)
 		{
 			Document gangDocument = document.getDocument(key);
@@ -70,10 +74,25 @@ public class ModuleGangs extends Module {
 			{
 				this.log("[WARNING] Could not load gang: " + key);
 
+				this.log("Failed document: " + gangDocument);
+
+				delete.add(key);
+
 				continue;
 			}
 
 			gangs.registerGang(gang);
+		}
+
+		if (delete.isEmpty()) return;
+
+		this.log("Deleting " + delete.size() + " invalid keys");
+
+		for (String deleteKey : delete)
+		{
+			this.subscription.removeField(deleteKey);
+
+			this.log("Deleted: " + deleteKey);
 		}
 	}
 
