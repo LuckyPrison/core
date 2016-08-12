@@ -1,7 +1,7 @@
 package com.ulfric.core.enchantments;
 
+import com.ulfric.lib.craft.entity.player.Player;
 import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.entity.Player;
 
 public class StateEnchantment extends PrisonEnchantment {
 

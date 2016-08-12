@@ -10,7 +10,6 @@ public abstract class PrisonEnchantment extends Enchantment implements Named {
 	protected PrisonEnchantment(int id, String name)
 	{
 		super(id);
-
 		this.name = name;
 	}
 

@@ -1,24 +1,26 @@
 package com.ulfric.core.enchantments.loader;
 
-import java.util.Set;
+import com.ulfric.lib.craft.inventory.item.enchant.Enchantment;
 
-import org.bukkit.enchantments.Enchantment;
+import java.util.Set;
 
 public class EnchantmentLoader {
 
-	protected static IEnchantmentLoader impl = IEnchantmentLoader.EMPTY;
+    protected static IEnchantmentLoader impl = IEnchantmentLoader.EMPTY;
 
-	public static <T extends Enchantment> Set<T> getEnchants(EnchantmentType type)
-	{
-		return EnchantmentLoader.impl.getEnchants(type);
-	}
-
-
-	protected interface IEnchantmentLoader
+    public static <T extends Enchantment> Set<T> getEnchants(EnchantmentType type)
     {
-        IEnchantmentLoader EMPTY = new IEnchantmentLoader() { };
+        return EnchantmentLoader.impl.getEnchants(type);
+    }
 
-        default <T extends Enchantment> Set<T> getEnchants(EnchantmentType type) { return null; }
+
+    protected interface IEnchantmentLoader {
+        IEnchantmentLoader EMPTY = new IEnchantmentLoader() {};
+
+        default <T extends Enchantment> Set<T> getEnchants(EnchantmentType type)
+        {
+            return null;
+        }
 
     }
 

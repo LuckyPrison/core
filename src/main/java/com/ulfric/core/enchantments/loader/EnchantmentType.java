@@ -4,5 +4,4 @@ public enum EnchantmentType {
 	PATTERN,
 	EFFECT,
 	STATE;
-
 }
