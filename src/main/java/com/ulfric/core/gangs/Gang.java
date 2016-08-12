@@ -65,7 +65,7 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 
 				Document memberDocument = membersDocument.getDocument(key);
 
-				GangRank rank = GangRank.valueOf(memberDocument.getString("rank"));
+				GangRank rank = GangRank.valueOf(memberDocument.getString("rank", GangRank.MEMBER.name()));
 				Instant joined = Instant.ofEpochMilli(memberDocument.getLong("joined"));
 
 				members.put(memberUUID, GangMember.builder().setUUID(memberUUID).setRank(rank).setJoined(joined));
@@ -292,43 +292,51 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 		document.set("created", this.created.toEpochMilli());
 		document.set("home", this.home == null ? null : this.home.locationToString());
 
-		MutableDocument membersDocument = document.createDocument("members");
-		for (Entry<UUID, GangMember> entry : this.members.entrySet())
+		Set<Entry<UUID, GangMember>> memberSet = this.members.entrySet();
+		if (!memberSet.isEmpty())
 		{
-			String uuidString = entry.getKey().toString();
-			GangMember member = entry.getValue();
-
-			if (member == null)
+			MutableDocument membersDocument = document.createDocument("members");
+			for (Entry<UUID, GangMember> entry : memberSet)
 			{
-				membersDocument.set(uuidString, null);
+				String uuidString = entry.getKey().toString();
+				GangMember member = entry.getValue();
 
-				continue;
+				if (member == null)
+				{
+					membersDocument.set(uuidString, null);
+
+					continue;
+				}
+
+				MutableDocument memberDocument = membersDocument.createDocument(uuidString);
+
+				memberDocument.set("rank", member.getRank().name());
+				memberDocument.set("joined", member.getJoined().toEpochMilli());
 			}
-
-			MutableDocument memberDocument = membersDocument.createDocument(uuidString);
-
-			memberDocument.set("rank", member.getRank());
-			memberDocument.set("joined", member.getJoined().toEpochMilli());
 		}
 
-		MutableDocument relationsDocument = document.createDocument("relations");
-		for (Entry<UUID, GangRelation> entry : this.relations.entrySet())
+		Set<Entry<UUID, GangRelation>> relationSet = this.relations.entrySet();
+		if (!relationSet.isEmpty())
 		{
-			UUID key = entry.getKey();
-			String uuidString = key.toString();
-			GangRelation relation = entry.getValue();
-
-			if (relation == null || Gangs.getInstance().getGang(key) == null)
+			MutableDocument relationsDocument = document.createDocument("relations");
+			for (Entry<UUID, GangRelation> entry : relationSet)
 			{
-				relationsDocument.set(uuidString, null);
+				UUID key = entry.getKey();
+				String uuidString = key.toString();
+				GangRelation relation = entry.getValue();
 
-				continue;
+				if (relation == null || Gangs.getInstance().getGang(key) == null)
+				{
+					relationsDocument.set(uuidString, null);
+
+					continue;
+				}
+
+				MutableDocument relationDocument = relationsDocument.createDocument(uuidString);
+
+				relationDocument.set("relation", relation.getRelation().name());
+				relationDocument.set("since", relation.getSince().toEpochMilli());
 			}
-
-			MutableDocument relationDocument = relationsDocument.createDocument(uuidString);
-
-			relationDocument.set("relation", relation.getRelation());
-			relationDocument.set("since", relation.getSince().toEpochMilli());
 		}
 
 		document.set("invites", this.invites.stream().map(Object::toString).collect(Collectors.toList()));
