@@ -50,9 +50,11 @@ public final class Gangs {
 	{
 		this.gangs.put(gang.getUniqueId(), gang);
 		this.gangsByName.put(gang.getName(), gang);
+
+		gang.getMembers().forEach(this::registerMember);
 	}
 
-	void registerMember(GangMember member)
+	private void registerMember(GangMember member)
 	{
 		this.members.put(member.getUniqueId(), member);
 	}

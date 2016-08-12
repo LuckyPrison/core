@@ -72,7 +72,6 @@ public class ModuleGangs extends Module {
 			}
 
 			gangs.registerGang(gang);
-			gang.getMembers().forEach(gangs::registerMember);
 		}
 	}
 

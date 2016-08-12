@@ -6,22 +6,27 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.ulfric.config.Document;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.core.teleport.Warp;
 import com.ulfric.lib.coffee.string.Nameable;
 import com.ulfric.lib.coffee.string.Unique;
+import com.ulfric.lib.craft.entity.player.Player;
+import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.location.Destination;
 import com.ulfric.lib.craft.location.Location;
 import com.ulfric.lib.craft.location.LocationUtils;
 
-public final class Gang implements Nameable, Unique {
+public final class Gang implements Nameable, Unique, Comparable<Gang> {
 
 	public static Gang fromDocument(Document document)
 	{
@@ -82,6 +87,31 @@ public final class Gang implements Nameable, Unique {
 		return new Gang(uuid, name, created, home, members, relations, invites);
 	}
 
+	public static Gang newGang(Gangs gangs, UUID uuid, String name, UUID owner)
+	{
+		Validate.notNull(gangs);
+		Validate.notNull(uuid);
+		Validate.notNull(name);
+		Validate.notNull(owner);
+
+		Instant created = Instant.now();
+
+		Warp home = null;
+
+		Map<UUID, GangMember.Builder> members = Maps.newHashMap();
+		members.put(owner, GangMember.builder().setUUID(owner).setJoined(created).setRank(GangRank.LEADER));
+
+		Map<UUID, GangRelation> relations = Maps.newHashMap();
+
+		Set<UUID> invites = Sets.newHashSet();
+
+		Gang gang = new Gang(uuid, name, created, home, members, relations, invites);
+
+		gangs.registerGang(gang);
+
+		return gang;
+	}
+
 	Gang(UUID uuid, String name, Instant created, Warp home, Map<UUID, GangMember.Builder> members, Map<UUID, GangRelation> relations, Set<UUID> invites)
 	{
 		this.uuid = uuid;
@@ -107,6 +137,10 @@ public final class Gang implements Nameable, Unique {
 	private final Map<UUID, GangMember> members;
 	private final Map<UUID, GangRelation> relations;
 	private final Set<UUID> invites;
+
+	private static final long MILLIS_THRESHOLD = TimeUnit.MINUTES.toMillis(10);
+	private int cachedCompareSize;
+	private long lastCacheUpdate = System.currentTimeMillis();
 
 	@Override
 	public UUID getUniqueId()
@@ -201,9 +235,28 @@ public final class Gang implements Nameable, Unique {
 		return ImmutableList.copyOf(this.members.keySet());
 	}
 
+	public Set<Player> getOnlinePlayers()
+	{
+		return PlayerUtils.getPlayers(this.members.keySet());
+	}
+
 	public List<UUID> getRelationParticipants()
 	{
 		return ImmutableList.copyOf(this.relations.keySet());
+	}
+
+	public List<UUID> getRelations(Relation relation)
+	{
+		List<UUID> list = Lists.newArrayList();
+
+		for (Entry<UUID, GangRelation> entry : this.relations.entrySet())
+		{
+			if (entry.getValue().getRelation() != relation) continue;
+
+			list.add(entry.getKey());
+		}
+
+		return list;
 	}
 
 	public List<GangMember> getMembers()
@@ -269,6 +322,59 @@ public final class Gang implements Nameable, Unique {
 		}
 
 		document.set("invites", this.invites.stream().map(Object::toString).collect(Collectors.toList()));
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return this.uuid.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object object)
+	{
+		if (object == this) return true;
+
+		if (!(object instanceof Gang)) return false;
+
+		return ((Gang) object).uuid.equals(this.uuid);
+	}
+
+	@Override
+	public int compareTo(Gang gang)
+	{
+		int compare = Integer.compare(this.calculateCompareSize(), gang.calculateCompareSize());
+
+		if (compare == 0)
+		{
+			compare = Integer.compare(this.members.size(), gang.members.size());
+
+			if (compare == 0)
+			{
+				compare = this.name.compareToIgnoreCase(gang.name);
+
+				if (compare == 0)
+				{
+					compare = this.created.compareTo(gang.created);
+				}
+			}
+		}
+
+		return compare;
+	}
+
+	private int calculateCompareSize()
+	{
+		final long current = System.currentTimeMillis();
+
+		if (current - this.lastCacheUpdate <= Gang.MILLIS_THRESHOLD)
+		{
+			return this.cachedCompareSize;
+		}
+
+		this.lastCacheUpdate = current;
+
+		return this.cachedCompareSize = this.getOnlinePlayers().size();
 	}
 
 }

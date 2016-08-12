@@ -11,7 +11,13 @@ public class CommandGangs extends Command {
 		super("gangs", owner, "gang", "g", "party", "clan");
 
 		Command command = new SubCommandInfo(owner);
-		this.addCommand(command, CommandKey.builder().add(command.getName()).add("i").add("inspect").add("check").build());
+		this.addCommand(command, CommandKey.builder().add(command.getName()).add("i").add("inspect").add("check").add("lookup").build());
+
+		command = new SubCommandCreate(owner);
+		this.addCommand(command, CommandKey.builder().add(command.getName()).add("new").add("n").add("open").build());
+
+		command = new SubCommandDisband(owner);
+		this.addCommand(command, CommandKey.builder().add(command.getName()).add("delete").add("open").build());
 	}
 
 	@Override

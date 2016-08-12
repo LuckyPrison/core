@@ -16,7 +16,7 @@ abstract class GangCommand extends Command {
 			GangMember member = gangs.getMember(cmd.getSender().getUniqueId());
 			if (member == null) return null;
 			return member.getGang();
-		}).setUsage("gangs.specify_gang").build());
+		}).setPermission("gangs." + this.getName() + ".others").setUsage("gangs.specify_gang").build());
 	}
 
 	public final Gang getGang()
