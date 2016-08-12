@@ -109,6 +109,8 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 
 		gangs.registerGang(gang);
 
+		gang.save();
+
 		return gang;
 	}
 
