@@ -7,6 +7,7 @@ import org.apache.commons.lang3.Validate;
 import com.ulfric.lib.coffee.command.ArgFunction;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
+import com.ulfric.lib.coffee.command.Enforcers;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.math.RandomUtils;
@@ -90,7 +91,7 @@ public class ModuleBeheading extends Module {
 			super("playerskull", ModuleBeheading.this, "skull");
 
 			this.addArgument(Argument.builder().setPath("owner").addResolver(ArgFunction.STRING_FUNCTION).setUsage("playerskull.specify_owner").build());
-			this.addEnforcer(Player.class::isInstance, "playerskull.must_be_player");
+			this.addEnforcer(Enforcers.IS_PLAYER, "playerskull.must_be_player");
 		}
 
 		@Override

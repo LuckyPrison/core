@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.ulfric.lib.coffee.command.ArgFunction;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
+import com.ulfric.lib.coffee.command.Enforcers;
 import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.email.EmailUtils;
 import com.ulfric.lib.coffee.module.Module;
@@ -35,7 +36,7 @@ public class ModuleEmailInterface extends Module {
 
 			this.addArgument(Argument.builder().setPath("address").addSimpleResolver(EmailUtils::parseAddress).setUsage("email.specify_address").build());
 
-			this.addEnforcer(Player.class::isInstance, "email.must_be_player");
+			this.addEnforcer(Enforcers.IS_PLAYER, "email.must_be_player");
 		}
 
 		@Override
@@ -74,7 +75,7 @@ public class ModuleEmailInterface extends Module {
 
 			this.addArgument(Argument.builder().setPath("code").addResolver(ArgFunction.STRING_FUNCTION).setUsage("confirm.code_required").build());
 
-			this.addEnforcer(Player.class::isInstance, "confirm.must_be_player");
+			this.addEnforcer(Enforcers.IS_PLAYER, "confirm.must_be_player");
 		}
 
 		@Override

@@ -30,6 +30,12 @@ public class CommandGangs extends Command {
 
 		command = new SubCommandInvites(owner);
 		this.addCommand(command, CommandKey.builder().add(command.getName()).add("listinvites").build());
+
+		command = new SubCommandSethome(owner);
+		this.addCommand(command, CommandKey.singular(command.getName()));
+
+		command = new SubCommandUnsethome(owner);
+		this.addCommand(command, CommandKey.builder().add(command.getName()).add("deletehome").add("delhome").build());
 	}
 
 	@Override

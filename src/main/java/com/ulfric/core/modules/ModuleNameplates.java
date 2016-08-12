@@ -16,6 +16,7 @@ import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
 import com.ulfric.lib.coffee.command.Command;
+import com.ulfric.lib.coffee.command.Enforcers;
 import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
@@ -262,7 +263,7 @@ public class ModuleNameplates extends Module {
 		{
 			super("nameplates", ModuleNameplates.this, "nameplate");
 
-			this.addEnforcer(Player.class::isInstance, "nameplate.must_be_player");
+			this.addEnforcer(Enforcers.IS_PLAYER, "nameplate.must_be_player");
 		}
 
 		@Override

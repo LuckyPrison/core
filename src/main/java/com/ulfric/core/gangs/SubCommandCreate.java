@@ -7,10 +7,10 @@ import com.ulfric.lib.coffee.command.ArgFunction;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
+import com.ulfric.lib.coffee.command.Enforcers;
 import com.ulfric.lib.coffee.enums.EnumUtils;
 import com.ulfric.lib.coffee.math.TimeUtils;
 import com.ulfric.lib.coffee.module.ModuleBase;
-import com.ulfric.lib.craft.entity.player.Player;
 
 public class SubCommandCreate extends Command {
 
@@ -20,7 +20,7 @@ public class SubCommandCreate extends Command {
 
 		this.addArgument(Argument.builder().setPath("gang_name").addResolver(ArgFunction.STRING_FUNCTION).setUsage("gangs.create_specify_name").build());
 
-		this.addEnforcer(Player.class::isInstance, "gangs.create_must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "gangs.create_must_be_player");
 	}
 
 	@Override
