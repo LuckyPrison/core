@@ -55,7 +55,7 @@ public final class ModulePunishments extends Module {
 
 		this.allowedCommandMutes = Sets.newHashSet();
 
-		//this.addModule(new ModuleNotes());
+		this.addModule(new ModuleNotes());
 
 		this.addCommand(new CommandKick(this));
 		this.addCommand(new CommandBan(this));
