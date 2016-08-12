@@ -187,6 +187,22 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 		return this.members.get(memberUUID);
 	}
 
+	public List<GangMember> getMembersByRank(GangRank rank)
+	{
+		Validate.notNull(rank);
+
+		List<GangMember> list = Lists.newArrayList();
+
+		for (GangMember member : this.members.values())
+		{
+			if (member.getRank() != rank) continue;
+
+			list.add(member);
+		}
+
+		return list;
+	}
+
 	public void addMember(GangMember member)
 	{
 		UUID memberUUID = member.getUniqueId();

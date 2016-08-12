@@ -7,6 +7,8 @@ import org.apache.commons.lang3.Validate;
 
 import com.ulfric.lib.coffee.string.Named;
 import com.ulfric.lib.coffee.string.Unique;
+import com.ulfric.lib.craft.entity.player.OfflinePlayer;
+import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 
 public final class GangMember implements Named, Unique {
@@ -102,6 +104,16 @@ public final class GangMember implements Named, Unique {
 	public String getName()
 	{
 		return PlayerUtils.getOfflinePlayer(this.uuid).getName();
+	}
+
+	public Player toPlayer()
+	{
+		return PlayerUtils.getPlayer(this.uuid);
+	}
+
+	public OfflinePlayer toOfflinePlayer()
+	{
+		return PlayerUtils.getOfflinePlayer(this.uuid);
 	}
 
 }

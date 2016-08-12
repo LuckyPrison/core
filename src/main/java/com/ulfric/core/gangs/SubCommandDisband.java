@@ -3,7 +3,9 @@ package com.ulfric.core.gangs;
 import java.util.UUID;
 
 import com.ulfric.lib.coffee.command.CommandSender;
+import com.ulfric.lib.coffee.locale.Locale;
 import com.ulfric.lib.coffee.module.ModuleBase;
+import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
 
 public class SubCommandDisband extends GangCommand {
@@ -17,12 +19,42 @@ public class SubCommandDisband extends GangCommand {
 	public void run()
 	{
 		CommandSender sender = this.getSender();
+		String senderName = sender.getName();
+
 		Gang gang = this.getGang();
+		String gangName = gang.getName();
+
+		GangMember member = gang.getMember(sender.getUniqueId());
+
+		if (member != null && member.getRank() != GangRank.LEADER && !sender.hasPermission("gangs.admin"))
+		{
+			sender.sendLocalizedMessage("gangs.must_be_leader");
+
+			for (GangMember leader : gang.getMembersByRank(GangRank.LEADER))
+			{
+				OfflinePlayer player = leader.toOfflinePlayer();
+				Player onlinePlayer = player.toPlayer();
+
+				Locale locale = null;
+
+				if (onlinePlayer != null)
+				{
+					locale = onlinePlayer.getLocale();
+
+					onlinePlayer.sendMessage(locale.getFormattedMessage("gangs.attempted_delete", senderName));
+				}
+				else
+				{
+					locale = Locale.getDefault();
+				}
+
+				player.sendEmail("LuckyPrison Gang Attempted Deletion", locale.getFormattedMessage("gangs.attempted_delete_email", gangName, senderName));
+			}
+
+			return;
+		}
 
 		Gangs gangs = Gangs.getInstance();
-
-		String gangName = gang.getName();
-		String senderName = sender.getName();
 
 		for (Player player : gang.getOnlinePlayers())
 		{
@@ -41,9 +73,9 @@ public class SubCommandDisband extends GangCommand {
 
 		for (UUID allyUUID : gang.getRelations(Relation.ALLY))
 		{
-			Gang enemy = gangs.getGang(allyUUID);
+			Gang ally = gangs.getGang(allyUUID);
 
-			for (Player allyPlayer : enemy.getOnlinePlayers())
+			for (Player allyPlayer : ally.getOnlinePlayers())
 			{
 				allyPlayer.sendLocalizedMessage("gangs.disbanded_ally", gangName, senderName);
 			}
