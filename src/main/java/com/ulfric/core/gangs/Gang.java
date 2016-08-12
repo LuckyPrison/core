@@ -32,7 +32,11 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 	{
 		Validate.notNull(document);
 
-		UUID uuid = UUID.fromString(document.getString("uuid"));
+		String uuidString = document.getString("uuid");
+
+		if (uuidString == null) return null;
+
+		UUID uuid = UUID.fromString(uuidString);
 
 		if (uuid == null) return null;
 
