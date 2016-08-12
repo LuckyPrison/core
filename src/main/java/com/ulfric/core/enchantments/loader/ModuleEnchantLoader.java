@@ -86,8 +86,8 @@ public class ModuleEnchantLoader extends Module {
             @Override
             public boolean shouldAct(Player player)
             {
-                if(player.inv().getMainHand() != null){
-                    ItemMeta meta = player.inv().getMainHand().getMeta();
+                if(player.getMainHand() != null){
+                    ItemMeta meta = player.getMainHand().getMeta();
 
                     // TODO redo
                 }
