@@ -1,8 +1,8 @@
 package com.ulfric.core.enchantments.loader;
 
-import org.bukkit.enchantments.Enchantment;
-
 import java.util.Set;
+
+import org.bukkit.enchantments.Enchantment;
 
 public class EnchantmentLoader {
 

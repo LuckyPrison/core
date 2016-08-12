@@ -1,8 +1,9 @@
 package com.ulfric.core.enchantments;
 
-import com.ulfric.lib.coffee.string.Named;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+
+import com.ulfric.lib.coffee.string.Named;
 
 public abstract class PrisonEnchantment extends Enchantment implements Named {
 

@@ -1,20 +1,21 @@
 package com.ulfric.core.enchantments.loader;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.ulfric.core.Core;
-import com.ulfric.core.enchantments.StateEnchantment;
-import com.ulfric.lib.coffee.command.Command;
-import com.ulfric.lib.coffee.module.Module;
+import java.io.File;
+import java.util.Map;
+import java.util.Set;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.File;
-import java.util.Map;
-import java.util.Set;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.ulfric.core.Core;
+import com.ulfric.core.enchantments.StateEnchantment;
+import com.ulfric.lib.coffee.command.Command;
+import com.ulfric.lib.coffee.module.Module;
 
 public class ModuleEnchantLoader extends Module {
 

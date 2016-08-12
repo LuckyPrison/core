@@ -6,7 +6,6 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.lib.coffee.command.Argument;
-import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.locale.Locale;
 import com.ulfric.lib.coffee.numbers.NumberUtils;
 
@@ -171,12 +170,9 @@ public abstract class Punishment implements Runnable, Comparable<Punishment>, No
 
 	public final void write()
 	{
-		ThreadUtils.runAsync(() ->
-		{
-			Punishments punishments = Punishments.getInstance();
+		Punishments punishments = Punishments.getInstance();
 
-			punishments.write(this);
-		});
+		punishments.write(this);
 	}
 
 	@Override

@@ -1,11 +1,12 @@
 package com.ulfric.core.enchantments;
 
-import com.ulfric.lib.coffee.string.Named;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import com.ulfric.lib.coffee.string.Named;
 
 public abstract class LoadableEnchantment extends Enchantment implements Named {
 
