@@ -11,7 +11,6 @@ import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.email.EmailUtils;
 import com.ulfric.lib.coffee.module.Module;
-import com.ulfric.lib.craft.entity.Metadatable.Meta;
 import com.ulfric.lib.craft.entity.player.Player;
 
 public class ModuleEmailInterface extends Module {
@@ -44,9 +43,7 @@ public class ModuleEmailInterface extends Module {
 		{
 			Player player = (Player) this.getSender();
 
-			Meta meta = player.meta();
-
-			String pending = meta.getString("pending_email");
+			String pending = player.getMetadataAsString("pending_email");
 
 			if (pending != null)
 			{
@@ -59,9 +56,9 @@ public class ModuleEmailInterface extends Module {
 
 			String addy = address.getAddress();
 
-			meta.set("pending_email", addy);
+			player.setMetadata("pending_email", addy);
 			String code = RandomStringUtils.randomAlphabetic(6);
-			meta.set("pending_email_code", code);
+			player.setMetadata("pending_email_code", code);
 
 			player.sendLocalizedMessage("email.verify", addy);
 
@@ -86,9 +83,7 @@ public class ModuleEmailInterface extends Module {
 			Player player = (Player) this.getSender();
 			String entered = (String) this.getObject("code");
 
-			Meta meta = player.meta();
-
-			String code = meta.getString("pending_email_code");
+			String code = player.getMetadataAsString("pending_email_code");
 
 			if (code == null)
 			{
@@ -108,9 +103,9 @@ public class ModuleEmailInterface extends Module {
 
 			player.sendLocalizedMessage("confirm.correct");
 
-			meta.remove("pending_email_code");
+			player.removeMetadata("pending_email_code");
 
-			EmailUtils.setEmailAddress(player.getUniqueId(), String.valueOf(meta.get("pending_email", true)));
+			EmailUtils.setEmailAddress(player.getUniqueId(), String.valueOf(player.getMetadata("pending_email", true)));
 
 			ThreadUtils.runAsync(() -> player.sendEmail(player.getLocalizedMessage("email.confirmed_subject"), player.getLocalizedMessage("email.confirmed")));
 		}

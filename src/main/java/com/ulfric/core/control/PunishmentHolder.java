@@ -165,7 +165,7 @@ public final class PunishmentHolder extends Punisher implements Noteable {
 			return this.getUniqueId().equals(player.getUniqueId());
 		}
 
-		return this.getIP().equals(player.connection().getIP());
+		return this.getIP().equals(player.getIP());
 	}
 
 	public List<Punishment> getPunishments(PunishmentType type)

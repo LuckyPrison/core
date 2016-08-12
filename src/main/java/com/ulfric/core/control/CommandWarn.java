@@ -41,7 +41,7 @@ class CommandWarn extends TimedPunishmentBaseCommand {
 
 		if (expiry == Instant.MAX)
 		{
-			expiry = TimeUtils.future(1, TimeUnit.DAYS);
+			expiry = TimeUtils.future(7, TimeUnit.DAYS);
 		}
 
 		Validate.notNull(expiry);

@@ -6,7 +6,6 @@ import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
-import com.ulfric.lib.craft.entity.LivingEntity.Health;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.event.player.PlayerJoinEvent;
@@ -30,7 +29,7 @@ public class ModuleGodmodeInterface extends Module {
 			@Handler
 			public void onJoin(PlayerJoinEvent event)
 			{
-				Scoreboard scoreboard = event.getPlayer().scoreboard();
+				Scoreboard scoreboard = event.getPlayer().getScoreboard();
 
 				scoreboard.addElement(new ElementGodmode(scoreboard));
 			}
@@ -47,9 +46,9 @@ public class ModuleGodmodeInterface extends Module {
 		}
 
 		@Override
-		public String getText()
+		public String getText(Player updater)
 		{
-			if (!this.getPlayer().health().isInvulnerable()) return null;
+			if (!updater.isInvulnerable()) return null;
 
 			return "core.scoreboard_godmode";
 		}
@@ -84,11 +83,9 @@ public class ModuleGodmodeInterface extends Module {
 				player = (Player) sender;
 			}
 
-			Health health = player.health();
-
-			if (health.isInvulnerable())
+			if (player.isInvulnerable())
 			{
-				health.setInvulnerable(false);
+				player.setInvulnerable(false);
 
 				if (player == sender)
 				{
@@ -102,7 +99,7 @@ public class ModuleGodmodeInterface extends Module {
 				return;
 			}
 
-			health.setInvulnerable(true);
+			player.setInvulnerable(true);
 
 			if (player == sender)
 			{

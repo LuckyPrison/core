@@ -16,7 +16,7 @@ class Warn extends TimedPunishment {
 	{
 		int id = document.getInteger("id");
 		PunishmentHolder holder = PunishmentHolder.valueOf(document.getString("holder"));
-		Punisher punisher = PunishmentHolder.valueOf(document.getString("punisher"));
+		Punisher punisher = Punisher.valueOf(document.getString("punisher"));
 		String reason = document.getString("reason");
 		Instant creation = Instant.ofEpochMilli(document.getLong("creation"));
 
@@ -99,7 +99,7 @@ class Warn extends TimedPunishment {
 
 	private void warn(Player player)
 	{
-		player.title().send(player.getLocalizedMessage("warned.title"), null, 9, 200, 11);
+		player.sendTitle(player.getLocalizedMessage("warned.title"), null, 9, 200, 11);
 	}
 
 }

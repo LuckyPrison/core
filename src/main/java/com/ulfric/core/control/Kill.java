@@ -14,7 +14,7 @@ class Kill extends Punishment {
 	{
 		int id = document.getInteger("id");
 		PunishmentHolder holder = PunishmentHolder.valueOf(document.getString("holder"));
-		Punisher punisher = PunishmentHolder.valueOf(document.getString("punisher"));
+		Punisher punisher = Punisher.valueOf(document.getString("punisher"));
 		String reason = document.getString("reason");
 		Instant creation = Instant.ofEpochMilli(document.getLong("creation"));
 
@@ -31,7 +31,7 @@ class Kill extends Punishment {
 
 	Kill(int id, PunishmentHolder holder, Punisher punisher, String reason, Instant placed, int[] referenced)
 	{
-		super(id, PunishmentType.WARN, holder, punisher, reason, placed, referenced);
+		super(id, PunishmentType.KILL, holder, punisher, reason, placed, referenced);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ class Kill extends Punishment {
 
 	private void kill(Player player)
 	{
-		player.health().kill();
+		player.kill();
 	}
 
 }

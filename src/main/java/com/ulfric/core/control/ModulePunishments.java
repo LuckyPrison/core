@@ -2,16 +2,14 @@ package com.ulfric.core.control;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.ulfric.config.Document;
-import com.ulfric.config.MutableDocument;
-import com.ulfric.config.SimpleDocument;
 import com.ulfric.data.DataAddress;
+import com.ulfric.data.DataSubscription;
 import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MapSubscription;
 import com.ulfric.lib.coffee.collection.ListUtils;
@@ -40,6 +38,8 @@ public final class ModulePunishments extends Module {
 	{
 		this.documents = Maps.newEnumMap(PunishmentType.class);
 
+		Punishments.getInstance().setDocuments(this.documents);
+
 		DataManager manager = DataManager.get();
 
 		DocumentStore store = manager.getEnsuredDatabase("punishments");
@@ -50,23 +50,38 @@ public final class ModulePunishments extends Module {
 
 			manager.ensureTableCreated(store, name);
 
-			this.documents.put(type, store.document(new DataAddress<>(name, "punishments")).subscribe());
+			this.documents.put(type, store.document(new DataAddress<>(name, "punishments", null)).blockOnSubscribe(true).subscribe());
 		}
 
 		this.allowedCommandMutes = Sets.newHashSet();
 
-		//this.addModule(new ModuleNotes());
+		this.addModule(new ModuleNotes());
 
 		this.addCommand(new CommandKick(this));
+		this.addCommand(new CommandKicks(this));
+
 		this.addCommand(new CommandBan(this));
+		this.addCommand(new CommandBans(this));
+		this.addCommand(new CommandPardon(this));
+
 		this.addCommand(new CommandMute(this));
+		this.addCommand(new CommandMutes(this));
+		this.addCommand(new CommandUnmute(this));
+
 		this.addCommand(new CommandCommandMute(this));
+		this.addCommand(new CommandCommandMutes(this));
+		this.addCommand(new CommandUncommandMute(this));
+
 		this.addCommand(new CommandShadowMute(this));
+		this.addCommand(new CommandShadowMutes(this));
+
 		this.addCommand(new CommandKill(this));
+		this.addCommand(new CommandKills(this));
+
 		this.addCommand(new CommandWarn(this));
 		this.addCommand(new CommandWarns(this));
+
 		this.addCommand(new CommandLift(this));
-		this.addCommand(new CommandPardon(this));
 
 		this.addListener(new Listener(this)
 		{
@@ -97,7 +112,7 @@ public final class ModulePunishments extends Module {
 
 				if (ModulePunishments.this.noChat(event, holder)) return;
 
-				holder = cache.getHolder(player.connection().getIP());
+				holder = cache.getHolder(player.getIP());
 
 				ModulePunishments.this.noChat(event, holder);
 			}
@@ -109,7 +124,7 @@ public final class ModulePunishments extends Module {
 
 				Punishments cache = Punishments.getInstance();
 
-				PunishmentHolder holder = cache.getHolder(player.connection().getIP());
+				PunishmentHolder holder = cache.getHolder(player.getIP());
 
 				if (ModulePunishments.this.shadowChat(event, holder)) return;
 
@@ -129,7 +144,7 @@ public final class ModulePunishments extends Module {
 
 				if (ModulePunishments.this.noCommand(event, holder)) return;
 
-				holder = cache.getHolder(player.connection().getIP());
+				holder = cache.getHolder(player.getIP());
 
 				ModulePunishments.this.noCommand(event, holder);
 			}
@@ -139,16 +154,11 @@ public final class ModulePunishments extends Module {
 	@Override
 	public void onModuleEnable()
 	{
-		for (MapSubscription<Document> subscription : this.documents.values())
-		{
-			if (subscription.isSubscribed()) continue;
-
-			subscription.subscribe();
-		}
+		this.documents.values().forEach(DataSubscription::subscribe);
 
 		Punishments punishments = Punishments.getInstance();
 
-		for (Entry<PunishmentType, MapSubscription<Document>> entry : this.documents.entrySet())
+		for (Map.Entry<PunishmentType, MapSubscription<Document>> entry : this.documents.entrySet())
 		{
 			PunishmentType type = entry.getKey();
 			MapSubscription<Document> subscription = entry.getValue();
@@ -185,57 +195,9 @@ public final class ModulePunishments extends Module {
 
 		Punishments punishments = Punishments.getInstance();
 
-		for (PunishmentType type : PunishmentType.values())
-		{
-			List<Punishment> punishmentTable = punishments.getAllPunishments(type);
-
-			if (ListUtils.isEmpty(punishmentTable)) continue;
-
-			this.log("Saving punishment type " + type.name().toLowerCase() + ", counted: " + punishmentTable.size());
-
-			MapSubscription<Document> subscription = this.documents.get(type);
-
-			Document document = subscription.getValue();
-			MutableDocument mut = null;
-
-			boolean changed = false;
-
-			for (Punishment punishment : punishmentTable)
-			{
-				if (!punishment.needsWrite()) continue;
-
-				if (mut == null)
-				{
-					changed = true;
-
-					mut = document == null ? new SimpleDocument() : new SimpleDocument(document.deepCopy());
-				}
-
-				String punishmentPath = "p" + punishment.getID();
-
-				MutableDocument punishmentDoc = mut.getDocument(punishmentPath);
-
-				if (punishmentDoc == null)
-				{
-					punishmentDoc = mut.createDocument(punishmentPath);
-				}
-
-				punishment.into(punishmentDoc);
-			}
-
-			if (!changed) continue;
-
-			subscription.setValue(mut);
-		}
-
 		punishments.dump();
 
-		for (MapSubscription<Document> subscription : this.documents.values())
-		{
-			if (!subscription.isSubscribed()) continue;
-
-			subscription.unsubscribe();
-		}
+		this.documents.values().forEach(DataSubscription::unsubscribe);
 	}
 
 	boolean kickBan(AsyncPreLoginEvent event, PunishmentHolder holder)

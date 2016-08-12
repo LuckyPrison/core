@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.Validate;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.numbers.NumberUtils;
@@ -61,7 +61,9 @@ public final class NoteHolder extends NamedBase {
 
 	public List<Note> getAllNotes()
 	{
-		return Lists.newArrayList(this.notes);
+		if (this.notes == null) return ImmutableList.of();
+
+		return ImmutableList.copyOf(this.notes);
 	}
 
 	public List<Note> getNotesBy(Punisher punisher)

@@ -95,16 +95,7 @@ public class CommandPay extends Command {
 
 		String senderName = sender.getName();
 
-		try
-		{
-			account.give(amount, "Payment from " + senderName).get();
-		}
-		catch (InterruptedException|ExecutionException exception)
-		{
-			exception.printStackTrace();
-
-			return;
-		}
+		account.give(amount, "Payment from " + senderName);
 
 		if (online == null) return;
 
