@@ -2,6 +2,7 @@ package com.ulfric.core.gangs;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
 
@@ -64,10 +65,20 @@ public final class Gangs {
 		this.gangsByName.put(gang.getName(), gang);
 		this.gangsByName.remove(gang.getOldName());
 
-		MutableDocument wrapper = new SimpleDocument();
-		gang.into(wrapper.createDocument(gang.getUniqueId().toString()));
+		MutableDocument gangData = new SimpleDocument();
+		gang.into(gangData);
 
-		ThreadUtils.runAsync(() -> this.subscription.updateFields(wrapper));
+		ThreadUtils.runAsync(() ->
+		{
+			try
+			{
+				this.subscription.setField(gang.getUniqueId().toString(), gangData).get();
+			}
+			catch (InterruptedException | ExecutionException exception)
+			{
+				exception.printStackTrace();
+			}
+		});
 	}
 
 	void deleteGang(Gang gang)
@@ -87,7 +98,17 @@ public final class Gangs {
 
 		gang.getMemberParticipants().forEach(this.members::remove);
 
-		ThreadUtils.runAsync(() -> this.subscription.removeField(gang.getUniqueId().toString()));
+		ThreadUtils.runAsync(() ->
+		{
+			try
+			{
+				this.subscription.removeField(gang.getUniqueId().toString()).get();
+			}
+			catch (InterruptedException | ExecutionException exception)
+			{
+				exception.printStackTrace();
+			}
+		});
 	}
 
 }
