@@ -195,7 +195,7 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 
 		for (GangMember member : this.members.values())
 		{
-			if (member.getRank() != rank) continue;
+			if (member.getRank().compareTo(rank) < 0) continue;
 
 			list.add(member);
 		}
@@ -230,6 +230,13 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 	public void addInvite(UUID memberUUID)
 	{
 		if (!this.invites.add(memberUUID)) return;
+
+		this.save();
+	}
+
+	public void removeInvite(UUID memberUUID)
+	{
+		if (!this.invites.remove(memberUUID)) return;
 
 		this.save();
 	}

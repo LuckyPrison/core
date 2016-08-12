@@ -21,6 +21,12 @@ public class CommandGangs extends Command {
 
 		command = new SubCommandRename(owner);
 		this.addCommand(command, CommandKey.builder().add(command.getName()).add("setname").add("changename").build());
+
+		command = new SubCommandInvite(owner);
+		this.addCommand(command, CommandKey.singular(command.getName()));
+
+		command = new SubCommandUninvite(owner);
+		this.addCommand(command, CommandKey.builder().add(command.getName()).add("deinvite").build());
 	}
 
 	@Override
