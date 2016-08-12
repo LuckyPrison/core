@@ -58,17 +58,30 @@ public final class ModulePunishments extends Module {
 		this.addModule(new ModuleNotes());
 
 		this.addCommand(new CommandKick(this));
+		this.addCommand(new CommandKicks(this));
+
 		this.addCommand(new CommandBan(this));
+		this.addCommand(new CommandBans(this));
+		this.addCommand(new CommandPardon(this));
+
 		this.addCommand(new CommandMute(this));
+		this.addCommand(new CommandMutes(this));
+		this.addCommand(new CommandUnmute(this));
+
 		this.addCommand(new CommandCommandMute(this));
+		this.addCommand(new CommandCommandMutes(this));
+		this.addCommand(new CommandUncommandMute(this));
+
 		this.addCommand(new CommandShadowMute(this));
+		this.addCommand(new CommandShadowMutes(this));
+
 		this.addCommand(new CommandKill(this));
+		this.addCommand(new CommandKills(this));
+
 		this.addCommand(new CommandWarn(this));
 		this.addCommand(new CommandWarns(this));
+
 		this.addCommand(new CommandLift(this));
-		this.addCommand(new CommandPardon(this));
-		this.addCommand(new CommandUnmute(this));
-		this.addCommand(new CommandUncommandmute(this));
 
 		this.addListener(new Listener(this)
 		{

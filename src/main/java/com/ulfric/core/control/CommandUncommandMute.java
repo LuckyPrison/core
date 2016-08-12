@@ -9,9 +9,9 @@ import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.coffee.string.StringUtils;
 
-class CommandUncommandmute extends Command {
+class CommandUncommandMute extends Command {
 
-	public CommandUncommandmute(ModuleBase owner)
+	public CommandUncommandMute(ModuleBase owner)
 	{
 		super("uncommandmute", owner, "uncmdmute", "uncmute");
 
