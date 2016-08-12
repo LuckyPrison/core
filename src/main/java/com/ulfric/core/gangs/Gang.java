@@ -203,8 +203,26 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 		return list;
 	}
 
+	public GangMember addNewMember(UUID memberUUID)
+	{
+		Validate.notNull(memberUUID);
+
+		GangMember member = GangMember.builder()
+									  .setGang(this)
+									  .setRank(GangRank.MEMBER)
+									  .setJoined(Instant.now())
+									  .build();
+
+		this.addMember(member);
+
+		return member;
+	}
+
 	public void addMember(GangMember member)
 	{
+		Validate.notNull(member);
+		Validate.isTrue(this.equals(member.getGang()));
+
 		UUID memberUUID = member.getUniqueId();
 		this.members.put(memberUUID, member);
 		this.invites.remove(memberUUID);
@@ -213,22 +231,46 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 
 	public void removeMember(GangMember member)
 	{
+		Validate.notNull(member);
+
 		this.removeMember(member.getUniqueId());
 	}
 
 	public void removeMember(UUID memberUUID)
 	{
-		this.members.put(memberUUID, null);
+		Validate.notNull(memberUUID);
+
+		this.members.remove(memberUUID);
 		this.save();
+	}
+
+	public void setRank(UUID memberUUID, GangRank rank)
+	{
+		Validate.notNull(memberUUID);
+		Validate.notNull(rank);
+
+		GangMember oldMember = this.members.get(memberUUID);
+
+		if (oldMember == null) return;
+
+		GangMember newMember = GangMember.builder().setGang(this).setJoined(oldMember.getJoined()).setRank(rank).build();
+
+		Gangs.getInstance().registerMember(newMember);
+
+		this.members.put(newMember.getUniqueId(), newMember);
 	}
 
 	public boolean isInvited(UUID memberUUID)
 	{
+		Validate.notNull(memberUUID);
+
 		return this.invites.contains(memberUUID);
 	}
 
 	public void addInvite(UUID memberUUID)
 	{
+		Validate.notNull(memberUUID);
+
 		if (!this.invites.add(memberUUID)) return;
 
 		this.save();
@@ -236,6 +278,8 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 
 	public void removeInvite(UUID memberUUID)
 	{
+		Validate.notNull(memberUUID);
+
 		if (!this.invites.remove(memberUUID)) return;
 
 		this.save();

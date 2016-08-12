@@ -17,7 +17,7 @@ abstract class InviteGangCommand extends GangCommand {
 
 			GangMember member = Gangs.getInstance().getMember(sender.getUniqueId());
 
-			return member.getRank().compareTo(GangRank.OFFICER) < 0;
+			return member.hasPermission(GangRank.OFFICER);
 		}, "gangs.manage_invite_must_be_officer");
 	}
 

@@ -47,7 +47,7 @@ public class SubCommandRename extends GangCommand {
 
 		GangMember member = gang.getMember(sender.getUniqueId());
 
-		if (member != null && member.getRank().compareTo(GangRank.OFFICER) < 0 && !sender.hasPermission("gangs.admin"))
+		if (member != null && !member.hasPermission(GangRank.OFFICER) && !sender.hasPermission("gangs.admin"))
 		{
 			sender.sendLocalizedMessage("gangs.must_be_officer");
 

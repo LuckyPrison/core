@@ -100,6 +100,16 @@ public final class GangMember implements Named, Unique {
 		return this.rank;
 	}
 
+	public boolean hasPermission(GangRank permission)
+	{
+		return this.getRank().compareTo(permission) >= 0;
+	}
+
+	public boolean isAbove(GangRank permission)
+	{
+		return this.getRank().compareTo(permission) > 0;
+	}
+
 	@Override
 	public String getName()
 	{

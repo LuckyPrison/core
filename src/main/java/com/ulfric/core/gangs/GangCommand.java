@@ -10,7 +10,7 @@ abstract class GangCommand extends Command {
 	{
 		super(name, owner);
 
-		this.addArgument(Argument.builder().setPath("gang").addSimpleResolver(Gangs.getInstance()::getGang).setDefaultValue(cmd ->
+		this.addArgument(Argument.builder().setPath("gang").addSimpleResolver(Gangs.getInstance()::resolveGang).setDefaultValue(cmd ->
 		{
 			Gangs gangs = Gangs.getInstance();
 			GangMember member = gangs.getMember(cmd.getSender().getUniqueId());

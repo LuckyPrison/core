@@ -26,7 +26,7 @@ public class SubCommandDisband extends GangCommand {
 
 		GangMember member = gang.getMember(sender.getUniqueId());
 
-		if (member != null && member.getRank() != GangRank.LEADER && !sender.hasPermission("gangs.admin"))
+		if (member != null && !member.hasPermission(GangRank.LEADER) && !sender.hasPermission("gangs.admin"))
 		{
 			sender.sendLocalizedMessage("gangs.must_be_leader");
 

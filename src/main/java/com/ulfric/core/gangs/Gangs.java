@@ -10,6 +10,8 @@ import com.ulfric.config.Document;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.config.SimpleDocument;
 import com.ulfric.data.MapSubscription;
+import com.ulfric.lib.craft.entity.player.Player;
+import com.ulfric.lib.craft.entity.player.PlayerUtils;
 
 public final class Gangs {
 
@@ -40,6 +42,44 @@ public final class Gangs {
 		return this.gangsByName.get(gang);
 	}
 
+	public Gang resolveGang(String context)
+	{
+		Gang gang = this.getGang(context);
+
+		if (gang != null) return gang;
+
+		UUID uuid = null;
+
+		if (context.length() == 36 && context.contains("-"))
+		{
+			try
+			{
+				uuid = UUID.fromString(context);
+
+				gang = this.getGang(uuid);
+
+				if (gang != null) return gang;
+			}
+			catch (IllegalArgumentException exception) { }
+		}
+
+		Player player = null;
+
+		if (uuid != null)
+		{
+			player = PlayerUtils.getPlayer(uuid);
+		}
+
+		if (player == null)
+		{
+			player = PlayerUtils.getPlayer(context);
+
+			if (player == null) return null;
+		}
+
+		return this.getMember(player.getUniqueId()).getGang();
+	}
+
 	public GangMember getMember(UUID uuid)
 	{
 		return this.members.get(uuid);
@@ -53,7 +93,7 @@ public final class Gangs {
 		gang.getMembers().forEach(this::registerMember);
 	}
 
-	private void registerMember(GangMember member)
+	void registerMember(GangMember member)
 	{
 		this.members.put(member.getUniqueId(), member);
 	}

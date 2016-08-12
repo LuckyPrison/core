@@ -36,6 +36,15 @@ public class CommandGangs extends Command {
 
 		command = new SubCommandUnsethome(owner);
 		this.addCommand(command, CommandKey.builder().add(command.getName()).add("deletehome").add("delhome").build());
+
+		command = new SubCommandJoin(owner);
+		this.addCommand(command, CommandKey.singular(command.getName()));
+
+		command = new SubCommandLeave(owner);
+		this.addCommand(command, CommandKey.builder().add(command.getName()).add("quit").add("exit").build());
+
+		command = new SubCommandSetrank(owner);
+		this.addCommand(command, CommandKey.singular(command.getName()));
 	}
 
 	@Override
