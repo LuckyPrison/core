@@ -49,6 +49,8 @@ public class ModuleGangs extends Module {
 			return;
 		}
 
+		this.log("Loading data for " + keys.size() + " gangs");
+
 		Gangs gangs = Gangs.getInstance();
 
 		for (String key : keys)
