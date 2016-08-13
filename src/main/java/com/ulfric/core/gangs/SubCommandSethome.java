@@ -8,7 +8,7 @@ public class SubCommandSethome extends GangCommand {
 
 	public SubCommandSethome(ModuleBase owner)
 	{
-		super("sethome", owner);
+		super("sethome", GangRank.OFFICER, owner);
 
 		this.addEnforcer(Enforcers.IS_PLAYER, "gangs.sethome_must_be_player");
 	}

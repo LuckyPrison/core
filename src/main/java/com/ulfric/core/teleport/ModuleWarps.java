@@ -13,10 +13,10 @@ import com.ulfric.data.DataContainer;
 import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.ReferenceCountedScope;
-import com.ulfric.lib.coffee.command.ArgFunction;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
+import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.math.RandomUtils;
 import com.ulfric.lib.coffee.module.Module;
@@ -143,7 +143,7 @@ public final class ModuleWarps extends Module {
 
 			this.addPermission("setwarp.use");
 
-			this.addArgument(Argument.builder().setPath("warp").addResolver(ArgFunction.STRING_FUNCTION).build());
+			this.addArgument(Argument.builder().setPath("warp").addResolver(Resolvers.STRING).build());
 			this.addOptionalArgument(Argument.builder().setPath("override").addResolver((sen, str) -> str.toLowerCase().equals("-o")).build());
 		}
 

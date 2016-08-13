@@ -13,7 +13,7 @@ public class SubCommandKick extends GangCommand {
 
 	public SubCommandKick(ModuleBase owner)
 	{
-		super("kick", owner);
+		super("kick", GangRank.OFFICER, owner);
 
 		this.addArgument(OfflinePlayer.ARGUMENT);
 	}

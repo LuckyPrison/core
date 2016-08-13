@@ -3,11 +3,11 @@ package com.ulfric.core.gangs;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import com.ulfric.lib.coffee.command.ArgFunction;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.command.Enforcers;
+import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.enums.EnumUtils;
 import com.ulfric.lib.coffee.math.TimeUtils;
 import com.ulfric.lib.coffee.module.ModuleBase;
@@ -18,7 +18,7 @@ public class SubCommandCreate extends Command {
 	{
 		super("create", owner);
 
-		this.addArgument(Argument.builder().setPath("gang_name").addResolver(ArgFunction.STRING_FUNCTION).setUsage("gangs.create_specify_name").build());
+		this.addArgument(Argument.builder().setPath("gang_name").addResolver(Resolvers.STRING).setUsage("gangs.create_specify_name").build());
 
 		this.addEnforcer(Enforcers.IS_PLAYER, "gangs.create_must_be_player");
 	}

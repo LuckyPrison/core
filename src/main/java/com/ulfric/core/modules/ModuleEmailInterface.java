@@ -5,10 +5,10 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.ulfric.lib.coffee.command.ArgFunction;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.Enforcers;
+import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.email.EmailUtils;
 import com.ulfric.lib.coffee.module.Module;
@@ -73,7 +73,7 @@ public class ModuleEmailInterface extends Module {
 		{
 			super("confirm", ModuleEmailInterface.this);
 
-			this.addArgument(Argument.builder().setPath("code").addResolver(ArgFunction.STRING_FUNCTION).setUsage("confirm.code_required").build());
+			this.addArgument(Argument.builder().setPath("code").addResolver(Resolvers.STRING).setUsage("confirm.code_required").build());
 
 			this.addEnforcer(Enforcers.IS_PLAYER, "confirm.must_be_player");
 		}

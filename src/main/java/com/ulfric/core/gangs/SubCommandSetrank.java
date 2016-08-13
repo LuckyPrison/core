@@ -12,7 +12,7 @@ public class SubCommandSetrank extends GangCommand {
 
 	public SubCommandSetrank(ModuleBase owner)
 	{
-		super("setrank", owner);
+		super("setrank", GangRank.LIEUTENANT, owner);
 
 		this.addArgument(OfflinePlayer.ARGUMENT);
 		this.addArgument(Argument.builder().setPath("rank").addSimpleResolver(GangRank::parseRank).setUsage("gangs.setrank_specify_rank").build());

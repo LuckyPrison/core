@@ -7,18 +7,9 @@ abstract class InviteGangCommand extends GangCommand {
 
 	public InviteGangCommand(String name, ModuleBase owner)
 	{
-		super(name, owner);
+		super(name, GangRank.OFFICER, owner);
 
 		this.addArgument(OfflinePlayer.ARGUMENT);
-
-		this.addEnforcer(sender ->
-		{
-			if (sender.hasPermission("gangs.admin")) return true;
-
-			GangMember member = Gangs.getInstance().getMember(sender.getUniqueId());
-
-			return member.hasPermission(GangRank.OFFICER);
-		}, "gangs.manage_invite_must_be_officer");
 	}
 
 }

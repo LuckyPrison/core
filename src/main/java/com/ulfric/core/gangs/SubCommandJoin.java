@@ -10,7 +10,7 @@ public class SubCommandJoin extends GangCommand {
 
 	public SubCommandJoin(ModuleBase owner)
 	{
-		super("join", owner);
+		super("join", null, owner);
 
 		this.addEnforcer(Enforcers.IS_PLAYER, "gangs.must_be_player");
 	}

@@ -2,21 +2,19 @@ package com.ulfric.core.gangs;
 
 import java.util.UUID;
 
-import com.ulfric.lib.coffee.command.ArgFunction;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.CommandSender;
-import com.ulfric.lib.coffee.locale.Locale;
+import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.module.ModuleBase;
-import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
 
 public class SubCommandRename extends GangCommand {
 
 	public SubCommandRename(ModuleBase owner)
 	{
-		super("rename", owner);
+		super("rename", GangRank.LIEUTENANT, owner);
 
-		this.addArgument(Argument.builder().setPath("gang_name").addResolver(ArgFunction.STRING_FUNCTION).setUsage("gangs.create_specify_name").build());
+		this.addArgument(Argument.builder().setPath("gang_name").addResolver(Resolvers.STRING).setUsage("gangs.create_specify_name").build());
 	}
 
 	@Override
@@ -42,36 +40,6 @@ public class SubCommandRename extends GangCommand {
 		if (length > 10)
 		{
 			sender.sendLocalizedMessage("gangs.rename_max_length", 10);
-			return;
-		}
-
-		GangMember member = gang.getMember(sender.getUniqueId());
-
-		if (member != null && !member.hasPermission(GangRank.OFFICER) && !sender.hasPermission("gangs.admin"))
-		{
-			sender.sendLocalizedMessage("gangs.must_be_officer");
-
-			for (GangMember leader : gang.getMembersByRank(GangRank.OFFICER))
-			{
-				OfflinePlayer player = leader.toOfflinePlayer();
-				Player onlinePlayer = player.toPlayer();
-
-				Locale locale = null;
-
-				if (onlinePlayer != null)
-				{
-					locale = onlinePlayer.getLocale();
-
-					onlinePlayer.sendMessage(locale.getFormattedMessage("gangs.attempted_delete", senderName));
-				}
-				else
-				{
-					locale = Locale.getDefault();
-				}
-
-				player.sendEmail("LuckyPrison Gang Attempted Rename", locale.getFormattedMessage("gangs.attempted_rename", oldName, gangName, senderName));
-			}
-
 			return;
 		}
 

@@ -13,10 +13,10 @@ import com.ulfric.data.DataAddress;
 import com.ulfric.data.DataContainer;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
-import com.ulfric.lib.coffee.command.ArgFunction;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
+import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.function.SortUtils;
 import com.ulfric.lib.coffee.module.Module;
@@ -163,7 +163,7 @@ public final class ModuleHomes extends Module {
 		{
 			super("sethome", ModuleHomes.this, "shome", "createhome", "chome", "makehome", "mhome");
 
-			this.addArgument(Argument.builder().setPath("home").setDefaultValue("home").addResolver(ArgFunction.STRING_FUNCTION).build());
+			this.addArgument(Argument.builder().setPath("home").setDefaultValue("home").addResolver(Resolvers.STRING).build());
 			this.addArgument(Argument.builder().setPath("material").setDefaultValue(Material.of("GRASS")).addResolver((sen, str) ->
 			{
 				Material material = Material.of(str);
@@ -271,7 +271,7 @@ public final class ModuleHomes extends Module {
 		{
 			super("deletehome", ModuleHomes.this, "delhome", "dhome");
 
-			this.addArgument(Argument.builder().setPath("home").setDefaultValue("home").addResolver(ArgFunction.STRING_FUNCTION).build());
+			this.addArgument(Argument.builder().setPath("home").setDefaultValue("home").addResolver(Resolvers.STRING).build());
 			this.addOptionalArgument(Argument.builder().setPath("player").addResolver(PlayerUtils::getOnlinePlayer).setPermission("delhome.others").build());
 		}
 
@@ -322,7 +322,7 @@ public final class ModuleHomes extends Module {
 		{
 			super("home", ModuleHomes.this);
 
-			this.addOptionalArgument(Argument.builder().setPath("home").addResolver(ArgFunction.STRING_FUNCTION).build());
+			this.addOptionalArgument(Argument.builder().setPath("home").addResolver(Resolvers.STRING).build());
 			this.addOptionalArgument(Argument.builder().setPath("player").addResolver(PlayerUtils::getOnlinePlayer).setPermission("home.others").build());
 		}
 
