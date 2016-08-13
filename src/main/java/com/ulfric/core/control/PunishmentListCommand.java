@@ -5,10 +5,12 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.locale.Locale;
 import com.ulfric.lib.coffee.module.ModuleBase;
+import com.ulfric.lib.coffee.numbers.NumberUtils;
 
 class PunishmentListCommand extends Command {
 
@@ -44,6 +46,21 @@ class PunishmentListCommand extends Command {
 		this.types = types;
 
 		this.addArgument(PunishmentHolder.ARGUMENT);
+
+		this.addArgument(Argument.builder().setPath("count").setDefaultValue(-10).addSimpleResolver(str ->
+		{
+			Integer val = NumberUtils.parseInteger(str);
+
+			if (val == null) return null;
+
+			int value = Math.abs(val);
+
+			if (value == 0) return null;
+
+			value = Math.min(value, 100);
+
+			return val;
+		}).build());
 
 		this.addPermission("control.base");
 	}
@@ -125,8 +142,14 @@ class PunishmentListCommand extends Command {
 
 		String raw = locale.getRawMessage(this.getName() + ".entry");
 
-		for (Punishment punishment : punishments)
+		int count = (int) this.getObject("count");
+
+		int startFrom = Math.max(0, size - count);
+
+		for (int x = startFrom; x > size; x++)
 		{
+			Punishment punishment = punishments.get(x);
+
 			sender.sendMessage(raw, punishment.getID(), punishment.getPunisher().getName(sender), punishment.getReason());
 		}
 	}

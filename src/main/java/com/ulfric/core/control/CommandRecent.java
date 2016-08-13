@@ -73,9 +73,7 @@ public class CommandRecent extends Command {
 		{
 			Punishment punishment = punishments.getPunishment(x);
 
-			System.out.println("1: " + x);
 			if (punishment == null) continue;
-			System.out.println("2: " + x);
 
 			counter++;
 
