@@ -43,6 +43,9 @@ public class CommandGangs extends Command {
 		command = new SubCommandLeave(owner);
 		this.addCommand(command, CommandKey.builder().add(command.getName()).add("quit").add("exit").build());
 
+		command = new SubCommandKick(owner);
+		this.addCommand(command, CommandKey.singular(command.getName()));
+
 		command = new SubCommandSetrank(owner);
 		this.addCommand(command, CommandKey.singular(command.getName()));
 	}
