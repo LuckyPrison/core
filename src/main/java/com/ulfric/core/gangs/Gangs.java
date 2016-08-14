@@ -124,6 +124,11 @@ public final class Gangs {
 			otherGang.clearRelation(uuid);
 		}
 
+		for (Gang relation : this.gangs.values())
+		{
+			relation.clearRelation(uuid);
+		}
+
 		gang.getMemberParticipants().forEach(this.members::remove);
 
 		this.subscription.removeField(gang.getUniqueId().toString());

@@ -347,7 +347,14 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 
 	public void clearRelation(UUID gangUUID)
 	{
-		this.relations.put(gangUUID, null);
+		this.relations.remove(gangUUID);
+
+		this.save();
+	}
+
+	public void setRelation(UUID uuid, Relation relation)
+	{
+		this.relations.put(uuid, new GangRelation(relation, Instant.now()));
 
 		this.save();
 	}
