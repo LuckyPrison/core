@@ -60,6 +60,21 @@ public class CommandGangs extends Command {
 		command = new SubCommandSetrank(owner);
 		this.addCommand(command, CommandKey.singular(command.getName()));
 
+		command = new SubCommandPromote(owner);
+		this.addCommand(command, CommandKey.singular(command.getName()));
+
+		command = new SubCommandDemote(owner);
+		this.addCommand(command, CommandKey.singular(command.getName()));
+
+		command = new SubCommandAlly(owner);
+		this.addCommand(command, CommandKey.singular(command.getName()));
+
+		command = new SubCommandNeutral(owner);
+		this.addCommand(command, CommandKey.singular(command.getName()));
+
+		command = new SubCommandEnemy(owner);
+		this.addCommand(command, CommandKey.singular(command.getName()));
+
 		this.addOptionalArgument(Argument.builder().setPath("page").addResolver(Resolvers.INTEGER).setDefaultValue(0).build());
 	}
 

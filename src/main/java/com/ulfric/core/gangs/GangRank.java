@@ -23,6 +23,15 @@ public enum GangRank {
 		return ranks[ordinal + 1];
 	}
 
+	public GangRank lastRank()
+	{
+		int ordinal = this.ordinal();
+
+		if (ordinal == 0) return null;
+
+		return GangRank.values()[ordinal - 1];
+	}
+
 	public static GangRank parseRank(String text)
 	{
 		Validate.notBlank(text);
