@@ -9,16 +9,18 @@ import com.ulfric.lib.coffee.module.ModuleBase;
 
 class RelationGangCommand extends GangCommand {
 
-	public RelationGangCommand(String name, GangRank gangPermission, Relation relation, ModuleBase owner)
+	public RelationGangCommand(String name, GangRank gangPermission, Relation relation, boolean force, ModuleBase owner)
 	{
 		super(name, gangPermission, owner);
 
 		Validate.notNull(relation);
 
 		this.relation = relation;
+		this.force = force;
 	}
 
 	private final Relation relation;
+	private final boolean force;
 
 	@Override
 	public void run()
@@ -46,10 +48,22 @@ class RelationGangCommand extends GangCommand {
 
 		memberGang.setRelation(gang.getUniqueId(), this.relation);
 
+		GangRelation currentRelation = gang.getRelation(gang.getUniqueId());
+
 		String senderName = sender.getName();
 		String gangName = memberGang.getName();
 
-		gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs.relation_set_other", senderName, gangName));
+		boolean already = currentRelation != null && currentRelation.getRelation() == this.relation;
+
+		if (this.force || already)
+		{
+			if (!already)
+			{
+				gang.setRelation(memberGang.getUniqueId(), this.relation);
+			}
+
+			gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs.relation_set_other", senderName, gangName));
+		}
 
 		String otherGangName = gang.getName();
 

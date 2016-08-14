@@ -6,7 +6,7 @@ class SubCommandNeutral extends RelationGangCommand {
 
 	public SubCommandNeutral(ModuleBase owner)
 	{
-		super("neutral", GangRank.OFFICER, Relation.NEUTRAL, owner);
+		super("neutral", GangRank.OFFICER, Relation.NEUTRAL, false, owner);
 	}
 
 }

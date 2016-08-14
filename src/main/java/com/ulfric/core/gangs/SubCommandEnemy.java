@@ -6,7 +6,7 @@ class SubCommandEnemy extends RelationGangCommand {
 
 	public SubCommandEnemy(ModuleBase owner)
 	{
-		super("enemy", GangRank.OFFICER, Relation.ENEMY, owner);
+		super("enemy", GangRank.OFFICER, Relation.ENEMY, true, owner);
 	}
 
 }

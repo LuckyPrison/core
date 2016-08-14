@@ -340,6 +340,11 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 		return list;
 	}
 
+	public GangRelation getRelation(UUID gangUUID)
+	{
+		return this.relations.get(gangUUID);
+	}
+
 	public List<GangMember> getMembers()
 	{
 		return ImmutableList.copyOf(this.members.values());
@@ -354,6 +359,13 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 
 	public void setRelation(UUID uuid, Relation relation)
 	{
+		GangRelation current = this.relations.get(uuid);
+
+		if (current != null)
+		{
+			if (current.getRelation() == relation) return;
+		}
+
 		this.relations.put(uuid, new GangRelation(relation, Instant.now()));
 
 		this.save();

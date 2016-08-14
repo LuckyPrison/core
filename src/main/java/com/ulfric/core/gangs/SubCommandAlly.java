@@ -6,7 +6,7 @@ class SubCommandAlly extends RelationGangCommand {
 
 	public SubCommandAlly(ModuleBase owner)
 	{
-		super("ally", GangRank.OFFICER, Relation.ALLY, owner);
+		super("ally", GangRank.OFFICER, Relation.ALLY, false, owner);
 	}
 
 }
