@@ -9,7 +9,7 @@ import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
 
-public class CommandBalance extends Command {
+class CommandBalance extends Command {
 
 	public CommandBalance(ModuleBase module)
 	{

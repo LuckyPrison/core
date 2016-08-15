@@ -8,7 +8,7 @@ import com.ulfric.lib.craft.block.Sign;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.SignListener;
 
-public class SignBalance extends SignListener {
+class SignBalance extends SignListener {
 
 	public SignBalance(ModuleBase owner)
 	{

@@ -1,4 +1,4 @@
-package com.ulfric.core.scoreboard;
+package com.ulfric.core.economy;
 
 import com.ulfric.lib.coffee.economy.Bank;
 import com.ulfric.lib.coffee.economy.Currency;

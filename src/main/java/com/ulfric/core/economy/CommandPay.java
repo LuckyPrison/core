@@ -16,7 +16,7 @@ import com.ulfric.lib.coffee.numbers.NumberUtils;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
 
-public class CommandPay extends Command {
+class CommandPay extends Command {
 
 	public CommandPay(ModuleBase module)
 	{
