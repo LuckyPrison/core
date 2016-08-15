@@ -75,6 +75,9 @@ public class CommandGangs extends Command {
 		command = new SubCommandEnemy(owner);
 		this.addCommand(command, CommandKey.singular(command.getName()));
 
+		command = new SubCommandChat(owner);
+		this.addCommand(command, CommandKey.builder().add(command.getName()).add("c").build());
+
 		this.addOptionalArgument(Argument.builder().setPath("page").addResolver(Resolvers.INTEGER).setDefaultValue(0).build());
 	}
 

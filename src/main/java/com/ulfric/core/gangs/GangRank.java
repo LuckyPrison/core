@@ -3,6 +3,7 @@ package com.ulfric.core.gangs;
 import org.apache.commons.lang3.Validate;
 
 import com.ulfric.lib.coffee.enums.EnumUtils;
+import com.ulfric.lib.coffee.string.StringUtils;
 
 public enum GangRank {
 
@@ -10,6 +11,18 @@ public enum GangRank {
 	OFFICER,
 	LIEUTENANT,
 	LEADER;
+
+	private final String stars;
+
+	GangRank()
+	{
+		this.stars = StringUtils.repeat('*', this.ordinal());
+	}
+
+	public String getStars()
+	{
+		return this.stars;
+	}
 
 	public GangRank nextRank()
 	{
