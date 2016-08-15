@@ -9,6 +9,7 @@ import com.ulfric.core.modules.ModuleBeheading;
 import com.ulfric.core.modules.ModuleEmailInterface;
 import com.ulfric.core.modules.ModuleGodmodeInterface;
 import com.ulfric.core.modules.ModuleNameplates;
+import com.ulfric.core.modules.ModulePrivateMessaging;
 import com.ulfric.core.modules.ModuleTrash;
 import com.ulfric.core.modules.ModuleVanishInterface;
 import com.ulfric.core.modules.ModuleWelcome;
@@ -31,9 +32,10 @@ public class Core extends Plugin {
 		this.addModule(new ModuleWarps());
 		this.addModule(new ModuleClearChat());
 		this.addModule(new ModuleCloseInventory());
-		this.addModule(new ModulePunishments());
 		this.addModule(new ModuleEmailInterface());
 		this.addModule(new ModuleBeheading());
+		this.addModule(new ModulePrivateMessaging());
+		this.addModule(new ModulePunishments());
 		this.addModule(new ModuleGangs());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
