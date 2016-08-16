@@ -8,6 +8,7 @@ import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.gangs.ModuleGangs;
 import com.ulfric.core.modules.ModuleBeheading;
 import com.ulfric.core.modules.ModuleEmailInterface;
+import com.ulfric.core.modules.ModuleEntityDisabler;
 import com.ulfric.core.modules.ModuleGameModeInterface;
 import com.ulfric.core.modules.ModuleGodmodeInterface;
 import com.ulfric.core.modules.ModuleNameplates;
@@ -39,6 +40,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleGangs());
 		this.addModule(new ModuleCombatTag());
 		this.addModule(new ModuleGameModeInterface());
+		this.addModule(new ModuleEntityDisabler());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 
