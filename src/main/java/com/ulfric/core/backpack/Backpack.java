@@ -1,12 +1,8 @@
 package com.ulfric.core.backpack;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.bukkit.Material;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.ulfric.config.MutableDocument;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.inventory.InventoryClickEvent;
@@ -14,15 +10,21 @@ import com.ulfric.lib.craft.inventory.Inventory;
 import com.ulfric.lib.craft.inventory.InventoryUtils;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.ItemUtils;
+import com.ulfric.lib.craft.inventory.item.Material;
 import com.ulfric.lib.craft.inventory.item.meta.ItemMeta;
 import com.ulfric.lib.craft.panel.Button;
 import com.ulfric.lib.craft.panel.Panel;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.IntStream;
+
 class Backpack extends Panel {
-	private final static ItemStack NEXT = setName(ItemUtils.getItem(Material.ARROW), "Next Page");
-	private final static ItemStack PREV = setName(ItemUtils.getItem(Material.ARROW), "Previous Page");
+
+	private final static ItemStack NEXT = setName(ItemUtils.getItem(Material.of("ARROW")), "Next Page");
+	private final static ItemStack PREV = setName(ItemUtils.getItem(Material.of("ARROW")), "Previous Page");
 	// TODO: Add these items to fill the bottom row?
-	private final static ItemStack FILL = setName(ItemUtils.getItem(Material.EGG), "Filler");
+	private final static ItemStack FILL = setName(ItemUtils.getItem(Material.of("EGG")), "Filler");
 
 	private final Player player;
 	private final OfflinePlayer target;
@@ -81,7 +83,7 @@ class Backpack extends Panel {
 	protected void onInventoryClick(InventoryClickEvent event)
 	{
 		// Check if we're clicking the last row of the backpack
-		if (event.getSlot() < this.inventory.getSize() - 9)
+		if (event.getSlot() >= this.inventory.getSize() - 9)
 		{
 			return;
 		}
@@ -105,12 +107,12 @@ class Backpack extends Panel {
 		if (this.canPageDown())
 		{
 			// Add prev button
-			addButton(this.buttons.get(0), player.getLocalizedMessage("core.backpack.prev"), this.page);
+			addButton(this.buttons.get(0), player.getLocalizedMessage("core.backpack.prev"), this.page - 1);
 		}
 		if (this.canPageUp())
 		{
 			// Add next button
-			addButton(this.buttons.get(1), player.getLocalizedMessage("core.backpack.next"), this.page + 2);
+			addButton(this.buttons.get(1), player.getLocalizedMessage("core.backpack.next"), this.page + 1);
 		}
 		player.openInventory(this.inventory);
 		return true;
@@ -133,7 +135,7 @@ class Backpack extends Panel {
 		for (int i = 0; i < this.inventory.getSize() - 9; i++)
 		{
 			ItemStack item = this.inventory.getItem(i);
-			if (item != null && item.getType() != com.ulfric.lib.craft.inventory.item.Material.of("AIR"))
+			if (item != null && item.getType() != Material.of("AIR"))
 			{
 				items.put(i, item);
 			}
@@ -157,4 +159,43 @@ class Backpack extends Panel {
 		item.setMeta(meta);
 		return item;
 	}
+
+	protected Player getPlayer()
+	{
+		return player;
+	}
+
+	protected Inventory getInventory()
+	{
+		return inventory;
+	}
+
+	protected int getPage()
+	{
+		return page;
+	}
+
+	protected void into(MutableDocument document)
+	{
+		document.set("max", maxPages);
+
+		MutableDocument pages = document.createDocument("pages");
+
+		IntStream.range(0, this.inventory.getSize()).forEach(i ->
+		{
+			ItemStack item = inventory.getItem(i);
+
+			MutableDocument slot = pages.createDocument(String.valueOf(i));
+
+			if (item != null && item.getType() != Material.of("AIR"))
+			{
+				// TODO: Serialize item to slot
+			}
+			else
+			{
+				pages.remove(String.valueOf(i));
+			}
+		});
+	}
+
 }
