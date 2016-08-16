@@ -1,5 +1,6 @@
 package com.ulfric.core;
 
+import com.ulfric.core.combattag.ModuleCombatTag;
 import com.ulfric.core.control.ModuleClearChat;
 import com.ulfric.core.control.ModuleCloseInventory;
 import com.ulfric.core.control.ModulePunishments;
@@ -37,6 +38,7 @@ public class Core extends Plugin {
 		this.addModule(new ModulePrivateMessaging());
 		this.addModule(new ModulePunishments());
 		this.addModule(new ModuleGangs());
+		this.addModule(new ModuleCombatTag());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 
