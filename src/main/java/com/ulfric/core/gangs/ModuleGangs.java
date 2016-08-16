@@ -66,12 +66,16 @@ public class ModuleGangs extends Module {
 
 				String name = player.getName();
 
+				Set<Player> recipients = event.getRecipients();
+
 				if (channel == ChatChannel.GANG)
 				{
 					String format = ChatUtils.color(Strings.format("&7{0} &a{1}&f: &a{2}", stars, name, message));
 
 					for (Player allPlayers : gang.getOnlinePlayers())
 					{
+						if (!recipients.contains(allPlayers)) continue;
+
 						allPlayers.sendMessage(format);
 					}
 
@@ -84,6 +88,8 @@ public class ModuleGangs extends Module {
 
 					for (Player allPlayers : gang.getOnlinePlayers())
 					{
+						if (!recipients.contains(allPlayers)) continue;
+
 						allPlayers.sendMessage(formatLocal);
 					}
 
@@ -103,6 +109,8 @@ public class ModuleGangs extends Module {
 
 						for (Player allPlayers : gang.getOnlinePlayers())
 						{
+							if (!recipients.contains(allPlayers)) continue;
+
 							allPlayers.sendMessage(allyFormat);
 						}
 					}
