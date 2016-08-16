@@ -68,6 +68,7 @@ public class ModuleTrash extends Module {
 					 		  .addSlot(this.size-1, ModuleTrash.this.item)
 					 		  .addAction(this::emptyTrash)
 					 		  .build())
+			 .withAllowEmptySlotClicks(true)
 			 .open(player);
 	}
 
