@@ -17,6 +17,7 @@ import com.ulfric.core.modules.ModuleTrash;
 import com.ulfric.core.modules.ModuleVanishInterface;
 import com.ulfric.core.modules.ModuleWelcome;
 import com.ulfric.core.playerlist.ModulePlayerList;
+import com.ulfric.core.settings.ModuleSettings;
 import com.ulfric.lib.bukkit.module.Plugin;
 
 public class Core extends Plugin {
@@ -24,6 +25,7 @@ public class Core extends Plugin {
 	@Override
 	public void onFirstEnable()
 	{
+		this.addModule(new ModuleSettings());
 		this.addModule(new ModuleEconomyInterface());
 		this.addModule(new ModuleWelcome());
 		this.addModule(new ModulePlayerList());
