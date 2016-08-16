@@ -139,7 +139,7 @@ public final class ModuleHomes extends Module implements ScopeListener<UUID> {
 		this.homes = Maps.newConcurrentMap();
 
 		PlayerUtils.getPlayerData()
-				   .multi(Document.class, PlayerScopes.ONLINE, new DataAddress<>("homes", null, "homedata"))
+				   .multi(Document.class, PlayerScopes.ONLINE, new DataAddress<>("homes", null, null))
 				   .blockOnSubscribe(true)
 				   .subscribe();
 
