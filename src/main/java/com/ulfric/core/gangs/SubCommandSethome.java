@@ -1,7 +1,7 @@
 package com.ulfric.core.gangs;
 
-import com.ulfric.lib.coffee.command.Enforcers;
 import com.ulfric.lib.coffee.module.ModuleBase;
+import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 
 public class SubCommandSethome extends GangCommand {

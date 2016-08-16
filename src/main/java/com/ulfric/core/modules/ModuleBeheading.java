@@ -6,12 +6,12 @@ import org.apache.commons.lang3.Validate;
 
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
-import com.ulfric.lib.coffee.command.Enforcers;
 import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.math.RandomUtils;
 import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.player.PlayerKillPlayerEvent;
 import com.ulfric.lib.craft.inventory.item.ItemStack;

@@ -1,9 +1,9 @@
 package com.ulfric.core.gangs;
 
 import com.ulfric.lib.coffee.command.Argument;
-import com.ulfric.lib.coffee.command.Enforcers;
 import com.ulfric.lib.coffee.enums.EnumUtils;
 import com.ulfric.lib.coffee.module.ModuleBase;
+import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 
 final class SubCommandChat extends GangCommand {

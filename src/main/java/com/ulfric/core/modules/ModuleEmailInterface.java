@@ -7,11 +7,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
-import com.ulfric.lib.coffee.command.Enforcers;
 import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.email.EmailUtils;
 import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 
 public class ModuleEmailInterface extends Module {

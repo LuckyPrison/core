@@ -3,8 +3,8 @@ package com.ulfric.core.gangs;
 import java.util.UUID;
 
 import com.ulfric.lib.coffee.command.CommandSender;
-import com.ulfric.lib.coffee.command.Enforcers;
 import com.ulfric.lib.coffee.module.ModuleBase;
+import com.ulfric.lib.craft.command.Enforcers;
 
 public class SubCommandJoin extends GangCommand {
 
