@@ -18,7 +18,7 @@ public enum Settings {
 		return ImmutableList.copyOf(this.settings);
 	}
 
-	public void registerSetting(Setting setting)
+	public void addSetting(Setting setting)
 	{
 		this.settings.add(setting);
 

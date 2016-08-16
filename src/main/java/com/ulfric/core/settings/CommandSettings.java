@@ -1,7 +1,10 @@
 package com.ulfric.core.settings;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import org.apache.commons.lang3.text.WordUtils;
 
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.locale.Locale;
@@ -20,7 +23,7 @@ class CommandSettings extends Command {
 
 	public CommandSettings(ModuleBase owner)
 	{
-		super("settings", owner);
+		super("settings", owner, "setting", "options", "option", /* for legacy users */ "chat");
 
 		this.addEnforcer(Enforcers.IS_PLAYER, "settings.must_be_player");
 	}
@@ -80,17 +83,9 @@ class CommandSettings extends Command {
 
 		meta.setDisplayName(locale.getRawMessage(meta.getDisplayName()));
 
-		List<String> lore = meta.getAllLore();
-		int size = lore.size();
-
 		String text = locale.getRawMessage(state.getText());
 
-		for (int x = 0; x < size; x++)
-		{
-			lore.set(x, Strings.format(lore.get(x), text));
-		}
-
-		meta.setAllLore(lore);
+		meta.setAllLore(Arrays.asList(Strings.format(WordUtils.wrap(setting.getDescription(), 12, "\n", true), text).split("\n")));
 
 		item.setMeta(meta);
 
