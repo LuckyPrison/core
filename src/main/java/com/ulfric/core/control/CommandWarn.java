@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
-import com.ulfric.lib.coffee.math.TimeUtils;
 import com.ulfric.lib.coffee.module.ModuleBase;
+import com.ulfric.lib.coffee.time.TimeUtils;
 
 class CommandWarn extends TimedPunishmentBaseCommand {
 

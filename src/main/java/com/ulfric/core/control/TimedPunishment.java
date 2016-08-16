@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.enums.EnumUtils;
-import com.ulfric.lib.coffee.math.TimeUtils;
+import com.ulfric.lib.coffee.time.TimeUtils;
 
 abstract class TimedPunishment extends Punishment {
 
