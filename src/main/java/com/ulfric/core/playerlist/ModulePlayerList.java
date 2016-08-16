@@ -8,6 +8,7 @@ import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.event.player.PlayerJoinEvent;
 import com.ulfric.lib.craft.event.player.PlayerQuitEvent;
+import com.ulfric.lib.craft.event.server.ServerPingEvent;
 import com.ulfric.lib.craft.scoreboard.Scoreboard;
 
 public class ModulePlayerList extends Module {
@@ -54,6 +55,12 @@ public class ModulePlayerList extends Module {
 
 		this.addListener(new Listener(this)
 		{
+			@Handler
+			public void onPing(ServerPingEvent event)
+			{
+				// TODO setPlayers
+			}
+
 			@Handler
 			public void onJoin(PlayerJoinEvent event)
 			{
