@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.ulfric.config.ConfigFile;
 import com.ulfric.config.MutableDocument;
+import com.ulfric.lib.coffee.event.Event;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.math.TimeUtils;
@@ -22,7 +23,9 @@ import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.event.player.PlayerDamagePlayerEvent;
 import com.ulfric.lib.craft.event.player.PlayerDeathEvent;
+import com.ulfric.lib.craft.event.player.PlayerFutureTeleportEvent;
 import com.ulfric.lib.craft.event.player.PlayerQuitEvent;
+import com.ulfric.lib.craft.event.player.PlayerTeleportEvent;
 
 public class ModuleCombatTag extends Module {
 
@@ -94,6 +97,29 @@ public class ModuleCombatTag extends Module {
 			public void onDeath(PlayerDeathEvent event)
 			{
 				Tags.INSTANCE.removeTag(event.getPlayer().getUniqueId());
+			}
+
+			@Handler(ignoreCancelled = true)
+			public void onTryTeleport(PlayerFutureTeleportEvent event)
+			{
+				this.teleportation(event.getPlayer(), event);
+			}
+
+			@Handler(ignoreCancelled = true)
+			public void onTeleport(PlayerTeleportEvent event)
+			{
+				this.teleportation(event.getPlayer(), event);
+			}
+
+			private void teleportation(Player player, Event event)
+			{
+				CombatTag tag = Tags.INSTANCE.getTag(player.getUniqueId());
+
+				if (tag == null) return;
+
+				player.sendLocalizedMessage("combattag.no_teleport");
+
+				event.setCancelled(true);
 			}
 
 			@Handler
