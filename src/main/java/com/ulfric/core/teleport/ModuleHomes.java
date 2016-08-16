@@ -1,6 +1,7 @@
 package com.ulfric.core.teleport;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -13,11 +14,11 @@ import com.ulfric.data.DataAddress;
 import com.ulfric.data.DataContainer;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
+import com.ulfric.data.scope.ScopeListener;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.command.Resolvers;
-import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.function.SortUtils;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.permission.Permissible;
@@ -28,7 +29,7 @@ import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.inventory.item.Material;
 import com.ulfric.lib.craft.location.Destination;
 
-public final class ModuleHomes extends Module {
+public final class ModuleHomes extends Module implements ScopeListener<UUID> {
 
 	public ModuleHomes()
 	{
@@ -39,17 +40,67 @@ public final class ModuleHomes extends Module {
 	private MultiSubscription<UUID, Document> subscription;
 
 	@Override
+	public void onAddition(UUID uuid)
+	{
+		Document value = this.subscription.get(uuid).getValue();
+
+		WarpSet homesList = new WarpSet();
+
+		for (String key : value.getKeys("homes", false))
+		{
+			Document homeToParse = value.getDocument(key);
+
+			homesList.add(Warp.fromDocument(key, homeToParse));
+		}
+
+		this.homes.put(uuid, homesList);
+	}
+
+	@Override
+	public void onRemove(UUID uuid)
+	{
+		WarpSet warpset = this.homes.remove(uuid);
+
+		if (warpset == null) return;
+
+		List<Warp> changed = warpset.getChangedWarps();
+
+		if (changed == null || changed.isEmpty()) return;
+
+		DataContainer<UUID, Document> container = ModuleHomes.this.subscription.get(uuid);
+
+		MutableDocument document = new SimpleDocument();
+
+		for (Warp warp : changed)
+		{
+			MutableDocument warpDoc = document.createDocument(warp.getName());
+
+			warpDoc.set("item", warp.itemToString());
+			warpDoc.set("visits", warp.getVisits());
+
+			MutableDocument destinationDocument = warpDoc.createDocument("destination");
+
+			destinationDocument.set("location", warp.locationToString());
+			destinationDocument.set("delay", warp.getDelay());
+		}
+
+		container.execute("updateValues", document);
+	}
+
+	@Override
 	public void onModuleEnable()
 	{
+		PlayerScopes.ONLINE.addListener(this);
+
 		if (this.subscription.isSubscribed()) return;
 
-		ThreadUtils.runAsync(this.subscription::subscribe);
+		this.subscription.subscribe();
 	}
 
 	@Override
 	public void onModuleDisable()
 	{
-		this.subscription.unsubscribe(); // BEFORE OR AFTER?
+		PlayerScopes.ONLINE.removeListener(this);
 
 		for (Entry<UUID, WarpSet> entry : this.homes.entrySet())
 		{
@@ -76,8 +127,10 @@ public final class ModuleHomes extends Module {
 				destinationDocument.set("delay", warp.getDelay());
 			}
 
-			container.setValue(document);
+			container.execute("updateValues", document);
 		}
+
+		this.subscription.unsubscribe(); // BEFORE OR AFTER?
 	}
 
 	@Override
@@ -86,23 +139,8 @@ public final class ModuleHomes extends Module {
 		this.homes = Maps.newConcurrentMap();
 
 		PlayerUtils.getPlayerData()
-				   .multi(Document.class, PlayerScopes.ONLINE, new DataAddress<>("homes", null, null))
+				   .multi(Document.class, PlayerScopes.ONLINE, new DataAddress<>("homes", null, "homedata"))
 				   .blockOnSubscribe(true)
-				   .onChange((oldValue, newValue) ->
-				   {
-					   Document value = newValue.getValue();
-
-					   WarpSet homesList = new WarpSet();
-
-					   for (String key : value.getKeys("homes", false))
-					   {
-						   Document homeToParse = value.getDocument(key);
-
-						   homesList.add(Warp.fromDocument(key, homeToParse));
-					   }
-
-					   this.homes.put(newValue.getAddress().getId(), homesList);
-				   })
 				   .subscribe();
 
 		this.addCommand(new CommandHome());
