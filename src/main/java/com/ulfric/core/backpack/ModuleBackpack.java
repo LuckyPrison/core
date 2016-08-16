@@ -1,7 +1,14 @@
 package com.ulfric.core.backpack;
 
+import com.ulfric.config.Document;
+import com.ulfric.config.MutableDocument;
+import com.ulfric.config.SimpleDocument;
+import com.ulfric.data.DataAddress;
+import com.ulfric.data.DocumentStore;
+import com.ulfric.data.MapSubscription;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
+import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
@@ -10,7 +17,9 @@ public final class ModuleBackpack extends Module {
 	// TODO: Resolve
 	private static final Argument PAGE = Argument.builder().addResolver(null).setPath("page").setDefaultValue(1).build();
 	// TODO: Resolve
-	private static final Argument PLAYER = Argument.builder().addResolver(null).setPath("player").setDefaultValue(command -> command.getSender()).setPermission("core.backpack.others").build();
+	private static final Argument PLAYER = Argument.builder().addResolver(null).setPath("player").setDefaultValue(Command::getSender).setPermission("core.backpack.others").build();
+
+	private MapSubscription<Document> subscription;
 
 	public ModuleBackpack()
 	{
@@ -20,10 +29,26 @@ public final class ModuleBackpack extends Module {
 	@Override
 	public void onFirstEnable()
 	{
+		DataManager dataManager = DataManager.get();
+		DocumentStore database  = dataManager.getEnsuredDatabase("backpack");
+
+		dataManager.ensureTableCreated(database, "packpack");
+
+		this.subscription = database.document(new DataAddress<>("backpack", "backpack", null)).blockOnSubscribe(true).subscribe();
+
+
+
 		this.addCommand(new BackpackCommand().addPermission("core.backpack").addEnforcer(sender -> sender instanceof Player, "system.cmd_player_only").addArgument(PAGE).addArgument(PLAYER));
 	}
 
+	@Override
+	public void onModuleDisable()
+	{
+		this.subscription.unsubscribe();
+	}
+
 	class BackpackCommand extends Command {
+
 		BackpackCommand()
 		{
 			super("backpack", ModuleBackpack.this, "pack");
@@ -48,4 +73,14 @@ public final class ModuleBackpack extends Module {
 			new Backpack(sender, target, page, max).open(sender);
 		}
 	}
+
+	protected void save(Backpack backpack)
+	{
+		MutableDocument document = new SimpleDocument();
+
+		backpack.into(document);
+
+		this.subscription.setField(backpack.getPlayer().getUniqueId().toString(), document);
+	}
+
 }
