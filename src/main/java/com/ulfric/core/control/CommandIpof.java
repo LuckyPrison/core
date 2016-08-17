@@ -7,11 +7,11 @@ import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 
-public class CommandPing extends Command {
+public class CommandIpof extends Command {
 
-	public CommandPing(ModuleBase owner)
+	public CommandIpof(ModuleBase owner)
 	{
-		super("ping", owner, "pings");
+		super("ipof", owner);
 
 		this.addArgument(Argument.builder().setPath("player").addResolver(PlayerUtils::getOnlinePlayer).setDefaultValue(cmd ->
 		{
@@ -20,7 +20,9 @@ public class CommandPing extends Command {
 			if (!(sender instanceof Player)) return null;
 
 			return sender;
-		}).setUsage("ping.specify_player").setPermission("ping.others").build());
+		}).setUsage("ipof.specify_player").setPermission("ipof.others").build());
+
+		this.addPermission("ipof.use");
 	}
 
 	@Override
@@ -31,12 +33,12 @@ public class CommandPing extends Command {
 
 		if (sender == player)
 		{
-			sender.sendLocalizedMessage("ping.self", player.getPing());
+			sender.sendLocalizedMessage("ipof.self", player.getSimpleIP());
 
 			return;
 		}
 
-		sender.sendLocalizedMessage("ping.other", player.getName(), player.getPing());
+		sender.sendLocalizedMessage("ipof.other", player.getName(), player.getSimpleIP());
 	}
 
 }
