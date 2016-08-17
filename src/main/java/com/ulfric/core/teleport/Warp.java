@@ -1,10 +1,13 @@
 package com.ulfric.core.teleport;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.Validate;
 
+import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
+import com.ulfric.config.ImmutableDocument;
 import com.ulfric.lib.coffee.numbers.NumberUtils;
 import com.ulfric.lib.coffee.object.HashUtils;
 import com.ulfric.lib.coffee.string.NamedBase;
@@ -71,6 +74,11 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 	public String locationToString()
 	{
 		return this.destination.locationToString();
+	}
+
+	public Location getLocation()
+	{
+		return this.destination.getLocation();
 	}
 
 	@Override
@@ -142,7 +150,11 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 	@Override
 	public int compareTo(Warp other)
 	{
-		return Integer.compare(this.visits, other.visits);
+		int compare = Integer.compare(this.visits, other.visits);
+
+		if (compare != 0) return compare;
+
+		return this.getName().compareTo(other.getName());
 	}
 
 	@Override
@@ -158,6 +170,23 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 		this.hashCode = hash;
 
 		return hash;
+	}
+
+	public Document toDocument()
+	{
+		Map<String, Object> map = Maps.newHashMapWithExpectedSize(3);
+
+		map.put("item", this.itemToString());
+		map.put("visits", this.visits);
+
+		Map<String, Object> destMap = Maps.newHashMapWithExpectedSize(3);
+		destMap.put("location", this.locationToString());
+		destMap.put("delay", this.getDelay());
+		destMap.put("closed", this.closed);
+
+		map.put("destination", destMap);
+
+		return new ImmutableDocument(map);
 	}
 
 }
