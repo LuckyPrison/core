@@ -13,6 +13,7 @@ public final class ModuleTeleport extends Module {
 	public void onFirstEnable()
 	{
 		this.addCommand(new CommandTeleport(this));
+		this.addCommand(new CommandTeleportPosition(this));
 
 		this.addModule(new ModuleSpawn());
 	}
