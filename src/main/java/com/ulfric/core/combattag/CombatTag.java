@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import com.ulfric.lib.coffee.concurrent.Task;
 
-final class CombatTag {
+public final class CombatTag {
 
 	CombatTag(UUID tagger, Task task)
 	{
