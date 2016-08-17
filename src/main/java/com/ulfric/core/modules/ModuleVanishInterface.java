@@ -43,7 +43,7 @@ public class ModuleVanishInterface extends Module {
 
 				Scoreboard scoreboard = player.getScoreboard();
 
-				scoreboard.setBelowName(player, ChatColor.of("GRAY").toString() + "VANISHED");
+				scoreboard.setBelowName(player, ChatColor.of("GRAY") + "VANISHED");
 
 				ScoreboardElement element = scoreboard.elementFromClazz(ElementVanish.class);
 
