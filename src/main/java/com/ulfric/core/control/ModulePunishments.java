@@ -57,6 +57,8 @@ public final class ModulePunishments extends Module {
 
 		this.addModule(new ModuleNotes());
 
+		this.addCommand(new CommandPing(this));
+
 		this.addCommand(new CommandKick(this));
 		this.addCommand(new CommandKicks(this));
 
