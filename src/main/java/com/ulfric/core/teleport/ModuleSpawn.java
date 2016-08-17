@@ -82,7 +82,7 @@ final class ModuleSpawn extends Module {
 		@Override
 		public void run()
 		{
-			Player player = (Player) this.getObject("player");
+			Player player = (Player) this.getSender();
 
 			ModuleSpawn.this.warp.accept(player);
 		}

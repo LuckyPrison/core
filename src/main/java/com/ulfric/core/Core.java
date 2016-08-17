@@ -6,6 +6,7 @@ import com.ulfric.core.control.ModuleClearChat;
 import com.ulfric.core.control.ModuleCloseInventory;
 import com.ulfric.core.control.ModuleControl;
 import com.ulfric.core.economy.ModuleEconomyInterface;
+import com.ulfric.core.enchant.ModuleEnchants;
 import com.ulfric.core.gangs.ModuleGangs;
 import com.ulfric.core.modules.ModuleBeheading;
 import com.ulfric.core.modules.ModuleEmailInterface;
@@ -47,6 +48,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleEntityDisabler());
 		this.addModule(new ModuleChat());
 		this.addModule(new ModuleTeleport());
+		this.addModule(new ModuleEnchants());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 

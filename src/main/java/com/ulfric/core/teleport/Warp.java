@@ -84,6 +84,8 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 	@Override
 	public void accept(Player player)
 	{
+		Validate.notNull(player);
+
 		this.destination.accept(player);
 
 		this.incrementVisits();
@@ -91,6 +93,8 @@ public final class Warp extends NamedBase implements Consumer<Player>, Comparabl
 
 	public void accept(Player player, boolean attemptRelative)
 	{
+		Validate.notNull(player);
+
 		this.destination.accept(player, attemptRelative);
 
 		this.incrementVisits();

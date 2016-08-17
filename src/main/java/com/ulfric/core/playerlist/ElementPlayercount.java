@@ -1,5 +1,7 @@
 package com.ulfric.core.playerlist;
 
+import java.text.NumberFormat;
+
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.scoreboard.Scoreboard;
@@ -21,7 +23,7 @@ class ElementPlayercount extends ScoreboardElement {
 	{
 		if (!updater.hasPermission("core.scoreboard.playercount")) return null;
 
-		return String.valueOf(PlayerUtils.countOnlinePlayers() * this.multiplier);
+		return String.valueOf(NumberFormat.getIntegerInstance().format((int) (PlayerUtils.countOnlinePlayers() * this.multiplier)));
 	}
 
 }
