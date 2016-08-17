@@ -20,7 +20,7 @@ public class CommandIpof extends Command {
 			if (!(sender instanceof Player)) return null;
 
 			return sender;
-		}).setUsage("ipof.specify_player").setPermission("ipof.others").build());
+		}).setUsage("control.ipof_specify_player").setPermission("ipof.others").build());
 
 		this.addPermission("ipof.use");
 	}
@@ -33,12 +33,12 @@ public class CommandIpof extends Command {
 
 		if (sender == player)
 		{
-			sender.sendLocalizedMessage("ipof.self", player.getSimpleIP());
+			sender.sendLocalizedMessage("control.ipof_self", player.getSimpleIP());
 
 			return;
 		}
 
-		sender.sendLocalizedMessage("ipof.other", player.getName(), player.getSimpleIP());
+		sender.sendLocalizedMessage("control.ipof_other", player.getName(), player.getSimpleIP());
 	}
 
 }

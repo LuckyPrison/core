@@ -26,7 +26,7 @@ public class CommandNote extends Command {
 	@Override
 	public void run()
 	{
-		this.getSender().sendLocalizedMessage("notes.usage");
+		this.getSender().sendLocalizedMessage("control.notes_usage");
 	}
 
 	private class CommandAdd extends Command
@@ -47,7 +47,7 @@ public class CommandNote extends Command {
 
 			if (StringUtils.isBlank(text))
 			{
-				sender.sendLocalizedMessage("notes.specify_text");
+				sender.sendLocalizedMessage("control.notes_specify_text");
 
 				return;
 			}
@@ -56,7 +56,7 @@ public class CommandNote extends Command {
 
 			Note note = holder.addNote(Notes.getInstance().getHolder(Punisher.valueOf(sender), NoteType.PUNISHMENT_HOLDER), text);
 
-			sender.sendLocalizedMessage("notes.added", holder.getName(), note.getID(), text);
+			sender.sendLocalizedMessage("control.notes_added", holder.getName(), note.getID(), text);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class CommandNote extends Command {
 
 			if (notes == null || notes.isEmpty())
 			{
-				sender.sendLocalizedMessage("notes.none");
+				sender.sendLocalizedMessage("control.notes_none");
 
 				return;
 			}

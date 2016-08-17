@@ -20,7 +20,7 @@ public class CommandPing extends Command {
 			if (!(sender instanceof Player)) return null;
 
 			return sender;
-		}).setUsage("ping.specify_player").setPermission("ping.others").build());
+		}).setUsage("control.ping_specify_player").setPermission("ping.others").build());
 	}
 
 	@Override
@@ -31,12 +31,12 @@ public class CommandPing extends Command {
 
 		if (sender == player)
 		{
-			sender.sendLocalizedMessage("ping.self", player.getPing());
+			sender.sendLocalizedMessage("control.ping_self", player.getPing());
 
 			return;
 		}
 
-		sender.sendLocalizedMessage("ping.other", player.getName(), player.getPing());
+		sender.sendLocalizedMessage("control.ping_other", player.getName(), player.getPing());
 	}
 
 }

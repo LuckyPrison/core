@@ -66,7 +66,7 @@ public class SubCommandInvites extends GangCommand {
 			joiner.append(Strings.format(raw, name));
 		}
 
-		sender.sendLocalizedMessage(joiner.toString());
+		sender.sendMessage(joiner.toString());
 	}
 
 }

@@ -25,7 +25,7 @@ public class CommandLift extends Command {
 			if (integer == null) return null;
 
 			return Punishments.getInstance().getPunishment(integer);
-		}).setUsage("life.specify_punishment").build());
+		}).setUsage("control.lift_specify_punishment").build());
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class CommandLift extends Command {
 
 		if (!(punishment instanceof TimedPunishment))
 		{
-			sender.sendLocalizedMessage("lift.not_timed", punishment.getID(), punishment.getClass().getSimpleName());
+			sender.sendLocalizedMessage("control.lift_not_timed", punishment.getID(), punishment.getClass().getSimpleName());
 
 			return;
 		}
@@ -45,7 +45,7 @@ public class CommandLift extends Command {
 
 		if (timed.isExpired())
 		{
-			sender.sendLocalizedMessage("lift.already_expired", punishment.getID());
+			sender.sendLocalizedMessage("control.lift_already_expired", punishment.getID());
 
 			return;
 		}
@@ -56,7 +56,7 @@ public class CommandLift extends Command {
 
 		timed.setExpiry(updater, updateReason, null);
 
-		sender.sendLocalizedMessage("life.lifted", punishment.getID());
+		sender.sendLocalizedMessage("control.lift_lifted", punishment.getID());
 	}
 
 }

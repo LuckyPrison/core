@@ -215,7 +215,7 @@ public abstract class Punishment implements Runnable, Comparable<Punishment>, No
 
 	public String quickInspect(Locale locale)
 	{
-		return locale.getFormattedMessage("punishment.inspect_quick", this.getID(), this.getHolder(), this.getReason());
+		return locale.getFormattedMessage("control.punishment_inspect_quick", this.getID(), this.getHolder(), this.getReason());
 	}
 
 	@Override

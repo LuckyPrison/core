@@ -22,7 +22,7 @@ public class CommandNameof extends Command {
 			return sender;
 		}).setUsage("nameof.specify_player").setPermission("nameof.others").build());
 
-		this.addPermission("nameof.use");
+		this.addPermission("punishment.nameof_use");
 	}
 
 	@Override
@@ -33,12 +33,12 @@ public class CommandNameof extends Command {
 
 		if (sender == player)
 		{
-			sender.sendLocalizedMessage("nameof.self", player.getName());
+			sender.sendLocalizedMessage("punishment.nameof_self", player.getName());
 
 			return;
 		}
 
-		sender.sendLocalizedMessage("nameof.other", player.getName());
+		sender.sendLocalizedMessage("punishment.nameof_other", player.getName());
 	}
 
 }

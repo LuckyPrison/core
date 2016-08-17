@@ -31,7 +31,7 @@ class CommandPardon extends Command {
 
 		if (ListUtils.isEmpty(punishments))
 		{
-			sender.sendLocalizedMessage("pardon.no_bans_found");
+			sender.sendLocalizedMessage("control.pardon_no_bans_found");
 
 			return;
 		}
@@ -57,12 +57,12 @@ class CommandPardon extends Command {
 
 		if (ids.isEmpty())
 		{
-			sender.sendLocalizedMessage("pardon.no_active_bans_found");
+			sender.sendLocalizedMessage("control.pardon_no_active_bans_found");
 
 			return;
 		}
 
-		sender.sendLocalizedMessage("pardon.expired", StringUtils.mergeNicely(ids));
+		sender.sendLocalizedMessage("control.pardon_expired", StringUtils.mergeNicely(ids));
 	}
 
 }

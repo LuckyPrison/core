@@ -48,7 +48,7 @@ class RelationGangCommand extends GangCommand {
 
 		memberGang.setRelation(gang.getUniqueId(), this.relation);
 
-		GangRelation currentRelation = gang.getRelation(gang.getUniqueId());
+		GangRelation currentRelation = gang.getRelation(memberGang.getUniqueId());
 
 		String senderName = sender.getName();
 		String gangName = memberGang.getName();

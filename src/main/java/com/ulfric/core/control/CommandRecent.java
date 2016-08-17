@@ -42,7 +42,7 @@ public class CommandRecent extends Command {
 
 		if (latest == 0)
 		{
-			sender.sendLocalizedMessage("recent.none");
+			sender.sendLocalizedMessage("control.recent_none");
 
 			return;
 		}
