@@ -2,7 +2,6 @@ package com.ulfric.core.gangs;
 
 import java.util.UUID;
 
-import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
@@ -19,7 +18,7 @@ public class SubCommandLeave extends GangCommand {
 	@Override
 	public void run()
 	{
-		CommandSender sender = this.getSender();
+		Player sender = (Player) this.getSender();
 		UUID uuid = sender.getUniqueId();
 
 		Gang gang = this.getGang();
@@ -74,6 +73,8 @@ public class SubCommandLeave extends GangCommand {
 		gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs.member_left", sender.getName()));
 
 		sender.sendLocalizedMessage("gangs.left", gang.getName());
+
+		new GangStatusEvent(sender, null).fire();
 	}
 
 }

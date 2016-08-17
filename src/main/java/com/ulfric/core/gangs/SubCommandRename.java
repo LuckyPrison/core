@@ -45,6 +45,7 @@ public class SubCommandRename extends GangCommand {
 
 		for (Player player : gang.getOnlinePlayers())
 		{
+			new GangStatusEvent(player, gang).fire();
 			player.sendLocalizedMessage("gangs.renamed", gangName, senderName);
 		}
 

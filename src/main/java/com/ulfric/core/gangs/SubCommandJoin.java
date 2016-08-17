@@ -2,9 +2,9 @@ package com.ulfric.core.gangs;
 
 import java.util.UUID;
 
-import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.command.Enforcers;
+import com.ulfric.lib.craft.entity.player.Player;
 
 public class SubCommandJoin extends GangCommand {
 
@@ -18,7 +18,7 @@ public class SubCommandJoin extends GangCommand {
 	@Override
 	public void run()
 	{
-		CommandSender sender = this.getSender();
+		Player sender = (Player) this.getSender();
 		UUID uuid = sender.getUniqueId();
 
 		Gangs gangs = Gangs.getInstance();
@@ -48,6 +48,8 @@ public class SubCommandJoin extends GangCommand {
 		gang.addNewMember(uuid);
 
 		sender.sendLocalizedMessage("gangs.joined", gang.getName());
+
+		new GangStatusEvent(sender, gang).fire();
 	}
 
 }

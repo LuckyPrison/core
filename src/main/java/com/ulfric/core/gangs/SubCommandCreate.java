@@ -5,12 +5,12 @@ import java.util.concurrent.TimeUnit;
 
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
-import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.enums.EnumUtils;
 import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.coffee.time.TimeUtils;
 import com.ulfric.lib.craft.command.Enforcers;
+import com.ulfric.lib.craft.entity.player.Player;
 
 public class SubCommandCreate extends Command {
 
@@ -26,7 +26,7 @@ public class SubCommandCreate extends Command {
 	@Override
 	public void run()
 	{
-		CommandSender sender = this.getSender();
+		Player sender = (Player) this.getSender();
 
 		Gangs gangs = Gangs.getInstance();
 
@@ -78,6 +78,8 @@ public class SubCommandCreate extends Command {
 		gang = Gang.newGang(gangs, gangUUID, name, sender.getUniqueId());
 
 		sender.sendLocalizedMessage("gangs.created_gang", gang.getName());
+
+		new GangStatusEvent(sender, gang).fire();
 	}
 
 }

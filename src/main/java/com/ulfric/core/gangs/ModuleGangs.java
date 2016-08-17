@@ -16,6 +16,7 @@ import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.player.AsyncPlayerChatEvent;
+import com.ulfric.lib.craft.event.player.PlayerJoinEvent;
 import com.ulfric.lib.craft.string.ChatUtils;
 
 public class ModuleGangs extends Module {
@@ -43,6 +44,38 @@ public class ModuleGangs extends Module {
 
 		this.addListener(new Listener(this)
 		{
+			@Handler
+			public void onStatus(GangStatusEvent event)
+			{
+				Player player = event.getPlayer();
+				Gang gang = event.getGang();
+
+				if (gang == null)
+				{
+					player.getScoreboard().setBelowName(player, null);
+
+					return;
+				}
+
+				player.getScoreboard().setBelowName(player, ChatUtils.color("&7") + gang.getName());
+			}
+
+			@Handler
+			public void onJoin(PlayerJoinEvent event)
+			{
+				Player player = event.getPlayer();
+
+				GangMember member = Gangs.getInstance().getMember(player.getUniqueId());
+
+				if (member == null) return;
+
+				Gang gang = member.getGang();
+
+				if (gang == null) return;
+
+				new GangStatusEvent(player, gang).fire();
+			}
+
 			@Handler(ignoreCancelled = true)
 			public void onChat(AsyncPlayerChatEvent event)
 			{
