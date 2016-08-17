@@ -19,7 +19,7 @@ import com.ulfric.core.modules.ModuleVanishInterface;
 import com.ulfric.core.modules.ModuleWelcome;
 import com.ulfric.core.playerlist.ModulePlayerList;
 import com.ulfric.core.settings.ModuleSettings;
-import com.ulfric.core.teleport.ModuleSpawn;
+import com.ulfric.core.teleport.ModuleTeleport;
 import com.ulfric.lib.bukkit.module.Plugin;
 
 public class Core extends Plugin {
@@ -46,7 +46,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleGameModeInterface());
 		this.addModule(new ModuleEntityDisabler());
 		this.addModule(new ModuleChat());
-		this.addModule(new ModuleSpawn());
+		this.addModule(new ModuleTeleport());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 

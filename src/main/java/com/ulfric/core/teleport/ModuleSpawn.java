@@ -16,7 +16,7 @@ import com.ulfric.lib.craft.location.Destination;
 import com.ulfric.lib.craft.location.Location;
 import com.ulfric.lib.craft.world.WorldUtils;
 
-public class ModuleSpawn extends Module {
+final class ModuleSpawn extends Module {
 
 	public ModuleSpawn()
 	{
