@@ -43,7 +43,6 @@ public final class State {
 		public State build()
 		{
 			Validate.notBlank(this.text);
-			Validate.notNull(this.item);
 
 			return new State(this.text, this.item);
 		}
