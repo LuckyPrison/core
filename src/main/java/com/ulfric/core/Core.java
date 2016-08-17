@@ -4,7 +4,7 @@ import com.ulfric.core.chat.ModuleChat;
 import com.ulfric.core.combattag.ModuleCombatTag;
 import com.ulfric.core.control.ModuleClearChat;
 import com.ulfric.core.control.ModuleCloseInventory;
-import com.ulfric.core.control.ModulePunishments;
+import com.ulfric.core.control.ModuleControl;
 import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.gangs.ModuleGangs;
 import com.ulfric.core.modules.ModuleBeheading;
@@ -40,7 +40,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleEmailInterface());
 		this.addModule(new ModuleBeheading());
 		this.addModule(new ModulePrivateMessaging());
-		this.addModule(new ModulePunishments());
+		this.addModule(new ModuleControl());
 		this.addModule(new ModuleGangs());
 		this.addModule(new ModuleCombatTag());
 		this.addModule(new ModuleGameModeInterface());

@@ -23,11 +23,11 @@ import com.ulfric.lib.craft.event.player.AsyncPlayerChatEvent;
 import com.ulfric.lib.craft.event.player.AsyncPreLoginEvent;
 import com.ulfric.lib.craft.event.player.PlayerCommandPreProcessEvent;
 
-public final class ModulePunishments extends Module {
+public final class ModuleControl extends Module {
 
-	public ModulePunishments()
+	public ModuleControl()
 	{
-		super("punishments", "Punishment manager module", "1.0.0", "Packet");
+		super("control", "Control & punishments manager module", "1.0.0", "Packet");
 	}
 
 	private Map<PunishmentType, MapSubscription<Document>> documents;
@@ -103,11 +103,11 @@ public final class ModulePunishments extends Module {
 
 				PunishmentHolder holder = cache.getHolder(event.getUniqueId());
 
-				if (ModulePunishments.this.kickBan(event, holder)) return;
+				if (ModuleControl.this.kickBan(event, holder)) return;
 
 				holder = cache.getHolder(event.getIpAddress());
 
-				ModulePunishments.this.kickBan(event, holder);
+				ModuleControl.this.kickBan(event, holder);
 			}
 
 			@Handler(ignoreCancelled = true)
@@ -119,11 +119,11 @@ public final class ModulePunishments extends Module {
 
 				PunishmentHolder holder = cache.getHolder(player.getUniqueId());
 
-				if (ModulePunishments.this.noChat(event, holder)) return;
+				if (ModuleControl.this.noChat(event, holder)) return;
 
 				holder = cache.getHolder(player.getIP());
 
-				ModulePunishments.this.noChat(event, holder);
+				ModuleControl.this.noChat(event, holder);
 			}
 
 			@Handler(ignoreCancelled = true)
@@ -135,11 +135,11 @@ public final class ModulePunishments extends Module {
 
 				PunishmentHolder holder = cache.getHolder(player.getIP());
 
-				if (ModulePunishments.this.shadowChat(event, holder)) return;
+				if (ModuleControl.this.shadowChat(event, holder)) return;
 
 				holder = cache.getHolder(player.getUniqueId());
 
-				ModulePunishments.this.shadowChat(event, holder);
+				ModuleControl.this.shadowChat(event, holder);
 			}
 
 			@Handler(ignoreCancelled = true)
@@ -151,11 +151,11 @@ public final class ModulePunishments extends Module {
 
 				PunishmentHolder holder = cache.getHolder(player.getUniqueId());
 
-				if (ModulePunishments.this.noCommand(event, holder)) return;
+				if (ModuleControl.this.noCommand(event, holder)) return;
 
 				holder = cache.getHolder(player.getIP());
 
-				ModulePunishments.this.noCommand(event, holder);
+				ModuleControl.this.noCommand(event, holder);
 			}
 		});
 	}
