@@ -12,7 +12,7 @@ final class CommandTeleportPosition extends Command {
 
 	public CommandTeleportPosition(ModuleBase owner)
 	{
-		super("teleportposition", owner, "tppos");
+		super("teleportposition", owner, "teleposition", "telepos", "tppos");
 
 		this.addArgument(Argument.builder().setPath("x").addResolver(Resolvers.DOUBLE).setUsage("teleport.tppos_specify_x").build());
 		this.addArgument(Argument.builder().setPath("y").addResolver(Resolvers.DOUBLE).setUsage("teleport.tppos_specify_y").build());
