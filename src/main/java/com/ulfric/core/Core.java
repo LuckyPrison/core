@@ -8,6 +8,7 @@ import com.ulfric.core.control.ModuleControl;
 import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.enchant.ModuleEnchants;
 import com.ulfric.core.gangs.ModuleGangs;
+import com.ulfric.core.mines.ModuleMines;
 import com.ulfric.core.modules.ModuleBeheading;
 import com.ulfric.core.modules.ModuleEmailInterface;
 import com.ulfric.core.modules.ModuleEntityDisabler;
@@ -51,6 +52,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleTeleport());
 		this.addModule(new ModuleEnchants());
 		this.addModule(new ModuleRegionInterface());
+		this.addModule(new ModuleMines());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 
