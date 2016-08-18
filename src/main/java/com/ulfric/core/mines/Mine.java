@@ -129,7 +129,11 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 	@Override
 	public int compareTo(Mine mine)
 	{
-		return Integer.compare(this.counter, mine.counter);
+		int compare = Integer.compare(this.counter, mine.counter);
+
+		if (compare != 0) return compare;
+
+		return this.getName().compareTo(mine.getName());
 	}
 
 	public static Builder builder()

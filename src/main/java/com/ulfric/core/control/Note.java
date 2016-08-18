@@ -77,7 +77,7 @@ public final class Note implements Comparable<Note> {
 	@Override
 	public int compareTo(Note note)
 	{
-		return Integer.valueOf(note.getID()).compareTo(this.getID());
+		return Integer.compare(this.getID(), note.getID());
 	}
 
 }

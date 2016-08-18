@@ -178,7 +178,7 @@ public abstract class Punishment implements Runnable, Comparable<Punishment>, No
 	@Override
 	public final int compareTo(Punishment punishment)
 	{
-		return this.creation.compareTo(punishment.creation);
+		return Integer.compare(this.id, punishment.id);
 	}
 
 	@Override
