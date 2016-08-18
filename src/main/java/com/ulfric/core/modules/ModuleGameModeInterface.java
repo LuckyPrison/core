@@ -80,12 +80,7 @@ public class ModuleGameModeInterface extends Module {
 
 			player.setGameMode(mode);
 
-			if (player == sender)
-			{
-				sender.sendLocalizedMessage("gamemode.changed", mode.getFormattedName());
-
-				return;
-			}
+			if (player == sender) return;
 
 			sender.sendLocalizedMessage("gamemode.changed_other", player.getName(), mode.getFormattedName());
 		}

@@ -3,7 +3,6 @@ package com.ulfric.core.regions;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
-import com.ulfric.lib.coffee.string.StringUtils;
 import com.ulfric.lib.craft.block.Block;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.player.PlayerInteractEvent;
@@ -47,7 +46,7 @@ public class ModuleRegionInterface extends Module {
 
 				if (!player.hasPermission("regions.list")) return;
 
-				player.sendLocalizedMessage(StringUtils.mergeNicely(RegionColl.at(player.getLocation()).toList()));
+				player.sendMessage(RegionColl.at(block.getLocation()).toString());
 			}
 		});
 	}
