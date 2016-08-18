@@ -19,6 +19,7 @@ import com.ulfric.core.modules.ModuleTrash;
 import com.ulfric.core.modules.ModuleVanishInterface;
 import com.ulfric.core.modules.ModuleWelcome;
 import com.ulfric.core.playerlist.ModulePlayerList;
+import com.ulfric.core.regions.ModuleRegionInterface;
 import com.ulfric.core.settings.ModuleSettings;
 import com.ulfric.core.teleport.ModuleTeleport;
 import com.ulfric.lib.bukkit.module.Plugin;
@@ -49,6 +50,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleChat());
 		this.addModule(new ModuleTeleport());
 		this.addModule(new ModuleEnchants());
+		this.addModule(new ModuleRegionInterface());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 

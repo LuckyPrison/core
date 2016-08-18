@@ -8,11 +8,11 @@ import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.economy.Bank;
 import com.ulfric.lib.coffee.economy.BankAccount;
+import com.ulfric.lib.coffee.economy.Currency;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.coffee.economy.MoneyFormatter;
 import com.ulfric.lib.coffee.economy.OfflineBankAccount;
 import com.ulfric.lib.coffee.module.ModuleBase;
-import com.ulfric.lib.coffee.numbers.NumberUtils;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
 
@@ -29,43 +29,33 @@ class CommandPay extends Command {
 	public void run()
 	{
 		CommandSender sender = this.getSender();
-		UUID uuid = sender.getUniqueId();
-
-		CurrencyAmount amount = (CurrencyAmount) this.getObject("price");
 		OfflinePlayer player = (OfflinePlayer) this.getObject("offline-player");
-		String payeeName = player.getName();
 
-		MoneyFormatter amountFormat = new MoneyFormatter(amount.getAmount()).dualFormatLetter();
+		if (sender == player)
+		{
+			sender.sendLocalizedMessage("economy.pay_specify_player_self");
+
+			return;
+		}
+
+		UUID uuid = sender.getUniqueId();
+		CurrencyAmount amount = (CurrencyAmount) this.getObject("price");
+		Currency currency = amount.getCurrency();
+		long amt = amount.getAmount();
+		String payeeName = player.getName();
+		MoneyFormatter amountFormat = new MoneyFormatter(amt).dualFormatLetter();
 
 		if (uuid != null)
 		{
-			if (player.getUniqueId().equals(uuid))
-			{
-				sender.sendLocalizedMessage("pay.specify_player_self");
-
-				return;
-			}
-
 			BankAccount account = Bank.getOnlineAccount(uuid);
 
-			DataUpdate<Long> balance = account.retrieveBalance(amount.getCurrency());
+			long balance = account.getBalance(currency);
 
-			try
+			long diff = balance - amt;
+
+			if (diff < 0)
 			{
-				long bal = NumberUtils.getLong(balance.get());
-
-				long diff = bal - amount.getAmount();
-
-				if (diff < 0)
-				{
-					sender.sendLocalizedMessage("pay.missing_money", amountFormat, new MoneyFormatter(bal).dualFormatLetter(), new MoneyFormatter(diff).dualFormatLetter());
-
-					return;
-				}
-			}
-			catch (InterruptedException|ExecutionException exception)
-			{
-				exception.printStackTrace();
+				sender.sendLocalizedMessage("economy.pay_cannot_afford", new MoneyFormatter(diff).dualFormatLetter());
 
 				return;
 			}
@@ -76,53 +66,31 @@ class CommandPay extends Command {
 			{
 				take.get();
 			}
-			catch (InterruptedException|ExecutionException e)
-			{
-				e.printStackTrace();
-			}
-
-			try
-			{
-				sender.sendLocalizedMessage("pay.payment_sent", payeeName, amountFormat, new MoneyFormatter(account.retrieveBalance(amount.getCurrency()).get()).dualFormatLetter());
-			}
 			catch (InterruptedException|ExecutionException exception)
 			{
-				sender.sendLocalizedMessage("pay.payment_sent_fallback", payeeName, amountFormat);
-
 				exception.printStackTrace();
+
+				return;
 			}
+
+			sender.sendLocalizedMessage("economy.pay_paid", payeeName, amountFormat, new MoneyFormatter(account.getBalance(currency)).dualFormatLetter());
 		}
 
 		Player online = player.toPlayer();
-
 		UUID playerUuid = player.getUniqueId();
-
 		OfflineBankAccount account = online == null ? Bank.getAccount(playerUuid) : Bank.getOnlineAccount(playerUuid);
 
 		String senderName = sender.getName();
 
-		try
-		{
-			System.out.println(account.give(amount, "Payment from " + senderName).get());
-		}
-		catch (InterruptedException|ExecutionException e)
-		{
-			e.printStackTrace();
-		}
+		account.give(amount, "Payment from " + senderName);
 
 		if (online == null) return;
 
-		try
-		{
-			account.retrieveBalance(amount.getCurrency()).get();
-			online.sendLocalizedMessage("pay.you_got_money", senderName, amountFormat, new MoneyFormatter(account.retrieveBalance(amount.getCurrency()).get()));
-		}
-		catch (InterruptedException|ExecutionException exception)
-		{
-			online.sendLocalizedMessage("pay.you_got_money_backup", senderName, amountFormat);
+		BankAccount onlineAccount = account instanceof BankAccount ? (BankAccount) account : Bank.getOnlineAccount(playerUuid);
 
-			exception.printStackTrace();
-		}
+		if (onlineAccount == null) return;
+
+		online.sendLocalizedMessage("economy.pay_received", senderName, amountFormat, new MoneyFormatter(onlineAccount.getBalance(amount.getCurrency())));
 	}
 
 }
