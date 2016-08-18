@@ -13,6 +13,9 @@ final class CommandRegions extends Command {
 		Command command = new CommandRegionImport(owner);
 		this.addCommand(command, CommandKey.singular(command.getName()));
 
+		command = new CommandFlag(owner);
+		this.addCommand(command, CommandKey.singular(command.getName()));
+
 		this.addPermission("regions.use");
 	}
 
