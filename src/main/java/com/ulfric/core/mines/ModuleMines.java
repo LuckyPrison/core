@@ -7,6 +7,7 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.ulfric.config.Document;
+import com.ulfric.lib.coffee.collection.SetUtils;
 import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
@@ -41,7 +42,13 @@ public class ModuleMines extends Module {
 	{
 		Document mines = this.getModuleConfig().getRoot().getDocument("mines");
 
-		for (String key : mines.getKeys(false))
+		if (mines == null) return;
+
+		Set<String> keys = mines.getKeys(false);
+
+		if (SetUtils.isEmpty(keys)) return;
+
+		for (String key : keys)
 		{
 			Document mineDocument = mines.getDocument(key);
 
