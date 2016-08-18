@@ -47,7 +47,7 @@ class PunishmentListCommand extends Command {
 
 		this.addArgument(PunishmentHolder.ARGUMENT);
 
-		this.addArgument(Argument.builder().setPath("count").setDefaultValue(-10).addSimpleResolver(str ->
+		this.addArgument(Argument.builder().setPath("count").setDefaultValue(10).addSimpleResolver(str ->
 		{
 			Integer val = NumberUtils.parseInteger(str);
 
