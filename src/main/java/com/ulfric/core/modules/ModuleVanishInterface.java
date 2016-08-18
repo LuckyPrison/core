@@ -12,7 +12,6 @@ import com.ulfric.lib.craft.event.player.PlayerJoinEvent;
 import com.ulfric.lib.craft.event.player.PlayerPostVanishEvent;
 import com.ulfric.lib.craft.scoreboard.Scoreboard;
 import com.ulfric.lib.craft.scoreboard.ScoreboardElement;
-import com.ulfric.lib.craft.string.ChatColor;
 
 public class ModuleVanishInterface extends Module {
 
@@ -40,10 +39,40 @@ public class ModuleVanishInterface extends Module {
 			public void onVanish(PlayerPostVanishEvent event)
 			{
 				Player player = event.getPlayer();
+				/*String name = player.getName();
+
+				String vanishText = ChatColor.of("GRAY") + "VANISHED";
+
+				for (Player allPlayers : PlayerUtils.getOnlinePlayers())
+				{
+					if (allPlayers == player) continue;
+
+					ScoreboardTeam team = allPlayers.getScoreboard().getTeam(allPlayers, name);
+
+					String suffix = team.getSuffix();
+
+					if (event.getNewVanishState())
+					{
+						if (suffix == null)
+						{
+							suffix = vanishText;
+						}
+						else
+						{
+							suffix += ' ' + vanishText;
+						}
+					}
+					else
+					{
+						if (suffix == null) continue;
+
+						suffix = suffix.replace(vanishText, "").trim();
+					}
+
+					team.setSuffix(suffix);
+				}*/
 
 				Scoreboard scoreboard = player.getScoreboard();
-
-				scoreboard.setBelowName(player, ChatColor.of("GRAY") + "VANISHED");
 
 				ScoreboardElement element = scoreboard.elementFromClazz(ElementVanish.class);
 

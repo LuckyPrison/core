@@ -77,7 +77,11 @@ public final class Gangs {
 			if (player == null) return null;
 		}
 
-		return this.getMember(player.getUniqueId()).getGang();
+		GangMember member = this.getMember(player.getUniqueId());
+
+		if (member == null) return null;
+
+		return member.getGang();
 	}
 
 	public GangMember getMember(UUID uuid)

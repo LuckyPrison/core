@@ -19,6 +19,7 @@ import com.ulfric.config.Document;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.core.teleport.Warp;
 import com.ulfric.lib.coffee.string.Nameable;
+import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.coffee.string.Unique;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
@@ -208,6 +209,7 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 		Validate.notNull(memberUUID);
 
 		GangMember member = GangMember.builder()
+									  .setUUID(memberUUID)
 									  .setGang(this)
 									  .setRank(GangRank.MEMBER)
 									  .setJoined(Instant.now())
@@ -484,6 +486,12 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 		this.lastCacheUpdate = current;
 
 		return this.cachedCompareSize = this.getOnlinePlayers().size();
+	}
+
+	@Override
+	public String toString()
+	{
+		return Strings.format("Gang[name={0}, uuid={1}]", this.name, this.uuid);
 	}
 
 }

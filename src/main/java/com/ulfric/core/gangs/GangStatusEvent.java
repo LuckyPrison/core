@@ -1,21 +1,30 @@
 package com.ulfric.core.gangs;
 
+import com.ulfric.lib.coffee.event.Fireable;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.player.PlayerEvent;
 
+@Fireable
 class GangStatusEvent extends PlayerEvent {
 
-	GangStatusEvent(Player player, Gang gang)
+	GangStatusEvent(Player player, Gang oldGang, Gang newGang)
 	{
 		super(player);
-		this.gang = gang;
+		this.oldGang = oldGang;
+		this.newGang = newGang;
 	}
 
-	private final Gang gang;
+	private final Gang oldGang;
+	private final Gang newGang;
 
-	public Gang getGang()
+	public Gang getOldGang()
 	{
-		return this.gang;
+		return this.oldGang;
+	}
+
+	public Gang getNewGang()
+	{
+		return this.newGang;
 	}
 
 }

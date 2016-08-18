@@ -71,7 +71,6 @@ public class ModuleNameplates extends Module {
 		this.consumer = (player, plate) ->
 		{
 			String prefix = plate.getPrefix();
-			String plateName = plate.getName();
 			String name = player.getName();
 
 			for (Player allPlayers : PlayerUtils.getOnlinePlayers())
@@ -80,16 +79,13 @@ public class ModuleNameplates extends Module {
 
 				Scoreboard scoreboard = allPlayers.getScoreboard();
 
-				ScoreboardTeam team = scoreboard.getTeam(allPlayers, plateName);
+				ScoreboardTeam team = scoreboard.getTeam(allPlayers, name);
 
-				if (team == null)
-				{
-					team = scoreboard.createTeam(allPlayers, plateName);
+				String currentPrefix = team.getPrefix();
 
-					team.setPrefix(prefix);
-				}
+				currentPrefix = currentPrefix == null ? "" : currentPrefix;
 
-				team.addEntry(name);
+				team.setPrefix(currentPrefix + prefix);
 			}
 		};
 

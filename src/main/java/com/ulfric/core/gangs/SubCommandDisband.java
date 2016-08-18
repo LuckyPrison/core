@@ -26,7 +26,7 @@ public class SubCommandDisband extends GangCommand {
 
 		for (Player player : gang.getOnlinePlayers())
 		{
-			new GangStatusEvent(player, null).fire();
+			new GangStatusEvent(player, gang, null).fire();
 			player.sendLocalizedMessage("gangs.disbanded", gangName, senderName);
 		}
 

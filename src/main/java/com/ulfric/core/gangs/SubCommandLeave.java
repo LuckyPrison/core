@@ -74,7 +74,7 @@ public class SubCommandLeave extends GangCommand {
 
 		sender.sendLocalizedMessage("gangs.left", gang.getName());
 
-		new GangStatusEvent(sender, null).fire();
+		new GangStatusEvent(sender, gang, null).fire();
 	}
 
 }

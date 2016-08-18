@@ -72,19 +72,25 @@ class CommandPay extends Command {
 
 			DataUpdate<Long> take = account.take(amount, "Payment to " + payeeName);
 
-			take.whenComplete((l, t) ->
+			try
 			{
-				try
-				{
-					sender.sendLocalizedMessage("pay.payment_sent", payeeName, amountFormat, new MoneyFormatter(account.retrieveBalance(amount.getCurrency()).get()).dualFormatLetter());
-				}
-				catch (InterruptedException|ExecutionException exception)
-				{
-					sender.sendLocalizedMessage("pay.payment_sent_fallback", payeeName, amountFormat);
+				take.get();
+			}
+			catch (InterruptedException|ExecutionException e)
+			{
+				e.printStackTrace();
+			}
 
-					exception.printStackTrace();
-				}
-			});
+			try
+			{
+				sender.sendLocalizedMessage("pay.payment_sent", payeeName, amountFormat, new MoneyFormatter(account.retrieveBalance(amount.getCurrency()).get()).dualFormatLetter());
+			}
+			catch (InterruptedException|ExecutionException exception)
+			{
+				sender.sendLocalizedMessage("pay.payment_sent_fallback", payeeName, amountFormat);
+
+				exception.printStackTrace();
+			}
 		}
 
 		Player online = player.toPlayer();
@@ -95,12 +101,20 @@ class CommandPay extends Command {
 
 		String senderName = sender.getName();
 
-		account.give(amount, "Payment from " + senderName);
+		try
+		{
+			System.out.println(account.give(amount, "Payment from " + senderName).get());
+		}
+		catch (InterruptedException|ExecutionException e)
+		{
+			e.printStackTrace();
+		}
 
 		if (online == null) return;
 
 		try
 		{
+			account.retrieveBalance(amount.getCurrency()).get();
 			online.sendLocalizedMessage("pay.you_got_money", senderName, amountFormat, new MoneyFormatter(account.retrieveBalance(amount.getCurrency()).get()));
 		}
 		catch (InterruptedException|ExecutionException exception)

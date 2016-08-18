@@ -79,7 +79,7 @@ public class SubCommandCreate extends Command {
 
 		sender.sendLocalizedMessage("gangs.created_gang", gang.getName());
 
-		new GangStatusEvent(sender, gang).fire();
+		new GangStatusEvent(sender, null, gang).fire();
 	}
 
 }

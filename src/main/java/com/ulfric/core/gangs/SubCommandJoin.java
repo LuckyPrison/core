@@ -49,7 +49,7 @@ public class SubCommandJoin extends GangCommand {
 
 		sender.sendLocalizedMessage("gangs.joined", gang.getName());
 
-		new GangStatusEvent(sender, gang).fire();
+		new GangStatusEvent(sender, null, gang).fire();
 	}
 
 }

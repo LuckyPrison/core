@@ -15,8 +15,12 @@ import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.craft.entity.player.Player;
+import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.event.player.AsyncPlayerChatEvent;
 import com.ulfric.lib.craft.event.player.PlayerJoinEvent;
+import com.ulfric.lib.craft.scoreboard.Scoreboard;
+import com.ulfric.lib.craft.scoreboard.ScoreboardTeam;
+import com.ulfric.lib.craft.string.ChatColor;
 import com.ulfric.lib.craft.string.ChatUtils;
 
 public class ModuleGangs extends Module {
@@ -48,16 +52,43 @@ public class ModuleGangs extends Module {
 			public void onStatus(GangStatusEvent event)
 			{
 				Player player = event.getPlayer();
-				Gang gang = event.getGang();
+				String name = player.getName();
+				Gang gang = event.getNewGang();
 
 				if (gang == null)
 				{
-					player.getScoreboard().setBelowName(player, null);
+					Gang oldGang = event.getOldGang();
+
+					if (oldGang == null) return;
+
+					String gangText = ChatColor.of("YELLOW") + oldGang.getName();
+
+					for (Player allPlayers : PlayerUtils.getOnlinePlayers())
+					{
+						if (allPlayers == player) continue;
+
+						ScoreboardTeam team = allPlayers.getScoreboard().getTeam(allPlayers, name);
+
+						String suffix = team.getSuffix();
+
+						if (suffix == null) continue;
+
+						suffix = suffix.replace(gangText, "");
+
+						team.setSuffix(suffix);
+					}
 
 					return;
 				}
 
-				player.getScoreboard().setBelowName(player, ChatUtils.color("&7") + gang.getName());
+				String gangText = ChatColor.of("YELLOW") + gang.getName();
+
+				for (Player allPlayers : PlayerUtils.getOnlinePlayers())
+				{
+					if (allPlayers == player) continue;
+
+					allPlayers.getScoreboard().getTeam(allPlayers, name).setSuffix(gangText);
+				}
 			}
 
 			@Handler
@@ -65,7 +96,26 @@ public class ModuleGangs extends Module {
 			{
 				Player player = event.getPlayer();
 
-				GangMember member = Gangs.getInstance().getMember(player.getUniqueId());
+				ChatColor yellow = ChatColor.of("YELLOW");
+				Gangs gangs = Gangs.getInstance();
+
+				Scoreboard scoreboard = player.getScoreboard();
+				for (Player allPlayers : PlayerUtils.getOnlinePlayers())
+				{
+					if (player == allPlayers) continue;
+
+					GangMember member = gangs.getMember(allPlayers.getUniqueId());
+
+					if (member == null) continue;
+
+					Gang gang = member.getGang();
+
+					String gangText = yellow + gang.getName();
+
+					scoreboard.getTeam(player, allPlayers.getName()).setSuffix(gangText);
+				}
+
+				GangMember member = gangs.getMember(player.getUniqueId());
 
 				if (member == null) return;
 
@@ -73,7 +123,7 @@ public class ModuleGangs extends Module {
 
 				if (gang == null) return;
 
-				new GangStatusEvent(player, gang).fire();
+				new GangStatusEvent(player, null, gang).fire();
 			}
 
 			@Handler(ignoreCancelled = true)

@@ -72,7 +72,7 @@ public class SubCommandKick extends GangCommand {
 
 		if (player == null) return;
 
-		new GangStatusEvent(player, null).fire();
+		new GangStatusEvent(player, gang, null).fire();
 
 		player.sendLocalizedMessage("gangs.kicked", gang.getName(), senderName);
 	}
