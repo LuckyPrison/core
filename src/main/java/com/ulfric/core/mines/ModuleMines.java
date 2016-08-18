@@ -78,6 +78,8 @@ public class ModuleMines extends Module {
 			{
 				RegionList list = RegionColl.at(event.getBlock().getLocation());
 
+				if (list == null || list.isEmpty()) return;
+
 				for (Region region : list)
 				{
 					Mine mine = Mines.INSTANCE.getByRegion(region);
@@ -110,12 +112,7 @@ public class ModuleMines extends Module {
 
 				Mine next = iterator.next();
 
-				if (!next.reset())
-				{
-					x--;
-
-					continue;
-				}
+				if (!next.reset()) continue;
 
 				reset.add(next);
 

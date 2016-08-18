@@ -44,7 +44,7 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 			builder.addType(Weighted.<MaterialData>builder().setValue(data).setWeight(weight).build());
 		}
 
-		int blockRate = document.getInteger("block-rate", 60);
+		int blockRate = document.getLong("block-rate", 60L).intValue();
 
 		builder.setBlockRate(blockRate);
 
@@ -77,18 +77,11 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 		this.counter++;
 	}
 
-	public int getCounter()
-	{
-		return this.counter;
-	}
-
 	public boolean reset()
 	{
 		if (this.resetting.get()) return false;
 
 		this.resetting.set(true);
-
-		this.counter = 0;
 
 		ThreadUtils.runAsync(() ->
 		{
@@ -107,19 +100,21 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 					this.change.addBlock(LocationUtils.getLocation(world, vector), data);
 				}
 
-				ThreadUtils.run(() ->
+				this.change.run();
+
+				this.change.clear();
+
+				for (Player player : PlayerUtils.getOnlinePlayers())
 				{
-					for (Player player : PlayerUtils.getOnlinePlayers())
-					{
-						if (!world.equals(player.getWorld())) continue;
+					if (!world.equals(player.getWorld())) continue;
 
-						if (!shape.containsPoint(player.getLocation())) continue;
+					if (!shape.containsPoint(player.getLocation())) continue;
 
-						player.teleportRelative(player.getLocation().setY(shape.getMaxPoint().getIntY() + 3));
-					}
-				});
+					ThreadUtils.run(() -> player.teleport(player.getLocation().setY(shape.getMaxPoint().getIntY() + 3)));
+				}
 			}
 
+			this.counter = 0;
 			this.resetting.set(false);
 		});
 
