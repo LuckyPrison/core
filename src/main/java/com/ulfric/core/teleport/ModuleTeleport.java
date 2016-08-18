@@ -15,6 +15,7 @@ public final class ModuleTeleport extends Module {
 		this.addCommand(new CommandTeleport(this));
 		this.addCommand(new CommandTeleportHere(this));
 		this.addCommand(new CommandTeleportPosition(this));
+		this.addCommand(new CommandWorld(this));
 
 		this.addModule(new ModuleSpawn());
 	}
