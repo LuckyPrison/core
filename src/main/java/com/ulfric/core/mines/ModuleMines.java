@@ -100,6 +100,7 @@ public class ModuleMines extends Module {
 			if (this.resetQueue.isEmpty()) return;
 
 			Set<Mine> set = Sets.newTreeSet(this.resetQueue);
+
 			int size = Math.min(set.size(), 3);
 
 			Iterator<Mine> iterator = set.iterator();
@@ -112,7 +113,7 @@ public class ModuleMines extends Module {
 
 				Mine next = iterator.next();
 
-				if (!next.reset()) continue;
+				if (!next.reset(next.getCounter() == 0)) continue;
 
 				reset.add(next);
 

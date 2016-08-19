@@ -20,7 +20,7 @@ public class CommandMineReset extends Command {
 	{
 		Mine mine = (Mine) this.getObject("mine");
 
-		mine.reset();
+		mine.reset(true);
 	}
 
 }
