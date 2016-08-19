@@ -2,7 +2,6 @@ package com.ulfric.core.mines;
 
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang3.Validate;
 
@@ -64,7 +63,6 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 	private final Set<Weighted<MaterialData>> types;
 	private final int totalWeight;
 	private final MultiBlockChange change;
-	private AtomicBoolean resetting = new AtomicBoolean();
 	private int counter;
 
 	public boolean containsRegion(Region region)
@@ -79,9 +77,7 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 
 	public boolean reset()
 	{
-		if (this.resetting.get()) return false;
-
-		this.resetting.set(true);
+		if (this.counter < 100) return false;
 
 		ThreadUtils.runAsync(() ->
 		{
@@ -115,7 +111,6 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 			}
 
 			this.counter = 0;
-			this.resetting.set(false);
 		});
 
 		return true;
