@@ -17,7 +17,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.ulfric.config.Document;
 import com.ulfric.config.MutableDocument;
-import com.ulfric.core.teleport.Warp;
 import com.ulfric.lib.coffee.string.Nameable;
 import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.coffee.string.Unique;
@@ -45,14 +44,14 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 
 		Instant created = Instant.ofEpochMilli(document.getLong("created"));
 
-		Warp home = null;
+		Destination home = null;
 		String locationString = document.getString("home");
 		if (locationString != null)
 		{
 			Location homeLocation = LocationUtils.fromString(locationString);
 			if (homeLocation != null)
 			{
-				home = Warp.newWarp(name + "-home", Destination.newDestination(homeLocation, 5), null);
+				home = Destination.newDestination(homeLocation, 5);
 			}
 		}
 
@@ -104,7 +103,7 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 
 		Instant created = Instant.now();
 
-		Warp home = null;
+		Destination home = null;
 
 		Map<UUID, GangMember.Builder> members = Maps.newHashMap();
 		members.put(owner, GangMember.builder().setUUID(owner).setJoined(created).setRank(GangRank.LEADER));
@@ -122,7 +121,7 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 		return gang;
 	}
 
-	Gang(UUID uuid, String name, Instant created, Warp home, Map<UUID, GangMember.Builder> members, Map<UUID, GangRelation> relations, Set<UUID> invites)
+	Gang(UUID uuid, String name, Instant created, Destination home, Map<UUID, GangMember.Builder> members, Map<UUID, GangRelation> relations, Set<UUID> invites)
 	{
 		this.uuid = uuid;
 		this.name = name;
@@ -143,7 +142,7 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 
 	private String oldName;
 	private String name;
-	private Warp home;
+	private Destination home;
 	private final Map<UUID, GangMember> members;
 	private final Map<UUID, GangRelation> relations;
 	private final Set<UUID> invites;
@@ -302,13 +301,13 @@ public final class Gang implements Nameable, Unique, Comparable<Gang> {
 		}
 		else
 		{
-			this.home = Warp.newWarp(this.name + "-home", Destination.newDestination(location, 5), null);
+			this.home = Destination.newDestination(location, 5);
 		}
 
 		this.save();
 	}
 
-	public Warp getHome()
+	public Destination getHome()
 	{
 		return this.home;
 	}

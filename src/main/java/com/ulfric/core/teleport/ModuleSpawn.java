@@ -11,7 +11,6 @@ import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.player.PlayerFirstJoinEvent;
 import com.ulfric.lib.craft.event.player.PlayerRespawnEvent;
-import com.ulfric.lib.craft.inventory.item.Material;
 import com.ulfric.lib.craft.location.Destination;
 import com.ulfric.lib.craft.location.Location;
 import com.ulfric.lib.craft.world.WorldUtils;
@@ -23,7 +22,7 @@ final class ModuleSpawn extends Module {
 		super("spawn", "/spawn & /setspawn", "1.0.0", "Packet");
 	}
 
-	Warp warp;
+	Destination destination;
 
 	@Override
 	public void onFirstEnable()
@@ -36,13 +35,13 @@ final class ModuleSpawn extends Module {
 			@Handler
 			public void onFirstJoin(PlayerFirstJoinEvent event)
 			{
-				event.getPlayer().teleport(ModuleSpawn.this.warp.getLocation());
+				event.getPlayer().teleport(ModuleSpawn.this.destination.getLocation());
 			}
 
 			@Handler
 			public void onRespawn(PlayerRespawnEvent event)
 			{
-				event.setLocation(ModuleSpawn.this.warp.getLocation());
+				event.setLocation(ModuleSpawn.this.destination.getLocation());
 			}
 		});
 	}
@@ -54,20 +53,20 @@ final class ModuleSpawn extends Module {
 
 		MutableDocument root = file.getRoot();
 
-		Document warpDoc = root.getDocument("warp");
+		Document destDoc = root.getDocument("destination");
 
-		if (warpDoc == null)
+		if (destDoc == null)
 		{
-			this.warp = Warp.newWarp("spawn", Destination.newDestination(WorldUtils.getWorlds().get(0).getSpawnPoint(), 5), Material.of("GRASS").toItem());
+			this.destination = Destination.newDestination(WorldUtils.getWorlds().get(0).getSpawnPoint(), 5);
 
-			root.set("warp", this.warp.toDocument());
+			root.set("destination", this.destination.toDocument());
 
 			file.save();
 
 			return;
 		}
 
-		this.warp = Warp.fromDocument("spawn", warpDoc);
+		this.destination = Destination.fromDocument(destDoc);
 	}
 
 	private class CommandSpawn extends Command
@@ -84,7 +83,7 @@ final class ModuleSpawn extends Module {
 		{
 			Player player = (Player) this.getSender();
 
-			ModuleSpawn.this.warp.accept(player);
+			ModuleSpawn.this.destination.accept(player);
 		}
 	}
 
@@ -105,11 +104,11 @@ final class ModuleSpawn extends Module {
 			Player player = (Player) this.getSender();
 			Location location = player.getLocation();
 
-			ModuleSpawn.this.warp = Warp.newWarp("spawn", Destination.newDestination(location, 5), Material.of("GRASS").toItem());
+			ModuleSpawn.this.destination = Destination.newDestination(location, 5);
 
 			ConfigFile config = ModuleSpawn.this.getModuleConfig();
 
-			config.getRoot().set("warp", ModuleSpawn.this.warp.toDocument());
+			config.getRoot().set("destination", ModuleSpawn.this.destination.toDocument());
 
 			config.save();
 

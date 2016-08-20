@@ -1,9 +1,10 @@
 package com.ulfric.core.homes;
 
-import com.ulfric.lib.coffee.string.NamedBase;
-import com.ulfric.lib.craft.location.Location;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.OfflinePlayer;
+
+import com.ulfric.lib.coffee.string.NamedBase;
+import com.ulfric.lib.craft.location.Location;
 
 public class Home extends NamedBase {
 
