@@ -102,6 +102,11 @@ public final class Achievement implements Named, Runnable, ScopeListener<UUID> {
 		this.counters.remove(uuid);
 	}
 
+	public void increment(UUID uuid)
+	{
+		this.increment(uuid, 1);
+	}
+
 	public void increment(UUID uuid, int amount)
 	{
 		Counter counter = this.counters.get(uuid);
@@ -307,6 +312,13 @@ public final class Achievement implements Named, Runnable, ScopeListener<UUID> {
 			Validate.isTrue(min > 0);
 
 			this.min = min;
+
+			return this;
+		}
+
+		public Builder setParent(Achievement parent)
+		{
+			this.parent = parent;
 
 			return this;
 		}

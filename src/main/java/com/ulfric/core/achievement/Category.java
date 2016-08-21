@@ -22,14 +22,7 @@ import com.ulfric.lib.craft.string.ChatUtils;
 
 public final class Category implements Named, Comparable<Category> {
 
-	private static final Category ROOT = new Category("root", Integer.MAX_VALUE, null, null);
-
-	public static Category getRoot()
-	{
-		return Category.ROOT;
-	}
-
-	Category(String name, int priority, MaterialData item, Category parent)
+	Category(String name, int priority, MaterialData item)
 	{
 		this.name = name;
 		this.priority = priority;
@@ -129,7 +122,6 @@ public final class Category implements Named, Comparable<Category> {
 		private String name;
 		private int priority;
 		private MaterialData item;
-		private Category parent;
 
 		@Override
 		public Category build()
@@ -137,9 +129,7 @@ public final class Category implements Named, Comparable<Category> {
 			Validate.notNull(this.name);
 			Validate.notNull(this.item);
 
-			Category realParent = this.parent == null ? Category.getRoot() : this.parent;
-
-			return new Category(this.name, this.priority, this.item, realParent);
+			return new Category(this.name, this.priority, this.item);
 		}
 
 		public Builder setName(String name)
@@ -163,13 +153,6 @@ public final class Category implements Named, Comparable<Category> {
 			Validate.notNull(item);
 
 			this.item = item;
-
-			return this;
-		}
-
-		public Builder setParent(Category parent)
-		{
-			this.parent = parent;
 
 			return this;
 		}

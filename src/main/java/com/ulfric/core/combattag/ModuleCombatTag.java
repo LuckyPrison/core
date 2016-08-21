@@ -12,12 +12,16 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.ulfric.config.ConfigFile;
 import com.ulfric.config.MutableDocument;
+import com.ulfric.core.achievement.Achievement;
+import com.ulfric.core.achievement.Categories;
+import com.ulfric.core.achievement.Category;
 import com.ulfric.lib.coffee.event.Event;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.string.StringUtils;
 import com.ulfric.lib.coffee.time.TimeUtils;
+import com.ulfric.lib.craft.block.MaterialData;
 import com.ulfric.lib.craft.entity.player.GameMode;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
@@ -26,6 +30,7 @@ import com.ulfric.lib.craft.event.player.PlayerDeathEvent;
 import com.ulfric.lib.craft.event.player.PlayerFutureTeleportEvent;
 import com.ulfric.lib.craft.event.player.PlayerQuitEvent;
 import com.ulfric.lib.craft.event.player.PlayerTeleportEvent;
+import com.ulfric.lib.craft.inventory.item.Material;
 
 public class ModuleCombatTag extends Module {
 
@@ -133,6 +138,12 @@ public class ModuleCombatTag extends Module {
 
 				Validate.isTrue(tag.getTask().isIncomplete());
 
+				PlayerKilledByCombatTagEvent call = new PlayerKilledByCombatTagEvent(player, tag);
+
+				call.fire();
+
+				if (call.isCancelled()) return;
+
 				player.kill();
 
 				Player tagger = PlayerUtils.getOnlinePlayer(tag.getTagger());
@@ -146,6 +157,19 @@ public class ModuleCombatTag extends Module {
 				// TODO is it possible to kick a player as they're disconnecting, and show them the kick page? Glitch if so, but seems plausible
 			}
 		});
+
+		Category category = Categories.INSTANCE.getByName("combat");
+
+		if (category == null)
+		{
+			category = Category.builder().setName("Combat").setItem(MaterialData.of(Material.of("DIAMOND_SWORD"))).build();
+
+			Categories.INSTANCE.register(category);
+		}
+
+		Achievement achievement = Achievement.builder().setCode("combattag").setName("Angel of Death").setDescription("Combat Tag someone, so that they log out and die").setItem(MaterialData.of(Material.of("REDSTONE_DUST"))).build();
+
+		category.addAchievement(achievement);
 	}
 
 	@Override

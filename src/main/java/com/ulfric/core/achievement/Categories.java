@@ -21,6 +21,20 @@ public enum Categories {
 		this.categories.add(category);
 	}
 
+	public Category getByName(String name)
+	{
+		String lower = name.toLowerCase();
+
+		for (Category category : this.categories)
+		{
+			if (!category.getName().toLowerCase().equals(lower)) continue;
+
+			return category;
+		}
+
+		return null;
+	}
+
 	public void openPanel(Player player)
 	{
 		StandardPanel panel = Panel.createStandard(NumberUtils.roundUp(this.categories.size(), 9), "Select a Category");
