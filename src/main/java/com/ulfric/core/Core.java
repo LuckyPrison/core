@@ -1,5 +1,6 @@
 package com.ulfric.core;
 
+import com.ulfric.core.achievement.ModuleAchievements;
 import com.ulfric.core.chat.ModuleChat;
 import com.ulfric.core.combattag.ModuleCombatTag;
 import com.ulfric.core.control.ModuleClearChat;
@@ -31,6 +32,7 @@ public class Core extends Plugin {
 	public void onFirstEnable()
 	{
 		this.addModule(new ModuleSettings());
+		this.addModule(new ModuleAchievements());
 		this.addModule(new ModuleEconomyInterface());
 		this.addModule(new ModuleWelcome());
 		this.addModule(new ModulePlayerList());
