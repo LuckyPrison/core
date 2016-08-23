@@ -1,5 +1,7 @@
 package com.ulfric.core.enchant;
 
+import java.util.List;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -8,7 +10,7 @@ import com.ulfric.lib.craft.inventory.item.enchant.Enchantment;
 
 public final class VectorPatternEnchantment extends Enchantment {
 
-	public static VectorPatternEnchantment newEnchantment(String name, int id, int max, VectorPattern pattern)
+	public static VectorPatternEnchantment newEnchantment(String name, int id, int max, VectorPattern pattern, List<Integer> conflicts)
 	{
 		Validate.notBlank(name);
 		Validate.isTrue(id <= 256);
@@ -17,16 +19,16 @@ public final class VectorPatternEnchantment extends Enchantment {
 
 		String enchName = WordUtils.capitalizeFully(name.trim()).replaceAll("[\\s]{2,}", " ").replace('_', ' ');
 
-		VectorPatternEnchantment ench = new VectorPatternEnchantment(enchName, id, max, pattern);
+		VectorPatternEnchantment ench = new VectorPatternEnchantment(enchName, id, max, pattern, conflicts);
 
 		Validate.isTrue(Enchantment.ENCHANTS.putIfAbsent(id, ench) == null);
 
 		return ench;
 	}
 
-	private VectorPatternEnchantment(String name, int id, int max, VectorPattern pattern)
+	private VectorPatternEnchantment(String name, int id, int max, VectorPattern pattern, List<Integer> conflicts)
 	{
-		super(name, id, max);
+		super(name, id, max, conflicts);
 
 		this.pattern = pattern;
 	}

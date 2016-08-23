@@ -1,0 +1,65 @@
+package com.ulfric.core.enchant;
+
+import com.ulfric.lib.coffee.event.Handler;
+import com.ulfric.lib.coffee.event.Listener;
+import com.ulfric.lib.coffee.math.RandomUtils;
+import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.craft.event.block.BlockBreakEvent;
+import com.ulfric.lib.craft.inventory.item.ItemStack;
+import com.ulfric.lib.craft.inventory.item.ItemStack.EnchantList;
+import com.ulfric.lib.craft.inventory.item.enchant.Enchantment;
+import com.ulfric.lib.craft.world.World;
+import com.ulfric.lib.craft.world.WorldUtils;
+
+final class ModuleFortunate extends Module {
+
+	public ModuleFortunate()
+	{
+		super("fortunate", "Makes Fortune awesome", "1.0.0", "Packet");
+	}
+
+	@Override
+	public void onFirstEnable()
+	{
+		World defaultWorld = WorldUtils.getWorlds().get(0);
+		Enchantment fortune = Enchantment.byName("LOOT_BONUS_BLOCKS");
+		this.addListener(new Listener(this)
+		{
+			@Handler(ignoreCancelled = true)
+			public void onBreak(BlockBreakEvent event)
+			{
+				if (!event.getPlayer().getWorld().equals(defaultWorld)) return;
+
+				ItemStack hand = event.getHand();
+
+				if (hand == null) return;
+
+				EnchantList enchants = hand.enchants();
+
+				int level = enchants.getLevel(fortune);
+
+				if (level <= 0)
+				{
+					event.getCustomItem().setAmount(4);
+
+					return;
+				}
+
+				event.getCustomItem().setAmount((int) Math.round(Math.max(Math.ceil(level / RandomUtils.randomRange(4.2D, 5.2D)), 4)));
+			}
+		});
+	}
+
+	@Override
+	public void onModuleEnable()
+	{
+		EnchantmentAutoSmelt.INSTANCE.register();
+	}
+
+	@Override
+	public void onModuleDisable()
+	{
+		EnchantmentAutoSmelt.INSTANCE.unregister();
+	}
+
+}

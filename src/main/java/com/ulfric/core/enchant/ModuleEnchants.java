@@ -1,5 +1,6 @@
 package com.ulfric.core.enchant;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.Validate;
@@ -36,6 +37,9 @@ public final class ModuleEnchants extends Module {
 	@Override
 	public void onFirstEnable()
 	{
+		this.addModule(new ModuleDropModifier());
+		this.addModule(new ModuleFlightEnchant());
+
 		this.enchants = Sets.newHashSet();
 		this.addCommand(new CommandEnchant(this));
 
@@ -109,6 +113,7 @@ public final class ModuleEnchants extends Module {
 			int id = document.getLong("id").intValue();
 			int max = document.getLong("max").intValue();
 			String type = document.getString("type", "normal");
+			List<Integer> conflicts = document.getIntegerList("conflicts");
 
 			Enchantment enchant = null;
 
@@ -116,11 +121,11 @@ public final class ModuleEnchants extends Module {
 			{
 				VectorPattern pattern = VectorPattern.fromDocument(document.getDocument("vector-pattern"));
 
-				enchant = VectorPatternEnchantment.newEnchantment(name, id, max, pattern);
+				enchant = VectorPatternEnchantment.newEnchantment(name, id, max, pattern, conflicts);
 			}
 			else
 			{
-				enchant = Enchantment.newEnchantment(name, id, max);
+				enchant = Enchantment.newEnchantment(name, id, max, conflicts);
 			}
 
 			Validate.notNull(enchant);
