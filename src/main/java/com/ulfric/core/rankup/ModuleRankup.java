@@ -3,10 +3,17 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.ulfric.config.ConfigFile;
 import com.ulfric.config.Document;
+import com.ulfric.data.DataAddress;
+import com.ulfric.data.DocumentStore;
+import com.ulfric.data.scope.PlayerScopes;
+import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.permission.Group;
 import com.ulfric.lib.coffee.permission.PermissionsManager;
+import com.ulfric.lib.coffee.permission.Track;
+import com.ulfric.lib.craft.block.MaterialData;
+import com.ulfric.lib.craft.entity.player.PlayerUtils;
 
 public class ModuleRankup extends Module {
 
@@ -19,6 +26,13 @@ public class ModuleRankup extends Module {
 	public void onFirstEnable()
 	{
 		this.addCommand(new CommandRankup(this));
+		this.addCommand(new CommandTracks(this));
+
+		DocumentStore data = PlayerUtils.getPlayerData();
+
+		DataManager.get().ensureTableCreated(data, "track");
+
+		Rankups.INSTANCE.subscription = data.multi(String.class, PlayerScopes.ONLINE, new DataAddress<>("track", null, "current")).blockOnSubscribe(true).subscribe();
 	}
 
 	@Override
@@ -28,12 +42,36 @@ public class ModuleRankup extends Module {
 
 		Document document = config.getRoot();
 
+		PermissionsManager manager = PermissionsManager.get();
+
+		Rankups.INSTANCE.defaultTrack = manager.getTrack(document.getString("default-track", "mines"));
+
+		Document tracksDoc = document.getDocument("tracks");
+
+		if (tracksDoc != null)
+		{
+			for (String key : tracksDoc.getKeys(false))
+			{
+				Document trackDoc = tracksDoc.getDocument(key);
+
+				if (trackDoc == null) continue;
+
+				Track track = manager.getTrack(trackDoc.getString("track", key));
+
+				if (track == null) continue;
+
+				MaterialData data = MaterialData.of(trackDoc.getString("material", "dirt"));
+
+				if (data == null) continue;
+
+				Rankups.INSTANCE.trackItems.put(track, data);
+			}
+		}
+
 		Document ranksDoc = document.getDocument("rankups");
 
 		if (ranksDoc != null)
 		{
-			PermissionsManager manager = PermissionsManager.get();
-
 			for (String key : ranksDoc.getKeys(false))
 			{
 				Document rankDoc = ranksDoc.getDocument(key);
@@ -50,12 +88,20 @@ public class ModuleRankup extends Module {
 				Rankups.INSTANCE.registerRankup(group, price);
 			}
 		}
+
+		PlayerScopes.ONLINE.addListener(Rankups.INSTANCE);
+
+		Rankups.INSTANCE.subscription.subscribe();
 	}
 
 	@Override
 	public void onModuleDisable()
 	{
 		Rankups.INSTANCE.clear();
+
+		PlayerScopes.ONLINE.removeListener(Rankups.INSTANCE);
+
+		Rankups.INSTANCE.subscription.unsubscribe();
 	}
 
 }

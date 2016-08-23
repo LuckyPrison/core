@@ -295,7 +295,7 @@ public class ModuleNameplates extends Module {
 
 				panel.addButton(Button.builder().addSlot(slot++, plateWrapper.getValue().getItem()).addAction(event ->
 				{
-					Entry<String, Nameplate> entry = availableNameplates.get(event.getSlotObject());
+					Entry<String, Nameplate> entry = availableNameplates.get(event.getSlot());
 
 					if (entry == null) return;
 
