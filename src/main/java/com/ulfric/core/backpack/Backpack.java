@@ -1,11 +1,8 @@
 package com.ulfric.core.backpack;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.IntStream;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.ulfric.config.Document;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
@@ -18,6 +15,10 @@ import com.ulfric.lib.craft.inventory.item.Material;
 import com.ulfric.lib.craft.inventory.item.meta.ItemMeta;
 import com.ulfric.lib.craft.panel.Button;
 import com.ulfric.lib.craft.panel.Panel;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.IntStream;
 
 class Backpack extends Panel {
 
@@ -196,6 +197,11 @@ class Backpack extends Panel {
 				pages.remove(String.valueOf(i));
 			}
 		});
+	}
+
+	protected static Backpack fromDocument(Player player, Document document)
+	{
+		return null;
 	}
 
 }
