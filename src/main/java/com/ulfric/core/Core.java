@@ -22,6 +22,7 @@ import com.ulfric.core.modules.ModuleTrash;
 import com.ulfric.core.modules.ModuleVanishInterface;
 import com.ulfric.core.modules.ModuleWelcome;
 import com.ulfric.core.playerlist.ModulePlayerList;
+import com.ulfric.core.rankup.ModuleRankup;
 import com.ulfric.core.regions.ModuleRegionInterface;
 import com.ulfric.core.settings.ModuleSettings;
 import com.ulfric.core.teleport.ModuleTeleport;
@@ -57,6 +58,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleRegionInterface());
 		this.addModule(new ModuleMines());
 		this.addModule(new ModuleKits());
+		this.addModule(new ModuleRankup());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 
