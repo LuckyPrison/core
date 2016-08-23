@@ -1,4 +1,5 @@
 package com.ulfric.core.rankup;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.ulfric.config.ConfigFile;
@@ -8,12 +9,17 @@ import com.ulfric.data.DocumentStore;
 import com.ulfric.data.scope.PlayerScopes;
 import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
+import com.ulfric.lib.coffee.event.Handler;
+import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.permission.Group;
 import com.ulfric.lib.coffee.permission.PermissionsManager;
 import com.ulfric.lib.coffee.permission.Track;
 import com.ulfric.lib.craft.block.MaterialData;
+import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
+import com.ulfric.lib.craft.event.player.PlayerJoinEvent;
+import com.ulfric.lib.craft.scoreboard.Scoreboard;
 
 public class ModuleRankup extends Module {
 
@@ -27,6 +33,28 @@ public class ModuleRankup extends Module {
 	{
 		this.addCommand(new CommandRankup(this));
 		this.addCommand(new CommandTracks(this));
+
+		this.addListener(new Listener(this)
+		{
+			@Handler
+			public void onJoin(PlayerJoinEvent event)
+			{
+				Scoreboard board = event.getPlayer().getScoreboard();
+				board.addElement(new ElementMine(board));
+				board.addElement(new ElementNextMine(board));
+			}
+
+			@Handler
+			public void onRankup(PlayerRankupEvent event)
+			{
+				Player player = event.getPlayer();
+
+				Scoreboard board = player.getScoreboard();
+
+				board.elementFromClazz(ElementMine.class).update(player);
+				board.elementFromClazz(ElementNextMine.class).update(player);
+			}
+		});
 
 		DocumentStore data = PlayerUtils.getPlayerData();
 
