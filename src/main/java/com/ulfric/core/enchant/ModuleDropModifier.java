@@ -27,6 +27,7 @@ final class ModuleDropModifier extends Module {
 	{
 		this.addModule(new ModuleAutoSmeltEnchant());
 		this.addModule(new ModuleFortunate());
+		this.addModule(new ModuleVacuum());
 
 		this.addListener(new Listener(this)
 		{
