@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableList;
 import com.ulfric.lib.coffee.command.CommandUtils;
 import com.ulfric.lib.craft.entity.player.Player;
 
-public final class MultiCommandReward implements Reward {
+final class MultiCommandReward implements Reward {
 
 	public static MultiCommandReward valueOf(List<String> commands)
 	{
@@ -27,7 +27,7 @@ public final class MultiCommandReward implements Reward {
 	private final List<String> commands;
 
 	@Override
-	public void give(Player player, String reason)
+	public void give(Player player, String reason, Object... objects)
 	{
 		String name = player.getName();
 

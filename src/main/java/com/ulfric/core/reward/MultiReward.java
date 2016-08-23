@@ -25,11 +25,11 @@ final class MultiReward implements Reward {
 	private final List<Reward> rewards;
 
 	@Override
-	public void give(Player player, String reason)
+	public void give(Player player, String reason, Object... objects)
 	{
 		for (Reward reward : this.rewards)
 		{
-			reward.give(player, reason);
+			reward.give(player, reason, objects);
 		}
 	}
 

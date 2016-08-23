@@ -9,6 +9,7 @@ import org.apache.commons.lang3.Validate;
 import com.ulfric.config.Document;
 import com.ulfric.lib.coffee.ApiInstantiationException;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
+import com.ulfric.lib.coffee.script.Script;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.ItemUtils;
 
@@ -45,6 +46,19 @@ public class Rewards {
 			case "cash":
 			case "money":
 				return Rewards.newMoneyReward(document);
+
+			case "multicash":
+			case "multimoney":
+			case "multi-cash":
+			case "multi-money":
+				return Rewards.newMoneyMultiReward(document);
+
+			case "script":
+				return Rewards.newScriptReward(document);
+
+			case "multiscript":
+			case "multi-script":
+				return Rewards.newScriptMultiReward(document);
 
 			default:
 				throw new IllegalArgumentException(type);
@@ -97,6 +111,37 @@ public class Rewards {
 		CurrencyAmount camount = CurrencyAmount.valueOf(amount);
 
 		return MoneyReward.valueOf(camount);
+	}
+
+	private static Reward newMoneyMultiReward(Document document)
+	{
+		List<String> strings = document.getStringList("amounts");
+
+		Validate.notEmpty(strings);
+
+		List<CurrencyAmount> amounts = strings.stream().map(CurrencyAmount::valueOf).filter(Objects::nonNull).collect(Collectors.toList());
+
+		return MultiMoneyReward.valueOf(amounts);
+	}
+
+	private static Reward newScriptReward(Document document)
+	{
+		String name = document.getString("script");
+
+		Script script = Script.byName(name);
+
+		return ScriptReward.valueOf(script);
+	}
+
+	private static Reward newScriptMultiReward(Document document)
+	{
+		List<String> strings = document.getStringList("scripts");
+
+		Validate.notEmpty(strings);
+
+		List<Script> scripts = strings.stream().map(Script::byName).filter(Objects::nonNull).collect(Collectors.toList());
+
+		return MultiScriptReward.valueOf(scripts);
 	}
 
 	private Rewards()

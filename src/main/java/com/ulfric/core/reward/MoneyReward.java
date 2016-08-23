@@ -6,7 +6,7 @@ import com.ulfric.lib.coffee.economy.Bank;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.craft.entity.player.Player;
 
-public final class MoneyReward implements Reward {
+final class MoneyReward implements Reward {
 
 	public static MoneyReward valueOf(CurrencyAmount amount)
 	{
@@ -23,7 +23,7 @@ public final class MoneyReward implements Reward {
 	private final CurrencyAmount amount;
 
 	@Override
-	public void give(Player player, String reason)
+	public void give(Player player, String reason, Object... objects)
 	{
 		Bank.getOnlineAccount(player.getUniqueId()).give(this.amount, reason);
 	}

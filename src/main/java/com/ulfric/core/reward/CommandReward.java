@@ -5,7 +5,7 @@ import org.apache.commons.lang3.Validate;
 import com.ulfric.lib.coffee.command.CommandUtils;
 import com.ulfric.lib.craft.entity.player.Player;
 
-public final class CommandReward implements Reward {
+final class CommandReward implements Reward {
 
 	public static CommandReward valueOf(String command)
 	{
@@ -22,7 +22,7 @@ public final class CommandReward implements Reward {
 	private final String command;
 
 	@Override
-	public void give(Player player, String reason)
+	public void give(Player player, String reason, Object... objects)
 	{
 		CommandUtils.console().runCommand(this.command.replace("{player}", player.getName()));
 	}

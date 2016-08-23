@@ -11,7 +11,7 @@ import com.ulfric.lib.craft.inventory.item.ItemUtils;
 import com.ulfric.lib.craft.location.Location;
 import com.ulfric.lib.craft.world.World;
 
-public final class MultiItemReward implements Reward {
+final class MultiItemReward implements Reward {
 
 	public static MultiItemReward valueOf(List<ItemStack> stacks)
 	{
@@ -33,7 +33,7 @@ public final class MultiItemReward implements Reward {
 	private final ItemStack[] stacks;
 
 	@Override
-	public void give(Player player, String reason)
+	public void give(Player player, String reason, Object... objects)
 	{
 		List<ItemStack> unadded = player.getInventory().addItems(this.stacks);
 

@@ -11,7 +11,7 @@ import com.ulfric.lib.craft.inventory.item.ItemUtils;
 import com.ulfric.lib.craft.location.Location;
 import com.ulfric.lib.craft.world.World;
 
-public final class ItemReward implements Reward {
+final class ItemReward implements Reward {
 
 	public static ItemReward valueOf(ItemStack stack)
 	{
@@ -28,7 +28,7 @@ public final class ItemReward implements Reward {
 	private final ItemStack stack;
 
 	@Override
-	public void give(Player player, String reason)
+	public void give(Player player, String reason, Object... objects)
 	{
 		List<ItemStack> unadded = player.getInventory().addItem(this.stack);
 
