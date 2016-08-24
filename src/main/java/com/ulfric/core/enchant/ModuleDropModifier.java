@@ -9,7 +9,7 @@ import com.ulfric.lib.coffee.collection.ListUtils;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
-import com.ulfric.lib.coffee.object.ObjectUtils;
+import com.ulfric.lib.coffee.reflect.ReflectUtils;
 import com.ulfric.lib.craft.block.Block;
 import com.ulfric.lib.craft.event.block.BlockBreakEvent;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
@@ -31,7 +31,7 @@ final class ModuleDropModifier extends Module {
 
 		this.addListener(new Listener(this)
 		{
-			final ItemStack proxyStack = ObjectUtils.newInstance(ItemStack.class);
+			final ItemStack proxyStack = ReflectUtils.newInstance(ItemStack.class);
 			final Map<Material, Map<Byte, ItemStack>> dropMap = new EnumishMap<>(Material.length());
 
 			@Handler(ignoreCancelled = true)

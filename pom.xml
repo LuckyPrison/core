@@ -26,7 +26,7 @@
         <dependency>
           <groupId>com.ulfric</groupId>
           <artifactId>data</artifactId>
-          <version>1.5.7-SNAPSHOT</version>
+          <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>javax.mail</groupId>
