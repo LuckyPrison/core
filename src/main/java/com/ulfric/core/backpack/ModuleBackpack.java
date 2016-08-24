@@ -1,5 +1,8 @@
 package com.ulfric.core.backpack;
 
+import java.util.Map;
+import java.util.UUID;
+
 import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
 import com.ulfric.config.MutableDocument;
@@ -14,9 +17,6 @@ import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
-
-import java.util.Map;
-import java.util.UUID;
 
 public final class ModuleBackpack extends Module {
 	// TODO: Resolve

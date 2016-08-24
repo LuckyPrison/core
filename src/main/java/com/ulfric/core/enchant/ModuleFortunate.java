@@ -50,16 +50,4 @@ final class ModuleFortunate extends Module {
 		});
 	}
 
-	@Override
-	public void onModuleEnable()
-	{
-		EnchantmentAutoSmelt.INSTANCE.register();
-	}
-
-	@Override
-	public void onModuleDisable()
-	{
-		EnchantmentAutoSmelt.INSTANCE.unregister();
-	}
-
 }

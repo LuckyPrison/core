@@ -9,7 +9,7 @@ public final class EnchantmentAutoSmelt extends Enchantment {
 
 	private EnchantmentAutoSmelt()
 	{
-		super("Autosmelt", 240, 1, ImmutableList.of(Enchantment.byName("SILK_TOUCH").getId()));
+		super("Autosmelt", 240, 1, ImmutableList.of(33));
 	}
 
 }

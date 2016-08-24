@@ -15,7 +15,7 @@ import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.player.AsyncPlayerChatEvent;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
-import com.ulfric.lib.craft.inventory.item.ItemUtils;
+import com.ulfric.lib.craft.inventory.item.Material;
 import com.ulfric.lib.craft.inventory.item.meta.ItemMeta;
 
 class ModuleChatToggler extends Module {
@@ -78,7 +78,7 @@ class ModuleChatToggler extends Module {
 		String name = settings.getString("name", "chat");
 		String itemName = settings.getString("item-name", "chat.setting_name");
 		String description = settings.getString("description", "chat.setting_description");
-		ItemStack item = ItemUtils.getItem(settings.getString("itemstack", "ma.WOOL du.7"));
+		ItemStack item = Material.of(settings.getString("itemstack", "STAINED_GLASS_PANE")).toItem();
 		ItemMeta meta = item.getMeta();
 		meta.setDisplayName(itemName);
 		item.setMeta(meta);

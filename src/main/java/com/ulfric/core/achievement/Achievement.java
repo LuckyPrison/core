@@ -17,6 +17,7 @@ import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
 import com.ulfric.data.scope.ScopeListener;
 import com.ulfric.lib.coffee.concurrent.ThreadUtils;
+import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.string.Named;
 import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.craft.block.MaterialData;
@@ -41,6 +42,8 @@ public final class Achievement implements Named, Runnable, ScopeListener<UUID> {
 		}
 
 		DocumentStore store = PlayerUtils.getPlayerData();
+
+		DataManager.get().ensureTableCreated(store, "achievements");
 
 		this.subscription = store
 				.multi(Integer.class, PlayerScopes.ONLINE, new DataAddress<>("achievements", null, code))

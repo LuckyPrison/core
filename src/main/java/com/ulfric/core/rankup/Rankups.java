@@ -40,9 +40,9 @@ public enum Rankups implements ScopeListener<UUID> {
 
 	private final Map<Track, SortedMap<Group, CurrencyAmount>> rankups = Maps.newHashMap();
 	private final Map<UUID, Track> trackCache = Maps.newHashMap();
+	final Map<Track, MaterialData> trackItems = Maps.newHashMap();
 	MultiSubscription<UUID, String> subscription;
 	Track defaultTrack;
-	Map<Track, MaterialData> trackItems;
 
 	public Rankup getActive(Player player)
 	{

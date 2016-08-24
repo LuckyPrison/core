@@ -1,7 +1,10 @@
 package com.ulfric.core.kit;
 
+import java.util.Set;
+
 import com.ulfric.config.ConfigFile;
 import com.ulfric.config.Document;
+import com.ulfric.lib.coffee.collection.SetUtils;
 import com.ulfric.lib.coffee.module.Module;
 
 public final class ModuleKits extends Module {
@@ -24,7 +27,13 @@ public final class ModuleKits extends Module {
 
 		Document doc = conf.getRoot().getDocument("kits");
 
-		for (String key : doc.getKeys(false))
+		if (doc == null) return;
+
+		Set<String> keys = doc.getKeys(false);
+
+		if (SetUtils.isEmpty(keys)) return;
+
+		for (String key : keys)
 		{
 			Document keyDoc = doc.getDocument(key);
 
