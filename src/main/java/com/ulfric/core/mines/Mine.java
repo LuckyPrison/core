@@ -82,7 +82,7 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 
 	public boolean reset(boolean force)
 	{
-		if (!force && this.counter < 100) return false;
+		if (!force && this.counter < 200) return false;
 
 		ThreadUtils.runAsync(() ->
 		{
