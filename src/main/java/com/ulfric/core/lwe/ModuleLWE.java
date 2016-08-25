@@ -2,6 +2,7 @@ package com.ulfric.core.lwe;
 
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
+import com.ulfric.lib.coffee.location.ImmutableVector;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.region.Selection;
 import com.ulfric.lib.craft.block.Block;
@@ -30,7 +31,7 @@ public class ModuleLWE extends Module {
 			{
 				Block block = event.getBlock();
 
-				if (block == null) return;
+				if (block == null || block.isAir()) return;
 
 				PlayerInteractEvent.Action action = event.getAction();
 
@@ -52,14 +53,14 @@ public class ModuleLWE extends Module {
 
 				if (action.isLeftClick())
 				{
-					selection.pushLeft(block.getLocation());
+					selection.pushLeft(ImmutableVector.of(block.getLocation()));
 
 					player.sendLocalizedMessage("worldedit.selection_updated", "left");
 				}
 
 				else if (action.isRightClick())
 				{
-					selection.pushRight(block.getLocation());
+					selection.pushRight(ImmutableVector.of(block.getLocation()));
 
 					player.sendLocalizedMessage("worldedit.selection_updated", "right");
 				}

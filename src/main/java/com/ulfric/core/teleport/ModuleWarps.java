@@ -133,7 +133,7 @@ final class ModuleWarps extends Module {
 
 		for (ConfigFile config : this.getModuleConfigs())
 		{
-			if (config == mainConfig) continue;
+			if (mainConfig.getPath().equals(config.getPath())) continue;
 
 			Warp warp = new Warp(config, config.getRoot());
 

@@ -21,7 +21,7 @@ final class CommandRegionImport extends Command {
 	{
 		ConfigFile file = (ConfigFile) this.getObject("file");
 
-		Region region = Region.fromDocument(file.getRoot());
+		Region region = Region.fromDocument(file, file.getRoot());
 
 		if (region == null) return;
 

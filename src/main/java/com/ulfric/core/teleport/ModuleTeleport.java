@@ -18,7 +18,7 @@ public final class ModuleTeleport extends Module {
 		this.addCommand(new CommandWorld(this));
 
 		this.addModule(new ModuleSpawn());
-		this.addModule(new ModuleWarps());
+		this.addModule(ModuleWarps.getInstance());
 	}
 
 }

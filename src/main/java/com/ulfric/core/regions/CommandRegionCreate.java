@@ -4,10 +4,12 @@ import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.module.ModuleBase;
+import com.ulfric.lib.coffee.module.ModuleUtils;
 import com.ulfric.lib.coffee.region.Region;
 import com.ulfric.lib.coffee.region.Selection;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
+import com.ulfric.lib.craft.region.ModuleRegionColl;
 import com.ulfric.lib.craft.region.RegionColl;
 
 final class CommandRegionCreate extends Command {
@@ -46,7 +48,9 @@ final class CommandRegionCreate extends Command {
 
 		int weight = (int) this.getObject("weight", 0);
 
-		region = Region.newRegion(name, player.getWorld().getName(), selection.toShape(), null, weight);
+		region = Region.newRegion(ModuleUtils.getModule(ModuleRegionColl.class).getModuleConfig(name), name, player.getWorld().getName(), selection.toShape(), null, weight);
+
+		RegionColl.registerRegion(region);
 
 		player.sendLocalizedMessage("regions.region_created", region.getName(), region.getWeight());
 	}
