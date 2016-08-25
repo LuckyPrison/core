@@ -49,7 +49,7 @@ public class ModuleCombatTag extends Module {
 	{
 		ConfigFile config = this.getModuleConfig();
 		MutableDocument document = config.getRoot();
-		this.ticks = document.getLong("ticks", 20L * 15);
+		this.ticks = document.getInteger("ticks", 20 * 15);
 		this.seconds = this.ticks / 20;
 		this.permission = document.getString("permission", "combattag.ignore");
 		this.ignoreGameModes.addAll(document.getStringList("ignore-game-modes", ImmutableList.of()).stream().map(GameMode::of).filter(Objects::nonNull).collect(Collectors.toList()));

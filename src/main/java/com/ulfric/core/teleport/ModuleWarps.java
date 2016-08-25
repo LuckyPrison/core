@@ -1,5 +1,6 @@
 package com.ulfric.core.teleport;
 
+import java.nio.file.Path;
 import java.util.Map;
 
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
@@ -108,6 +109,7 @@ final class ModuleWarps extends Module {
 
 		public void save()
 		{
+			this.file.getRoot().set("name", this.getName());
 			this.file.getRoot().set("destination", this.destination.toDocument());
 			this.file.save();
 		}
@@ -127,13 +129,13 @@ final class ModuleWarps extends Module {
 	@Override
 	public void onModuleEnable()
 	{
-		ConfigFile mainConfig = this.getModuleConfig();
+		Path mainConfig = this.getModuleConfig().getPath();
 
 		int count = 0;
 
 		for (ConfigFile config : this.getModuleConfigs())
 		{
-			if (mainConfig.getPath().equals(config.getPath())) continue;
+			if (mainConfig.equals(config.getPath())) continue;
 
 			Warp warp = new Warp(config, config.getRoot());
 
