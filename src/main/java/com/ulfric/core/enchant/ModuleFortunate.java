@@ -22,7 +22,7 @@ final class ModuleFortunate extends Module {
 	public void onFirstEnable()
 	{
 		World defaultWorld = WorldUtils.getWorlds().get(0);
-		Enchantment fortune = Enchantment.byName("LOOT_BONUS_BLOCKS");
+		Enchantment fortune = Enchantment.byName("fortune");
 		this.addListener(new Listener(this)
 		{
 			@Handler(ignoreCancelled = true)

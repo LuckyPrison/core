@@ -1,21 +1,13 @@
 package com.ulfric.core.gangs;
 
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.commons.lang3.Validate;
-
 import com.ulfric.lib.coffee.command.Argument;
+import com.ulfric.lib.coffee.command.BaseCommand;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandKey;
-import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.command.Resolvers;
-import com.ulfric.lib.coffee.function.BooleanResult;
-import com.ulfric.lib.coffee.locale.Locale;
 import com.ulfric.lib.coffee.module.ModuleBase;
-import com.ulfric.lib.coffee.string.Joiner;
 
-public class CommandGangs extends Command {
+public final class CommandGangs extends BaseCommand {
 
 	public CommandGangs(ModuleBase owner)
 	{
@@ -79,54 +71,6 @@ public class CommandGangs extends Command {
 		this.addCommand(command, CommandKey.builder().add(command.getName()).add("c").build());
 
 		this.addOptionalArgument(Argument.builder().setPath("page").addResolver(Resolvers.INTEGER).setDefaultValue(0).build());
-	}
-
-	@Override
-	public void run()
-	{
-		CommandSender sender = this.getSender();
-		List<Command> commands = this.getCommands();
-
-		Validate.notEmpty(commands);
-
-		Iterator<Command> iterator = commands.iterator();
-
-		while (iterator.hasNext())
-		{
-			Command command = iterator.next();
-
-			BooleanResult result = command.enforce(sender);
-
-			if (result.isSuccess()) continue;
-
-			iterator.remove();
-		}
-
-		Validate.notEmpty(commands);
-
-		int page = (int) this.getObject("page");
-
-		int size = commands.size();
-
-		int pages = size / 5;
-
-		page = Math.min(Math.min(0, page), pages);
-
-		size = Math.min(size, pages + 5);
-
-		Joiner joiner = Joiner.lineBreak();
-
-		Locale locale = sender.getLocale();
-
-		for (int x = page; x < size; x++)
-		{
-			Command command = commands.get(x);
-			joiner.append(locale.getFormattedMessage("gangs.help_entry", command.getName(), command.getUsage()));
-		}
-
-		joiner.append(locale.getFormattedMessage("gangs.help_page", page, pages));
-
-		sender.sendMessage(joiner.toString());
 	}
 
 }

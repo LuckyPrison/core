@@ -11,6 +11,7 @@ import com.ulfric.core.enchant.ModuleEnchants;
 import com.ulfric.core.gangs.ModuleGangs;
 import com.ulfric.core.kit.ModuleKits;
 import com.ulfric.core.luckyblocks.ModuleLuckyBlocks;
+import com.ulfric.core.lwe.ModuleLWE;
 import com.ulfric.core.mines.ModuleMines;
 import com.ulfric.core.modules.ModuleBeheading;
 import com.ulfric.core.modules.ModuleEmailInterface;
@@ -63,6 +64,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleRankup());
 		this.addModule(new ModuleLuckyBlocks());
 		this.addModule(new ModuleSpeedyGonzales());
+		this.addModule(new ModuleLWE());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 

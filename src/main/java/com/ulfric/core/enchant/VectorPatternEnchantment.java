@@ -21,7 +21,7 @@ public final class VectorPatternEnchantment extends Enchantment {
 
 		VectorPatternEnchantment ench = new VectorPatternEnchantment(enchName, id, max, pattern, conflicts);
 
-		Validate.isTrue(Enchantment.ENCHANTS.putIfAbsent(id, ench) == null);
+		Enchantment.insert(ench);
 
 		return ench;
 	}
