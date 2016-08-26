@@ -4,6 +4,8 @@ import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.math.RandomUtils;
 import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.craft.entity.player.GameMode;
+import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.block.BlockBreakEvent;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.ItemStack.EnchantList;
@@ -23,12 +25,17 @@ final class ModuleFortunate extends Module {
 	{
 		World defaultWorld = WorldUtils.getWorlds().get(0);
 		Enchantment fortune = Enchantment.byName("fortune");
+		GameMode survival = GameMode.of("SURVIVAL");
 		this.addListener(new Listener(this)
 		{
 			@Handler(ignoreCancelled = true)
 			public void onBreak(BlockBreakEvent event)
 			{
-				if (!event.getPlayer().getWorld().equals(defaultWorld)) return;
+				Player player = event.getPlayer();
+
+				if (!player.getWorld().equals(defaultWorld)) return;
+
+				if (!survival.equals(player.getGameMode())) return;
 
 				ItemStack hand = event.getHand();
 
@@ -45,7 +52,11 @@ final class ModuleFortunate extends Module {
 					return;
 				}
 
-				event.getCustomItem().setAmount((int) Math.round(Math.max(Math.ceil(level / RandomUtils.randomRange(4.2D, 5.2D)), 4)));
+				ItemStack custom = event.getCustomItem();
+
+				if (custom == null) return;
+
+				custom.setAmount((int) Math.round(Math.max(Math.ceil(level / RandomUtils.randomRange(4.2D, 5.2D)), 4)));
 			}
 		});
 	}
