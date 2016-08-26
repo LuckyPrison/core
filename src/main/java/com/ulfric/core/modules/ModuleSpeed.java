@@ -27,6 +27,8 @@ public final class ModuleSpeed extends Module {
 		{
 			super("speed", owner);
 
+			this.addPermission("speed.use");
+
 			this.addEnforcer(Enforcers.IS_PLAYER, "speed.must_be_player");
 
 			this.addArgument(Argument.builder().setPath("value").addResolver(Resolvers.FLOAT).setUsage("speed.specify_speed").build());
