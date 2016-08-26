@@ -93,6 +93,8 @@ public final class ModuleEnchants extends Module {
 
 					if (toBreak.getTypeOrdinal() == 0) continue;
 
+					if (toBreak.getType().getBestTool() == null) continue;
+
 					player.breakBlock(toBreak);
 				}
 			}
