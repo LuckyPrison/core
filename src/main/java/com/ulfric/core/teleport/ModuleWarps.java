@@ -14,6 +14,7 @@ import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.string.NamedBase;
+import com.ulfric.lib.craft.entity.player.Actions;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.location.Destination;
 import com.ulfric.lib.craft.location.Location;
@@ -124,6 +125,17 @@ final class ModuleWarps extends Module {
 
 		this.addCommand(new CommandWarp());
 		this.addCommand(new CommandSetWarp());
+
+		Actions.getInstance().register("warp", (player, obj) ->
+		{
+			String value = String.valueOf(obj);
+
+			Destination destination = this.getWarp(value);
+
+			if (destination == null) return;
+
+			player.teleport(destination.getLocation());
+		});
 	}
 
 	@Override
