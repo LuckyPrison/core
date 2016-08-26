@@ -12,7 +12,7 @@ public class SubCommandRename extends GangCommand {
 
 	public SubCommandRename(ModuleBase owner)
 	{
-		super("rename", GangRank.LIEUTENANT, owner);
+		super("rename", GangRank.LIEUTENANT, owner, "setname", "changename");
 
 		this.addArgument(Argument.builder().setPath("gang_name").addResolver(Resolvers.STRING).setUsage("gangs.create_specify_name").build());
 	}

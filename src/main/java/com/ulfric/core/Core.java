@@ -21,6 +21,7 @@ import com.ulfric.core.modules.ModuleGameModeInterface;
 import com.ulfric.core.modules.ModuleGodmodeInterface;
 import com.ulfric.core.modules.ModuleNameplates;
 import com.ulfric.core.modules.ModulePrivateMessaging;
+import com.ulfric.core.modules.ModuleSpeed;
 import com.ulfric.core.modules.ModuleSpeedyGonzales;
 import com.ulfric.core.modules.ModuleTrash;
 import com.ulfric.core.modules.ModuleVanishInterface;
@@ -67,6 +68,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleSpeedyGonzales());
 		this.addModule(new ModuleLWE());
 		this.addModule(new ModuleColoredSigns());
+		this.addModule(new ModuleSpeed());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 

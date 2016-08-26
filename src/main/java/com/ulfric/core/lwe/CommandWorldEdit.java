@@ -1,8 +1,6 @@
 package com.ulfric.core.lwe;
 
 import com.ulfric.lib.coffee.command.BaseCommand;
-import com.ulfric.lib.coffee.command.Command;
-import com.ulfric.lib.coffee.command.CommandKey;
 import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.command.Enforcers;
 
@@ -16,17 +14,10 @@ final class CommandWorldEdit extends BaseCommand {
 
 		this.addPermission("worldedit.use");
 
-		Command command = new CommandSet(owner);
-		this.addCommand(command, CommandKey.singular(command.getName()));
-
-		command = new CommandDelete(owner);
-		this.addCommand(command, CommandKey.singular(command.getName()));
-
-		command = new CommandSelection(owner);
-		this.addCommand(command, CommandKey.builder().add(command.getName()).add("select").add("sel").build());
-
-		command = new CommandSchematic(owner);
-		this.addCommand(command, CommandKey.builder().add(command.getName()).add("schem").build());
+		this.addCommand(new CommandSet(owner));
+		this.addCommand(new CommandDelete(owner));
+		this.addCommand(new CommandSelection(owner));
+		this.addCommand(new CommandSchematic(owner));
 	}
 
 }

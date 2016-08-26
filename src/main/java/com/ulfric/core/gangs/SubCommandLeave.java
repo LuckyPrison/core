@@ -10,7 +10,7 @@ public class SubCommandLeave extends GangCommand {
 
 	public SubCommandLeave(ModuleBase owner)
 	{
-		super("leave", GangRank.MEMBER, owner);
+		super("leave", GangRank.MEMBER, owner, "quit");
 
 		this.addEnforcer(Enforcers.IS_PLAYER, "gangs.must_be_player");
 	}

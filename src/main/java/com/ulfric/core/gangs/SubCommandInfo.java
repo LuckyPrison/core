@@ -8,7 +8,7 @@ public class SubCommandInfo extends GangCommand {
 
 	public SubCommandInfo(ModuleBase owner)
 	{
-		super("info", null, owner);
+		super("info", null, owner, "inspect", "check", "lookup");
 	}
 
 	@Override

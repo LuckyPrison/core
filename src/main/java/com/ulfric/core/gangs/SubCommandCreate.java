@@ -16,7 +16,7 @@ public class SubCommandCreate extends Command {
 
 	public SubCommandCreate(ModuleBase owner)
 	{
-		super("create", owner);
+		super("create", owner, "new", "open");
 
 		this.addArgument(Argument.builder().setPath("gang_name").addResolver(Resolvers.STRING).setUsage("gangs.create_specify_name").build());
 

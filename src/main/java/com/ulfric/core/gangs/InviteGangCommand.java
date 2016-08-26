@@ -5,9 +5,9 @@ import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 
 abstract class InviteGangCommand extends GangCommand {
 
-	public InviteGangCommand(String name, ModuleBase owner)
+	public InviteGangCommand(String name, ModuleBase owner, String... aliases)
 	{
-		super(name, GangRank.OFFICER, owner);
+		super(name, GangRank.OFFICER, owner, aliases);
 
 		this.addArgument(OfflinePlayer.ARGUMENT);
 	}

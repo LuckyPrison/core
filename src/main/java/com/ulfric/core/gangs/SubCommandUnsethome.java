@@ -7,7 +7,7 @@ public class SubCommandUnsethome extends GangCommand {
 
 	public SubCommandUnsethome(ModuleBase owner)
 	{
-		super("unsethome", GangRank.OFFICER, owner);
+		super("unsethome", GangRank.OFFICER, owner, "deletehome", "delhome");
 	}
 
 	@Override

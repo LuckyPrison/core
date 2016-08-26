@@ -10,7 +10,6 @@ import org.apache.commons.lang3.Validate;
 
 import com.flowpowered.nbt.ByteArrayTag;
 import com.flowpowered.nbt.ShortTag;
-import com.flowpowered.nbt.StringTag;
 import com.flowpowered.nbt.Tag;
 import com.flowpowered.nbt.stream.NBTInputStream;
 import com.ulfric.lib.coffee.location.ImmutableVector;
@@ -76,9 +75,9 @@ public final class Schematic extends NamedBase {
 			short length = Schematic.getTag(schematic, "Length", ShortTag.class).getValue();
 			short height = Schematic.getTag(schematic, "Height", ShortTag.class).getValue();
 
-			String materials = Schematic.getTag(schematic, "Materials", StringTag.class).getValue();
+			//String materials = Schematic.getTag(schematic, "Materials", StringTag.class).getValue();
 
-			Validate.isTrue(materials.equals("Alpha"));
+			//Validate.isTrue(materials.equals("Alpha"));
 
 			byte[] blockId = getTag(schematic, "Blocks", ByteArrayTag.class).getValue();
 			byte[] blockData = getTag(schematic, "Data", ByteArrayTag.class).getValue();
@@ -118,9 +117,13 @@ public final class Schematic extends NamedBase {
 					{
 						int index = y * width * length + z * width + x;
 
-						Vector set = ImmutableVector.of(x, y, z).add(base);
+						short id = blocks[index];
 
-						MaterialData data = MaterialData.of(Material.of(blocks[index]), blockData[index]);
+						if (id == 0) continue;
+
+						MaterialData data = MaterialData.of(Material.of(id), blockData[index]);
+
+						Vector set = ImmutableVector.of(x, y, z).add(base);
 
 						change.addBlock(LocationUtils.getLocation(world, set), data);
 					}

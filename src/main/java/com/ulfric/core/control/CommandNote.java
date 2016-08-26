@@ -5,7 +5,6 @@ import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ulfric.lib.coffee.command.Command;
-import com.ulfric.lib.coffee.command.CommandKey;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.locale.Locale;
 import com.ulfric.lib.coffee.module.ModuleBase;
@@ -17,10 +16,10 @@ public class CommandNote extends Command {
 		super("note", owner, "notes");
 
 		Command add = new CommandAdd(owner);
-		this.addCommand(add, CommandKey.builder().add(add.getName()).add("new").add("create").build());
+		this.addCommand(add);
 
 		Command list = new CommandList(owner);
-		this.addCommand(list, CommandKey.builder().add(list.getName()).add("all").add("show").add("display").add("fetch").build());
+		this.addCommand(list);
 	}
 
 	@Override
@@ -33,7 +32,7 @@ public class CommandNote extends Command {
 	{
 		public CommandAdd(ModuleBase owner)
 		{
-			super("add", owner);
+			super("add", owner, "new", "create");
 
 			this.addArgument(NoteHolder.ARGUMENT);
 		}
@@ -64,7 +63,7 @@ public class CommandNote extends Command {
 	{
 		public CommandList(ModuleBase owner)
 		{
-			super("list", owner);
+			super("list", owner, "all", "show", "display", "fetch");
 
 			this.addArgument(NoteHolder.ARGUMENT);
 		}

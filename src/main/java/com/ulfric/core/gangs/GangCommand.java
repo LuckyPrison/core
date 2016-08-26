@@ -6,9 +6,9 @@ import com.ulfric.lib.coffee.module.ModuleBase;
 
 abstract class GangCommand extends Command {
 
-	public GangCommand(String name, GangRank gangPermission, ModuleBase owner)
+	public GangCommand(String name, GangRank gangPermission, ModuleBase owner, String... aliases)
 	{
-		super(name, owner);
+		super(name, owner, aliases);
 
 		this.gangPermission = gangPermission;
 

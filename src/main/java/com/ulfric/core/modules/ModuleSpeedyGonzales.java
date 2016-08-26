@@ -5,7 +5,7 @@ import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.event.player.PlayerJoinEvent;
 
-public class ModuleSpeedyGonzales extends Module {
+public final class ModuleSpeedyGonzales extends Module {
 
 	public ModuleSpeedyGonzales()
 	{

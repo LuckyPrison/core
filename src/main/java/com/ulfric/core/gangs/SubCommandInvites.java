@@ -15,7 +15,7 @@ public class SubCommandInvites extends GangCommand {
 
 	public SubCommandInvites(ModuleBase owner)
 	{
-		super("invites", null, owner);
+		super("invites", null, owner, "listinvites", "showinvites");
 	}
 
 	@Override

@@ -10,7 +10,7 @@ public class SubCommandDisband extends GangCommand {
 
 	public SubCommandDisband(ModuleBase owner)
 	{
-		super("disband", GangRank.LEADER, owner);
+		super("disband", GangRank.LEADER, owner, "delete");
 	}
 
 	@Override

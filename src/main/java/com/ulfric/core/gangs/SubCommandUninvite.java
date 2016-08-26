@@ -12,7 +12,7 @@ public class SubCommandUninvite extends InviteGangCommand {
 
 	public SubCommandUninvite(ModuleBase owner)
 	{
-		super("uninvite", owner);
+		super("uninvite", owner, "deinvite");
 	}
 
 	@Override
