@@ -5,7 +5,11 @@ import java.util.Set;
 import com.ulfric.config.ConfigFile;
 import com.ulfric.config.Document;
 import com.ulfric.lib.coffee.collection.SetUtils;
+import com.ulfric.lib.coffee.event.Handler;
+import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.craft.entity.player.Player;
+import com.ulfric.lib.craft.event.player.PlayerFirstJoinEvent;
 
 public final class ModuleKits extends Module {
 
@@ -18,6 +22,26 @@ public final class ModuleKits extends Module {
 	public void onFirstEnable()
 	{
 		this.addCommand(new CommandKit(this));
+
+		this.addListener(new Listener(this)
+		{
+			@Handler
+			public void onJoin(PlayerFirstJoinEvent event)
+			{
+				Player player = event.getPlayer();
+
+				Kit defaultKit = Kits.INSTANCE.getKitByExactName("default");
+
+				if (defaultKit == null)
+				{
+					player.sendLocalizedMessage("kits.default_kit_not_found");
+
+					return;
+				}
+
+				defaultKit.give(null, player, "New player kit");
+			}
+		});
 	}
 
 	@Override

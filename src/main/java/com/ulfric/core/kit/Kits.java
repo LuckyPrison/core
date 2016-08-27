@@ -18,6 +18,11 @@ public enum Kits {
 		this.kits.put(kit.getName().toLowerCase(), kit);
 	}
 
+	public Kit getKitByExactName(String name)
+	{
+		return this.kits.get(name.toLowerCase());
+	}
+
 	public Kit getByName(String name)
 	{
 		String lower = name.toLowerCase();
