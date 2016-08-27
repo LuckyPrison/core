@@ -42,26 +42,66 @@ public class ModuleMines extends Module {
 	{
 		Document mines = this.getModuleConfig().getRoot().getDocument("mines");
 
-		if (mines == null) return;
+		if (mines == null)
+		{
+			this.log("No mines found");
+
+			return;
+		}
 
 		Set<String> keys = mines.getKeys(false);
 
-		if (SetUtils.isEmpty(keys)) return;
+		if (SetUtils.isEmpty(keys))
+		{
+			this.log("No mines found (but the document exists)");
+
+			return;
+		}
+
+		int counter = 0;
 
 		for (String key : keys)
 		{
 			Document mineDocument = mines.getDocument(key);
 
-			if (mineDocument == null) continue;
+			if (mineDocument == null)
+			{
+				this.log("Mine not a document: " + key);
+
+				continue;
+			}
 
 			Mine mine = Mine.fromDocument(mineDocument);
 
-			if (mine == null) continue;
+			if (mine == null)
+			{
+				this.log("Mine could not be resolved: " + key);
+
+				continue;
+			}
+
+			counter++;
 
 			Mines.INSTANCE.registerMine(mine);
 
 			this.resetQueue.add(mine);
 		}
+
+		if (counter > 0)
+		{
+			if (counter == 1)
+			{
+				this.log("Loaded 1 mine");
+
+				return;
+			}
+
+			this.log("Loaded " + counter + " mines");
+
+			return;
+		}
+
+		this.log("No mines found");
 	}
 
 	@Override
