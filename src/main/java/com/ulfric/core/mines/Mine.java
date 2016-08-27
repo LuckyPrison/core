@@ -131,6 +131,12 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 		return this.getName().compareTo(mine.getName());
 	}
 
+	@Override
+	public String toString()
+	{
+		return this.getName();
+	}
+
 	public static Builder builder()
 	{
 		return new Builder();
