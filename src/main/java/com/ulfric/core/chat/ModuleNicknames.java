@@ -71,7 +71,7 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 
 		if (nickname == null || nickname == name) return name;
 
-		State state = this.setting.getState(observer.getUniqueId());
+		State state = this.setting == null ? this.disabled : this.setting.getState(observer.getUniqueId());
 
 		if (state == this.disabled)
 		{
@@ -100,7 +100,10 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 	@Override
 	public void onModuleDisable()
 	{
-		Settings.INSTANCE.removeSetting(this.setting);
+		if (this.setting != null)
+		{
+			Settings.INSTANCE.removeSetting(this.setting);
+		}
 		PlayerScopes.ONLINE.removeListener(this);
 		this.subscription.unsubscribe();
 	}
@@ -136,7 +139,10 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 
 		this.setting = builder.build();
 
-		Settings.INSTANCE.addSetting(this.setting);
+		if (this.setting != null)
+		{
+			Settings.INSTANCE.addSetting(this.setting);
+		}
 		PlayerScopes.ONLINE.addListener(this);
 		this.subscription.subscribe();
 	}
