@@ -3,6 +3,8 @@ package com.ulfric.core.chat;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.Validate;
+
 import com.ulfric.config.Document;
 import com.ulfric.core.settings.Setting;
 import com.ulfric.core.settings.Settings;
@@ -147,7 +149,7 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 			this.addOptionalArgument(Argument.builder().setPath("nick").addResolver(Resolvers.STRING).build());
 		}
 
-		private final Pattern pattern = Pattern.compile("[a-zA-Z0-9_§]+");
+		private final Pattern pattern = Pattern.compile("[a-zA-Z0-9_{color_char}]+".replace("{color_char}", String.valueOf(ChatUtils.colorChar())));
 
 		@Override
 		public void run()
@@ -182,7 +184,20 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 
 				if (nick.length() > 16)
 				{
-					nick = nick.substring(0, 15);
+					if (ChatUtils.stripColor(nick).length() > 16)
+					{
+						nick = nick.substring(0, 15);
+
+						String colorChar = String.valueOf(ChatUtils.colorChar());
+
+						if (nick.endsWith(colorChar))
+						{
+							nick = nick.substring(0, nick.length()-2);
+
+							// extra security
+							Validate.isTrue(!nick.endsWith(colorChar));
+						}
+					}
 				}
 			}
 
