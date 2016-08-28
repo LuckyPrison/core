@@ -45,6 +45,7 @@ public class ModuleChat extends Module {
 		this.cachedTranslations = Maps.newConcurrentMap();
 
 		this.addModule(new ModuleChatToggler());
+		this.addModule(ModuleNicknames.INSTANCE);
 
 		this.addListener(new Listener(this)
 		{
@@ -125,9 +126,6 @@ public class ModuleChat extends Module {
 
 				format = format.replace("{group}", groupFormat);
 
-				// TODO nicknames
-				format = format.replace("{player}", player.getName());
-
 				// TODO tags
 				format = format.replace("{tag}", "<TODO tags>");
 
@@ -163,8 +161,7 @@ public class ModuleChat extends Module {
 					{
 						for (Player recipient : recipientEntry.getValue())
 						{
-							// TODO nicknames
-							recipient.sendMessage(format);
+							recipient.sendMessage(format.replace("{player}", ModuleNicknames.getName(player, recipient)));
 						}
 					}
 
@@ -190,8 +187,7 @@ public class ModuleChat extends Module {
 
 						for (Player recipient : toSend)
 						{
-							// TODO nicknames
-							recipient.sendMessage(formatted);
+							recipient.sendMessage(formatted.replace("{player}", ModuleNicknames.getName(player, recipient)));
 						}
 
 						continue;
@@ -215,8 +211,7 @@ public class ModuleChat extends Module {
 
 							for (Player recipient : toSend)
 							{
-								// TODO nicknames
-								recipient.sendMessage(formatted);
+								recipient.sendMessage(formatted.replace("{player}", ModuleNicknames.getName(player, recipient)));
 							}
 
 							continue;
@@ -233,8 +228,7 @@ public class ModuleChat extends Module {
 
 						for (Player recipient : toSend)
 						{
-							// TODO nicknames
-							recipient.sendMessage(formatted);
+							recipient.sendMessage(formatted.replace("{player}", ModuleNicknames.getName(player, recipient)));
 						}
 					}
 					catch (GoogleAPIException exception)
@@ -246,7 +240,7 @@ public class ModuleChat extends Module {
 						for (Player recipient : toSend)
 						{
 							// TODO nicknames
-							recipient.sendMessage(formatted);
+							recipient.sendMessage(formatted.replace("{player}", ModuleNicknames.getName(player, recipient)));
 						}
 					}
 				}

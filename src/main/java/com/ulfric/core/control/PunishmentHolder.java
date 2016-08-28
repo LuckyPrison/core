@@ -23,7 +23,7 @@ import com.ulfric.lib.craft.entity.player.PlayerUtils;
 
 public final class PunishmentHolder extends Punisher implements Noteable {
 
-	public static final Argument ARGUMENT = Argument.builder().setPath("holder").addResolver((sen, str) -> PunishmentHolder.valueOf(str)).setUsage("control.specify_holder").build();
+	public static final Argument ARGUMENT = Argument.builder().setPath("holder").addSimpleResolver(PunishmentHolder::valueOf).setUsage("control.specify_holder").build();
 
 	public static PunishmentHolder valueOf(String contextual)
 	{

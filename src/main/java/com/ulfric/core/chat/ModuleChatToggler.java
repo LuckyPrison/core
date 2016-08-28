@@ -14,8 +14,8 @@ import com.ulfric.lib.coffee.event.Priority;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.player.AsyncPlayerChatEvent;
+import com.ulfric.lib.craft.inventory.item.ItemParts;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
-import com.ulfric.lib.craft.inventory.item.Material;
 import com.ulfric.lib.craft.inventory.item.meta.ItemMeta;
 
 class ModuleChatToggler extends Module {
@@ -32,6 +32,9 @@ class ModuleChatToggler extends Module {
 	@Override
 	public void onFirstEnable()
 	{
+		this.enabled = State.builder().setText("chat.setting_state_enabled").build();
+		this.disabled = State.builder().setText("chat.setting_state_disabled").build();
+
 		this.addListener(new Listener(this)
 		{
 			@Handler(ignoreCancelled = true, priority = Priority.LOWEST)
@@ -76,18 +79,15 @@ class ModuleChatToggler extends Module {
 		}
 
 		String name = settings.getString("name", "chat");
-		String itemName = settings.getString("item-name", "chat.setting_name");
-		String description = settings.getString("description", "chat.setting_description");
-		ItemStack item = Material.of(settings.getString("itemstack", "STAINED_GLASS_PANE")).toItem();
+		String itemName = "chat.setting_name";
+		String description = "chat.setting_description";
+		ItemStack item = ItemParts.stringToItem(settings.getString("itemstack", "id.STAINED_GLASS_PANE"));
 		ItemMeta meta = item.getMeta();
 		meta.setDisplayName(itemName);
 		item.setMeta(meta);
 		int priority = settings.getInteger("priority", 0);
 
 		Setting.Builder builder = Setting.builder().setName(name).setDescription(description).setItem(item).setPriority(priority);
-
-		this.enabled = State.builder().setText(settings.getString("enabled-state-text", "chat.setting_state_enabled")).build();
-		this.disabled = State.builder().setText(settings.getString("disabled-state-text", "chat.setting_state_disabled")).build();
 
 		builder.addState(this.enabled);
 		builder.addState(this.disabled);
