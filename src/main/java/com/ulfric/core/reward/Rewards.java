@@ -12,6 +12,8 @@ import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.coffee.script.Script;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.ItemUtils;
+import com.ulfric.lib.craft.potion.PotionEffect;
+import com.ulfric.lib.craft.potion.PotionUtils;
 
 public class Rewards {
 
@@ -30,6 +32,14 @@ public class Rewards {
 			case "multiitem":
 			case "multi-item":
 				return Rewards.newItemMultiReward(document);
+
+			case "potion":
+				return Rewards.newPotionReward(document);
+
+			case "potions":
+			case "multipotion":
+			case "multi-potion":
+				return Rewards.newPotionMultiReward(document);
 
 			case "cmd":
 			case "command":
@@ -88,6 +98,26 @@ public class Rewards {
 		List<ItemStack> items = strings.stream().map(ItemUtils::getItem).filter(Objects::nonNull).collect(Collectors.toList());
 
 		return MultiItemReward.valueOf(items);
+	}
+
+	private static Reward newPotionReward(Document document)
+	{
+		PotionEffect potion = PotionUtils.of(document.getString("potion"));
+
+		Validate.notNull(potion);
+
+		return PotionReward.valueOf(potion);
+	}
+
+	private static Reward newPotionMultiReward(Document document)
+	{
+		List<String> strings = document.getStringList("potions");
+
+		Validate.notEmpty(strings);
+
+		List<PotionEffect> effects = strings.stream().map(PotionUtils::of).filter(Objects::nonNull).collect(Collectors.toList());
+
+		return MultiPotionReward.valueOf(effects);
 	}
 
 	private static Reward newCommandReward(Document document)
