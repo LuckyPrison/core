@@ -24,6 +24,7 @@ import com.ulfric.core.modules.ModuleNameplates;
 import com.ulfric.core.modules.ModulePrivateMessaging;
 import com.ulfric.core.modules.ModuleSpeed;
 import com.ulfric.core.modules.ModuleSpeedyGonzales;
+import com.ulfric.core.modules.ModuleTrample;
 import com.ulfric.core.modules.ModuleTrash;
 import com.ulfric.core.modules.ModuleVanishInterface;
 import com.ulfric.core.modules.ModuleWelcome;
@@ -71,6 +72,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleColoredSigns());
 		this.addModule(new ModuleSpeed());
 		this.addModule(new ModuleCandy());
+		this.addModule(new ModuleTrample());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 
