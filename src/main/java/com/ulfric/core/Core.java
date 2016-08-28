@@ -14,6 +14,7 @@ import com.ulfric.core.luckyblocks.ModuleLuckyBlocks;
 import com.ulfric.core.lwe.ModuleLWE;
 import com.ulfric.core.mines.ModuleMines;
 import com.ulfric.core.modules.ModuleBeheading;
+import com.ulfric.core.modules.ModuleCandy;
 import com.ulfric.core.modules.ModuleColoredSigns;
 import com.ulfric.core.modules.ModuleEmailInterface;
 import com.ulfric.core.modules.ModuleEntityDisabler;
@@ -69,6 +70,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleLWE());
 		this.addModule(new ModuleColoredSigns());
 		this.addModule(new ModuleSpeed());
+		this.addModule(new ModuleCandy());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 

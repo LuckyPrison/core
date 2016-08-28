@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
+import com.google.common.collect.ImmutableList;
 import com.ulfric.config.Document;
 import com.ulfric.lib.coffee.ApiInstantiationException;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
@@ -16,6 +17,32 @@ import com.ulfric.lib.craft.potion.PotionEffect;
 import com.ulfric.lib.craft.potion.PotionUtils;
 
 public class Rewards {
+
+	public static Reward parseMultiReward(Document document)
+	{
+		Validate.notNull(document);
+
+		ImmutableList.Builder<Reward> parsedRewards = ImmutableList.builder();
+
+		for (String key : document.getKeys(false))
+		{
+			Document rewardDoc = document.getDocument(key);
+
+			if (rewardDoc == null) continue;
+
+			Reward reward = Rewards.parseReward(rewardDoc);
+
+			if (reward == null) continue;
+
+			parsedRewards.add(reward);
+		}
+
+		List<Reward> builtRewards = parsedRewards.build();
+
+		Validate.notEmpty(builtRewards);
+
+		return Rewards.multi(builtRewards);
+	}
 
 	public static Reward parseReward(Document document)
 	{

@@ -27,26 +27,9 @@ public final class Kit extends NamedBase {
 
 		Document rewards = document.getDocument("rewards");
 
-		ImmutableList.Builder<Reward> parsedRewards = ImmutableList.builder();
+		Reward multi = Rewards.parseMultiReward(rewards);
 
-		for (String key : rewards.getKeys(false))
-		{
-			Document rewardDoc = rewards.getDocument(key);
-
-			if (rewardDoc == null) continue;
-
-			Reward reward = Rewards.parseReward(rewardDoc);
-
-			if (reward == null) continue;
-
-			parsedRewards.add(reward);
-		}
-
-		List<Reward> builtRewards = parsedRewards.build();
-
-		Validate.notEmpty(builtRewards);
-
-		return new Kit(name, Rewards.multi(builtRewards), cooldown);
+		return new Kit(name, multi, cooldown);
 	}
 
 	Kit(String name, Reward reward, long cooldown)
