@@ -10,6 +10,7 @@ import com.ulfric.core.settings.Setting;
 import com.ulfric.core.settings.Settings;
 import com.ulfric.core.settings.State;
 import com.ulfric.data.DataAddress;
+import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
 import com.ulfric.data.scope.ScopeListener;
@@ -17,6 +18,7 @@ import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.command.Resolvers;
+import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.craft.command.Enforcers;
@@ -88,7 +90,11 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 
 		this.addCommand(new CommandNickname());
 
-		this.subscription = PlayerUtils.getPlayerData().multi(String.class, PlayerScopes.ONLINE, new DataAddress<>("nicknames", null, "nickname")).blockOnSubscribe(true).subscribe();
+		DocumentStore store = PlayerUtils.getPlayerData();
+
+		DataManager.get().ensureTableCreated(store, "nicknames");
+
+		this.subscription = store.multi(String.class, PlayerScopes.ONLINE, new DataAddress<>("nicknames", null, "nickname")).blockOnSubscribe(true).subscribe();
 	}
 
 	@Override
