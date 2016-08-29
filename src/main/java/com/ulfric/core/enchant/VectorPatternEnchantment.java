@@ -22,8 +22,6 @@ public final class VectorPatternEnchantment extends Enchantment {
 
 		VectorPatternEnchantment ench = new VectorPatternEnchantment(enchName, id, max, pattern, conflicts);
 
-		ench.register();
-
 		return ench;
 	}
 

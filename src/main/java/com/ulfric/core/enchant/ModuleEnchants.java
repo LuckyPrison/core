@@ -130,6 +130,8 @@ public final class ModuleEnchants extends Module {
 				enchant = Enchantment.newEnchantment(name, id, max, conflicts, null);
 			}
 
+			enchant.register();
+
 			Validate.notNull(enchant);
 
 			Validate.isTrue(this.enchants.add(enchant));
