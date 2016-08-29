@@ -1,19 +1,24 @@
 package com.ulfric.core.economy;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
 
 import com.ulfric.config.ConfigFile;
-import com.ulfric.config.Document;
 import com.ulfric.config.MutableDocument;
+import com.ulfric.lib.coffee.collection.ListUtils;
 import com.ulfric.lib.coffee.collection.SetUtils;
 import com.ulfric.lib.coffee.economy.Bank;
 import com.ulfric.lib.coffee.economy.Currency;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.coffee.numbers.NumberUtils;
+import com.ulfric.lib.coffee.string.Patterns;
+import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.craft.block.MaterialData;
 import com.ulfric.lib.craft.block.Sign;
 import com.ulfric.lib.craft.entity.player.Player;
@@ -42,16 +47,11 @@ final class ModuleSell extends Module {
 		{
 			priceDoc = root.createDocument("prices");
 
-			priceDoc = priceDoc.createDocument("example-key");
-
-			priceDoc = priceDoc.createDocument("example");
-
-			priceDoc.set("item", "stone;6");
-			priceDoc.set("value", "1000");
+			priceDoc.set("a", Arrays.asList("type.STONE;6 worth.1000"));
 
 			config.save();
 
-			return;
+			this.log("Loaded prices with default values");
 		}
 
 		Set<String> keys = priceDoc.getKeys();
@@ -63,66 +63,84 @@ final class ModuleSell extends Module {
 			return;
 		}
 
+		int count = 0;
+		int total = 0;
+
 		for (String key : keys)
 		{
-			Document node = priceDoc.getDocument(key);
+			List<String> list = priceDoc.getStringList(key);
 
-			if (node == null)
+			if (ListUtils.isEmpty(list))
 			{
-				this.log("Invalid node: prices." + key);
+				this.log("Unable to find prices in: prices." + key);
 
 				continue;
 			}
 
-			Set<String> priceKeys = node.getKeys();
+			count++;
 
-			if (SetUtils.isEmpty(priceKeys))
+			Map<MaterialData, Long> priced = new HashMap<>(list.size());
+
+			for (String parse : list)
 			{
-				this.log("No keys found: prices." + key);
+				String[] split = Patterns.WHITESPACE.split(parse);
 
-				continue;
-			}
+				String materialData = split[0].substring("type.".length());
+				String priceData = split[1].substring("worth.".length());
 
-			Map<MaterialData, Long> worths = new HashMap<>(priceKeys.size());
+				MaterialData material = MaterialData.of(materialData);
 
-			for (String priceKey : priceKeys)
-			{
-				Document price = node.getDocument(priceKey);
+				if (material == null)
+				{
+					this.log("Could not parse material data: (" + materialData + ") in: prices." + key);
+
+					continue;
+				}
+
+				Long price = NumberUtils.parseLong(priceData);
 
 				if (price == null)
 				{
-					this.log("Invalid node: prices." + key + '.' + priceKey);
+					this.log("Could not parse price: (" + priceData + ") in: prices." + key);
 
 					continue;
 				}
 
-				String dataContext = price.getString("item");
-
-				MaterialData data = MaterialData.of(dataContext);
-
-				if (data == null)
+				if (priced.put(material, price) != null)
 				{
-					this.log("Invalid item: " + dataContext);
-
-					continue;
+					this.log("Price specified twice in: prices." + key);
 				}
 
-				Long worth = price.getLong("value");
-
-				if (worth == null)
-				{
-					this.log("Invalid worth (should be long > 0): " + price.getString("value"));
-
-					continue;
-				}
-
-				if (worths.put(data, worth) == null) continue;
-
-				this.log("Found double worths: prices." + key + '.' + priceKey);
+				total++;
 			}
 
-			this.prices.put(key, worths);
+			if (priced.isEmpty()) continue; // TODO warning
+
+			this.prices.put(key, priced);
 		}
+
+		if (count == 0 || total == 0)
+		{
+			this.log("Could not load any prices.");
+
+			return;
+		}
+
+		if (count == 1)
+		{
+			if (total == 1)
+			{
+				this.log("Loaded 1 price in 1 category");
+
+				return;
+			}
+
+			this.log("Loaded " + total + " prices in 1 category");
+
+			return;
+		}
+
+		this.log("Loaded " + total + " prices across " + count + " categories");
 	}
 
 	@Override
@@ -142,6 +160,15 @@ final class ModuleSell extends Module {
 			public void handle(Player player, Sign sign)
 			{
 				String line = sign.getLine(1);
+
+				if (line == null)
+				{
+					player.sendLocalizedMessage("economy.sellall_sign_broken");
+
+					return;
+				}
+
+				line = line.replace(" ", Strings.EMPTY);
 
 				if (!player.hasPermission("sellall." + line))
 				{
