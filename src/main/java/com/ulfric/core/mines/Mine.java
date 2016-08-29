@@ -44,7 +44,7 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 			builder.addType(Weighted.<MaterialData>builder().setValue(data).setWeight(weight).build());
 		}
 
-		int blockRate = document.getLong("block-rate", 60L).intValue();
+		int blockRate = document.getLong("block-rate", 75L).intValue();
 
 		builder.setBlockRate(blockRate);
 
