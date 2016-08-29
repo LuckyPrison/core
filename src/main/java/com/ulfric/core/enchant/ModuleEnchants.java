@@ -127,7 +127,7 @@ public final class ModuleEnchants extends Module {
 			}
 			else
 			{
-				enchant = Enchantment.newEnchantment(name, id, max, conflicts);
+				enchant = Enchantment.newEnchantment(name, id, max, conflicts, null);
 			}
 
 			Validate.notNull(enchant);

@@ -29,7 +29,7 @@ public final class VectorPatternEnchantment extends Enchantment {
 
 	private VectorPatternEnchantment(String name, int id, int max, VectorPattern pattern, List<Integer> conflicts)
 	{
-		super(name, id, max, conflicts);
+		super(name, id, max, conflicts, item -> item.getType().isTool());
 
 		this.pattern = pattern;
 	}

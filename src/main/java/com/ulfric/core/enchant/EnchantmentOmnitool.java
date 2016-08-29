@@ -2,9 +2,8 @@ package com.ulfric.core.enchant;
 
 import com.google.common.collect.ImmutableList;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
-import com.ulfric.lib.craft.inventory.item.enchant.Enchantment;
 
-public final class EnchantmentOmnitool extends Enchantment {
+public final class EnchantmentOmnitool extends ToolEnchantment {
 
 	public static final EnchantmentOmnitool INSTANCE = new EnchantmentOmnitool();
 
