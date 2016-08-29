@@ -6,6 +6,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.WordUtils;
 
 import com.ulfric.lib.coffee.location.VectorPattern;
+import com.ulfric.lib.coffee.string.Patterns;
 import com.ulfric.lib.craft.inventory.item.enchant.Enchantment;
 
 public final class VectorPatternEnchantment extends Enchantment {
@@ -17,11 +18,11 @@ public final class VectorPatternEnchantment extends Enchantment {
 		Validate.isTrue(max > 0);
 		Validate.notNull(pattern);
 
-		String enchName = WordUtils.capitalizeFully(name.trim()).replaceAll("[\\s]{2,}", " ").replace('_', ' ');
+		String enchName = WordUtils.capitalizeFully(Patterns.D_WHITESPACE.matcher(name.trim()).replaceAll(" ")).replace('_', ' ');
 
 		VectorPatternEnchantment ench = new VectorPatternEnchantment(enchName, id, max, pattern, conflicts);
 
-		Enchantment.insert(ench);
+		ench.register();
 
 		return ench;
 	}
