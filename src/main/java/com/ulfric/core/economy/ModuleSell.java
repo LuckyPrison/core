@@ -136,14 +136,19 @@ final class ModuleSell extends Module {
 	{
 		this.prices = new CaseInsensitiveMap<>();
 
-		this.addListener(new SignListener(this, "sellall", PlayerUseSignEvent.Action.LEFT_CLICK)
+		this.addListener(new SignListener(this, "sellall", PlayerUseSignEvent.Action.RIGHT_CLICK)
 		{
 			@Override
 			public void handle(Player player, Sign sign)
 			{
 				String line = sign.getLine(1);
 
-				if (!player.hasPermission("sellall." + line)) return;
+				if (!player.hasPermission("sellall." + line))
+				{
+					player.sendLocalizedMessage("economy.sellall_missing_permission", line);
+
+					return;
+				}
 
 				Map<MaterialData, Long> values = ModuleSell.this.prices.get(line);
 
@@ -159,6 +164,7 @@ final class ModuleSell extends Module {
 				int size = inventory.getSize();
 
 				long total = 0;
+				int count = 0;
 
 				for (int location = 0; location < size; location++)
 				{
@@ -170,12 +176,26 @@ final class ModuleSell extends Module {
 
 					if (value == null) continue;
 
-					total += value;
+					int amount = item.getAmount();
+
+					total += (value * amount);
+					count += amount;
 
 					inventory.setItem(location, null);
 				}
 
-				Bank.getOnlineAccount(player.getUniqueId()).give(CurrencyAmount.of(Currency.getDefaultCurrency(), total), "SellAll Sign");
+				if (total == 0)
+				{
+					player.sendLocalizedMessage("economy.sellall_no_items", line);
+
+					return;
+				}
+
+				CurrencyAmount amt = CurrencyAmount.of(Currency.getDefaultCurrency(), total);
+
+				player.sendLocalizedMessage("economy.sellall", count, amt.toFormatter().dualFormatWord());
+
+				Bank.getOnlineAccount(player.getUniqueId()).give(amt, "SellAll " + line);
 			}
 		});
 	}
