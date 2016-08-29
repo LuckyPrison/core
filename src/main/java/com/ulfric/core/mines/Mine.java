@@ -13,6 +13,7 @@ import com.ulfric.lib.coffee.math.RandomUtils;
 import com.ulfric.lib.coffee.region.Region;
 import com.ulfric.lib.coffee.region.Shape;
 import com.ulfric.lib.coffee.string.NamedBase;
+import com.ulfric.lib.coffee.string.Patterns;
 import com.ulfric.lib.coffee.tuple.Weighted;
 import com.ulfric.lib.craft.block.MaterialData;
 import com.ulfric.lib.craft.block.MultiBlockChange;
@@ -35,7 +36,7 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 
 		for (String type : document.getStringList("blocks"))
 		{
-			String[] split = type.split("\\s+");
+			String[] split = Patterns.WHITESPACE.split(type);
 
 			MaterialData data = MaterialData.of(split[0].substring("type.".length()));
 			Integer weight = Integer.valueOf(split[1].substring("weight.".length()));
