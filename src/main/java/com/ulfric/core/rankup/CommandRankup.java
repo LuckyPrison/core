@@ -44,15 +44,22 @@ public class CommandRankup extends Command {
 
 			if (balance < costAmount)
 			{
-				player.sendLocalizedMessage("rankup.cannot_afford", new MoneyFormatter(costAmount - balance).dualFormatWord(), rankup.getNext().getDisplayName());
+				player.sendLocalizedMessage("rankup.cannot_afford", new MoneyFormatter(costAmount - balance).dualFormatWord(), rankup.getNext().getName());
 
 				return;
 			}
 
-			account.take(cost, "Rankup to " + rankup.getNext().getDisplayName());
+			account.take(cost, "Rankup to " + rankup.getNext().getName());
 		}
 
-		player.swapParents(rankup.getOld(), rankup.getOld());
+		if (rankup.getOld() == null)
+		{
+			player.addGroup(rankup.getNext());
+		}
+		else
+		{
+			player.swapGroups(rankup.getOld(), rankup.getNext());
+		}
 
 		player.sendLocalizedMessage("rankup.ranked_up", rankup.getNext().getName());
 

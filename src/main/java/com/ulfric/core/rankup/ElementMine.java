@@ -1,6 +1,6 @@
 package com.ulfric.core.rankup;
 
-import com.ulfric.lib.coffee.permission.Group;
+import com.ulfric.lib.coffee.npermission.Group;
 import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.scoreboard.Scoreboard;
@@ -25,7 +25,7 @@ class ElementMine extends ScoreboardElement {
 
 		if (group == null) return null;
 
-		return Strings.format(ChatUtils.color("&a{0} (&e/mine&a)"), group.getDisplayName());
+		return Strings.format(ChatUtils.color("&a{0} (&e/mine&a)"), group.getName());
 	}
 
 }

@@ -4,20 +4,15 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.ulfric.config.ConfigFile;
 import com.ulfric.config.Document;
-import com.ulfric.data.DataAddress;
-import com.ulfric.data.DocumentStore;
-import com.ulfric.data.scope.PlayerScopes;
-import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
-import com.ulfric.lib.coffee.permission.Group;
-import com.ulfric.lib.coffee.permission.PermissionsManager;
-import com.ulfric.lib.coffee.permission.Track;
+import com.ulfric.lib.coffee.npermission.Group;
+import com.ulfric.lib.coffee.npermission.Permissions;
+import com.ulfric.lib.coffee.npermission.Track;
 import com.ulfric.lib.craft.block.MaterialData;
 import com.ulfric.lib.craft.entity.player.Player;
-import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.event.player.PlayerJoinEvent;
 import com.ulfric.lib.craft.scoreboard.Scoreboard;
 
@@ -55,12 +50,6 @@ public class ModuleRankup extends Module {
 				board.elementFromClazz(ElementNextMine.class).update(player);
 			}
 		});
-
-		DocumentStore data = PlayerUtils.getPlayerData();
-
-		DataManager.get().ensureTableCreated(data, "track");
-
-		Rankups.INSTANCE.subscription = data.multi(String.class, PlayerScopes.ONLINE, new DataAddress<>("track", null, "current")).blockOnSubscribe(true).subscribe();
 	}
 
 	@Override
@@ -70,9 +59,7 @@ public class ModuleRankup extends Module {
 
 		Document document = config.getRoot();
 
-		PermissionsManager manager = PermissionsManager.get();
-
-		Rankups.INSTANCE.defaultTrack = manager.getTrack(document.getString("default-track", "mines"));
+		Rankups.INSTANCE.defaultTrack = Permissions.getTrack(document.getString("default-track", "mines"));
 
 		Document tracksDoc = document.getDocument("tracks");
 
@@ -84,7 +71,7 @@ public class ModuleRankup extends Module {
 
 				if (trackDoc == null) continue;
 
-				Track track = manager.getTrack(trackDoc.getString("track", key));
+				Track track = Permissions.getTrack(trackDoc.getString("track", key));
 
 				if (track == null) continue;
 
@@ -106,7 +93,7 @@ public class ModuleRankup extends Module {
 
 				if (rankDoc == null) continue;
 
-				Group group = manager.getGroup(rankDoc.getString("group", key));
+				Group group = Permissions.getGroup(rankDoc.getString("group", key));
 
 				if (group == null) continue;
 
@@ -116,20 +103,12 @@ public class ModuleRankup extends Module {
 				Rankups.INSTANCE.registerRankup(group, price);
 			}
 		}
-
-		PlayerScopes.ONLINE.addListener(Rankups.INSTANCE);
-
-		Rankups.INSTANCE.subscription.subscribe();
 	}
 
 	@Override
 	public void onModuleDisable()
 	{
 		Rankups.INSTANCE.clear();
-
-		PlayerScopes.ONLINE.removeListener(Rankups.INSTANCE);
-
-		Rankups.INSTANCE.subscription.unsubscribe();
 	}
 
 }

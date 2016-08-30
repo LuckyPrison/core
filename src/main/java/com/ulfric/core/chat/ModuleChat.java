@@ -1,10 +1,12 @@
 package com.ulfric.core.chat;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
 
 import com.google.common.collect.Maps;
@@ -15,9 +17,9 @@ import com.ulfric.lib.coffee.collection.SetUtils;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
-import com.ulfric.lib.coffee.permission.Group;
-import com.ulfric.lib.coffee.permission.PermissionsManager;
-import com.ulfric.lib.coffee.permission.Track;
+import com.ulfric.lib.coffee.npermission.Group;
+import com.ulfric.lib.coffee.npermission.Permissions;
+import com.ulfric.lib.coffee.npermission.Track;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.player.AsyncPlayerChatEvent;
 import com.ulfric.lib.craft.event.player.AsyncPlayerFormattedChatEvent;
@@ -54,7 +56,7 @@ public class ModuleChat extends Module {
 			{
 				Set<Player> vanillaRecipients = event.getRecipients();
 
-				Set<Group> groups = event.getPlayer().getParents();
+				Collection<Group> groups = event.getPlayer().getParents();
 
 				Player player = event.getPlayer();
 				final String message = event.getMessage();
@@ -66,11 +68,10 @@ public class ModuleChat extends Module {
 
 				String groupFormat = "";
 
-				if (!SetUtils.isEmpty(groups))
+				if (!CollectionUtils.isEmpty(groups))
 				{
-					PermissionsManager manager = PermissionsManager.get();
-					Track premium = manager.getTrack("premium");
-					Track mine = manager.getTrack("mine");
+					Track premium = Permissions.getTrack("premium");
+					Track mine = Permissions.getTrack("mine");
 
 					StringBuilder builder = new StringBuilder();
 
@@ -81,7 +82,7 @@ public class ModuleChat extends Module {
 						if (!groups.contains(group)) continue;
 
 						builder.append('[');
-						builder.append(group.getDisplayName());
+						builder.append(group.getName());
 						builder.append(']');
 
 						break;
@@ -94,7 +95,7 @@ public class ModuleChat extends Module {
 						if (!groups.contains(group)) continue;
 
 						builder.append(" [");
-						builder.append(group.getDisplayName());
+						builder.append(group.getName());
 						builder.append(']');
 
 						break;
@@ -283,8 +284,6 @@ public class ModuleChat extends Module {
 			return;
 		}
 
-		PermissionsManager perms = PermissionsManager.get();
-
 		int count = 0;
 
 		for (String key : keys)
@@ -299,7 +298,7 @@ public class ModuleChat extends Module {
 			}
 
 			String groupString = formatDoc.getString("group", key);
-			Group group = perms.getGroup(groupString);
+			Group group = Permissions.getGroup(groupString);
 
 			if (group == null && !groupString.toLowerCase().equals("default"))
 			{

@@ -1,8 +1,8 @@
 package com.ulfric.core.rankup;
 
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
-import com.ulfric.lib.coffee.permission.Group;
-import com.ulfric.lib.coffee.permission.Track;
+import com.ulfric.lib.coffee.npermission.Group;
+import com.ulfric.lib.coffee.npermission.Track;
 
 public final class Rankup {
 

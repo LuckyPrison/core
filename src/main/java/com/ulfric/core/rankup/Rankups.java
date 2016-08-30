@@ -1,28 +1,21 @@
 package com.ulfric.core.rankup;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.SortedMap;
 import java.util.UUID;
-
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.Validate;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.ulfric.data.MultiSubscription;
-import com.ulfric.data.scope.ScopeListener;
-import com.ulfric.lib.coffee.collection.SetUtils;
 import com.ulfric.lib.coffee.economy.Bank;
 import com.ulfric.lib.coffee.economy.BankAccount;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.coffee.locale.Locale;
+import com.ulfric.lib.coffee.npermission.Group;
+import com.ulfric.lib.coffee.npermission.Permissions;
+import com.ulfric.lib.coffee.npermission.Track;
 import com.ulfric.lib.coffee.numbers.NumberUtils;
-import com.ulfric.lib.coffee.permission.Group;
-import com.ulfric.lib.coffee.permission.PermissionsManager;
-import com.ulfric.lib.coffee.permission.Track;
 import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.craft.block.MaterialData;
 import com.ulfric.lib.craft.entity.player.Player;
@@ -34,123 +27,70 @@ import com.ulfric.lib.craft.panel.Button;
 import com.ulfric.lib.craft.panel.Panel;
 import com.ulfric.lib.craft.panel.standard.StandardPanel;
 
-public enum Rankups implements ScopeListener<UUID> {
+public enum Rankups {
 
 	INSTANCE;
 
-	private final Map<Track, SortedMap<Group, CurrencyAmount>> rankups = Maps.newHashMap();
-	private final Map<UUID, Track> trackCache = Maps.newHashMap();
+	private final Map<Track, TrackPrices> rankups = Maps.newHashMap();
 	final Map<Track, MaterialData> trackItems = Maps.newHashMap();
-	MultiSubscription<UUID, String> subscription;
 	Track defaultTrack;
 
 	public Rankup getActive(Player player)
 	{
-		Set<Group> groups = player.getParents();
-
-		Track cached = this.trackCache.get(player.getUniqueId());
-
-		if (cached != null)
+		Track track = player.getCurrentTrack();
+		if (track == null)
 		{
-			if (SetUtils.isEmpty(groups))
+			track = this.defaultTrack;
+
+			if (track == null)
 			{
-				Group first = cached.getNext(null);
-
-				return this.newRankup(cached, first, cached.getNext(first));
-			}
-
-			for (Group group : groups)
-			{
-				Group next = cached.getNext(group);
-
-				if (next == null) continue;
-
-				return this.newRankup(cached, group, next);
+				return null;
 			}
 		}
 
-		if (SetUtils.isEmpty(groups)) return null;
+		Group next = player.getNextGroup();
+		Group current = player.getCurrentGroup();
 
-		Set<Track> tracks = player.getTracks();
-
-		if (SetUtils.isEmpty(tracks)) return null;
-
-		for (Track track : tracks)
+		if (next != null)
 		{
-			for (Group group : groups)
-			{
-				Group next = track.getNext(group);
-
-				if (next == null) continue;
-
-				return this.newRankup(track, group, next);
-			}
+			return this.newRankup(track, current, next);
 		}
 
-		return null;
+		if (current == null)
+		{
+			return null;
+		}
+
+		return this.newRankup(track, null, current);
 	}
 
 	private Rankup newRankup(Track track, Group oldGroup, Group newGroup)
 	{
-		Map<Group, CurrencyAmount> costs = this.rankups.get(track);
-		return new Rankup(track, oldGroup, newGroup, costs == null ? null : costs.get(newGroup));
+		TrackPrices costs = this.rankups.get(track);
+		return new Rankup(track, oldGroup, newGroup, costs == null ? null : costs.getPrice(newGroup));
 	}
 
 	void registerRankup(Group group, CurrencyAmount amount)
 	{
-		for (Track track : PermissionsManager.get().getTracksForGroup(group))
+		for (Track track : Permissions.getTracks(group))
 		{
-			SortedMap<Group, CurrencyAmount> amounts = this.rankups.get(track);
+			TrackPrices amounts = this.rankups.get(track);
 
 			if (amounts == null)
 			{
-				amounts = Maps.newTreeMap();
+				amounts = new TrackPrices();
 
 				this.rankups.put(track, amounts);
 			}
 
-			amounts.put(group, amount);
+			amounts.putPrice(group, amount);
 		}
 	}
 
 	void clear()
 	{
 		this.rankups.clear();
-		this.trackCache.clear();
 		this.trackItems.clear();
-	}
-
-	@Override
-	public void onAddition(UUID uuid)
-	{
-		String track = this.subscription.get(uuid).getValue();
-
-		if (track == null)
-		{
-			this.trackCache.put(uuid, this.defaultTrack);
-
-			return;
-		}
-
-		Track trackValue = PermissionsManager.get().getTrack(track);
-
-		this.trackCache.put(uuid, trackValue == null ? this.defaultTrack : trackValue);
-	}
-
-	@Override
-	public void onRemove(UUID uuid)
-	{
-		this.trackCache.remove(uuid);
-	}
-
-	public void setTrack(UUID uuid, Track track)
-	{
-		Validate.notNull(uuid);
-		Validate.notNull(track);
-
-		this.trackCache.put(uuid, track);
-
-		this.subscription.get(uuid).setValue(track.getName());
 	}
 
 	public void openPanel(Player player)
@@ -160,14 +100,14 @@ public enum Rankups implements ScopeListener<UUID> {
 
 		int index = 0;
 
-		Track currentTrack = this.trackCache.get(player.getUniqueId());
+		Track currentTrack = player.getCurrentTrack();
 
 		String title = locale.getRawMessage("track.panel_item_title");
 		String rightClick = locale.getRawMessage("track.panel_right_click");
 		String leftClick = locale.getRawMessage("track.panel_left_click");
 		String completeMessage = locale.getRawMessage("track.complete");
 
-		Set<Group> parents = player.getRecursiveParents();
+		Collection<Group> parents = player.getParents();
 
 		for (Entry<Track, MaterialData> entry : this.trackItems.entrySet())
 		{
@@ -243,15 +183,14 @@ public enum Rankups implements ScopeListener<UUID> {
 
 					else if (click.isLeftClick())
 					{
-						SortedMap<Group, CurrencyAmount> trackPrices = this.rankups.get(track);
+						TrackPrices trackPrices = this.rankups.get(track);
 
 						UUID uuid = clicked.getUniqueId();
 
-						Group first = trackPrices.firstKey();
+						Group first = trackPrices.getFirstGroup();
+						CurrencyAmount amount = trackPrices.getFirstPrice();
 						if (!parents.contains(first))
 						{
-							CurrencyAmount amount = trackPrices.get(first);
-
 							if (amount != null)
 							{
 								BankAccount account = Bank.getOnlineAccount(uuid);
@@ -270,11 +209,11 @@ public enum Rankups implements ScopeListener<UUID> {
 								account.take(amount, "Track purchase " + track.getName());
 							}
 
-							clicked.addParent(first);
+							clicked.addGroup(first);
 						}
 						// TODO charge player to join the track
 
-						this.setTrack(uuid, track);
+						clicked.setCurrentTrack(track);
 
 						clicked.closeInventory();
 
@@ -291,11 +230,11 @@ public enum Rankups implements ScopeListener<UUID> {
 		}
 	}
 
-	public void openTrackPanel(Track track, Player player, Set<Group> parents)
+	public void openTrackPanel(Track track, Player player, Collection<Group> parents)
 	{
-		Map<Group, CurrencyAmount> map = this.rankups.get(track);
+		TrackPrices map = this.rankups.get(track);
 
-		if (MapUtils.isEmpty(map)) return;
+		if (map == null) return;
 
 		Locale locale = player.getLocale();
 
@@ -307,15 +246,13 @@ public enum Rankups implements ScopeListener<UUID> {
 		String attained = locale.getRawMessage("tracks.track_panel_entry_attained");
 		String cost = locale.getRawMessage("tracks.track_panel_entry_cost");
 
-		for (Entry<Group, CurrencyAmount> entry : map.entrySet())
+		for (Group group : map.getGroups())
 		{
-			Group group = entry.getKey();
-
 			ItemStack item = material.toItem();
 
 			ItemMeta meta = item.getMeta();
 
-			meta.setDisplayName(Strings.format(displayName, group.getDisplayName()));
+			meta.setDisplayName(Strings.format(displayName, group.getName()));
 
 			List<String> lore = Lists.newArrayList(Strings.EMPTY);
 
@@ -329,7 +266,7 @@ public enum Rankups implements ScopeListener<UUID> {
 			{
 				item.setDurability(8);
 
-				CurrencyAmount amount = entry.getValue();
+				CurrencyAmount amount = map.getPrice(group);
 
 				lore.add(Strings.format(cost, amount == null ? "FREE" : amount.toFormatter().wordFormat()));
 			}
