@@ -1,25 +1,26 @@
 package com.ulfric.core.backpack;
 
+import java.util.Map;
+import java.util.UUID;
+
 import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
 import com.ulfric.data.DataAddress;
 import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
+import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 
-import java.util.Map;
-import java.util.UUID;
-
 public final class ModuleBackpack extends Module {
 
-	private static ModuleBackpack instance;
+	private static final ModuleBackpack INSTANCE = new ModuleBackpack();
 
 	public static ModuleBackpack getInstance()
 	{
-		return instance;
+		return ModuleBackpack.INSTANCE;
 	}
 
 	// TODO: Resolve
@@ -30,14 +31,9 @@ public final class ModuleBackpack extends Module {
 	private MultiSubscription<UUID, Document> subscription;
 	private final Map<UUID, Backpack> cache = Maps.newHashMap();
 
-	public ModuleBackpack()
+	private ModuleBackpack()
 	{
 		super("backpack", "Backpack command module", "1.0.0", "[feildmaster, insou]");
-		if (instance != null)
-		{
-			throw new IllegalStateException("Already initialized!");
-		}
-		instance = this;
 	}
 
 	@Override
@@ -45,8 +41,10 @@ public final class ModuleBackpack extends Module {
 	{
 		DocumentStore database = PlayerUtils.getPlayerData();
 
+		DataManager.get().ensureTableCreated(database, "backpacks");
+
 		this.subscription = database
-				.multi(Document.class, PlayerScopes.ONLINE, new DataAddress<>("backpacks", null, null))
+				.multi(Document.class, PlayerScopes.ONLINE, new DataAddress<>("backpacks", null, "data"))
 				.blockOnSubscribe(true)
 				.subscribe();
 
@@ -61,7 +59,7 @@ public final class ModuleBackpack extends Module {
 
 	public MultiSubscription<UUID, Document> getSubscription()
 	{
-		return subscription;
+		return this.subscription;
 	}
 
 	protected Backpack getBackpack(OfflinePlayer player)
