@@ -1,8 +1,5 @@
 package com.ulfric.core.backpack;
 
-import java.util.Map;
-import java.util.UUID;
-
 import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
 import com.ulfric.data.DataAddress;
@@ -13,6 +10,9 @@ import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
+
+import java.util.Map;
+import java.util.UUID;
 
 public final class ModuleBackpack extends Module {
 
@@ -75,10 +75,18 @@ public final class ModuleBackpack extends Module {
 
 		if (document == null || document.getKeys().size() == 0)
 		{
-			return this.cache.put(player.getUniqueId(), this.makeBackpack(player));
+			Backpack backpack = this.makeBackpack(player);
+
+			this.cache.put(player.getUniqueId(), backpack);
+
+			return backpack;
 		}
 
-		return this.cache.put(player.getUniqueId(), Backpack.fromDocument(player, document));
+		Backpack backpack = Backpack.fromDocument(player, document);
+
+		this.cache.put(player.getUniqueId(), backpack);
+
+		return backpack;
 	}
 
 	private Backpack makeBackpack(OfflinePlayer owner)
