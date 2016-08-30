@@ -1,6 +1,7 @@
 package com.ulfric.core;
 
 import com.ulfric.core.achievement.ModuleAchievements;
+import com.ulfric.core.backpack.ModuleBackpack;
 import com.ulfric.core.chat.ModuleChat;
 import com.ulfric.core.combattag.ModuleCombatTag;
 import com.ulfric.core.control.ModuleClearChat;
@@ -73,6 +74,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleSpeed());
 		this.addModule(new ModuleCandy());
 		this.addModule(new ModuleTrample());
+		this.addModule(new ModuleBackpack());
 		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 

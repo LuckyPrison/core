@@ -1,35 +1,43 @@
 package com.ulfric.core.backpack;
 
-import java.util.Map;
-import java.util.UUID;
-
 import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
-import com.ulfric.config.MutableDocument;
-import com.ulfric.config.SimpleDocument;
 import com.ulfric.data.DataAddress;
 import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
-import com.ulfric.lib.coffee.command.Argument;
-import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
-import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 
+import java.util.Map;
+import java.util.UUID;
+
 public final class ModuleBackpack extends Module {
+
+	private static ModuleBackpack instance;
+
+	public static ModuleBackpack getInstance()
+	{
+		return instance;
+	}
+
 	// TODO: Resolve
-	private static final Argument PAGE = Argument.builder().addResolver(null).setPath("page").setDefaultValue(1).build();
+//	private static final Argument PAGE = Argument.builder().addSimpleResolver(NumberUtils::parseInteger).setPath("page").setDefaultValue(1).build();
 	// TODO: Resolve
-	private static final Argument PLAYER = Argument.builder().addResolver(null).setPath("player").setDefaultValue(Command::getSender).setPermission("core.backpack.others").build();
+//	private static final Argument PLAYER = OfflinePlayer.ARGUMENT;
 
 	private MultiSubscription<UUID, Document> subscription;
 	private final Map<UUID, Backpack> cache = Maps.newHashMap();
 
 	public ModuleBackpack()
 	{
-		super("backpack", "Backpack command module", "1.0.0", "feildmaster");
+		super("backpack", "Backpack command module", "1.0.0", "[feildmaster, insou]");
+		if (instance != null)
+		{
+			throw new IllegalStateException("Already initialized!");
+		}
+		instance = this;
 	}
 
 	@Override
@@ -38,11 +46,11 @@ public final class ModuleBackpack extends Module {
 		DocumentStore database = PlayerUtils.getPlayerData();
 
 		this.subscription = database
-				.multi(Document.class, PlayerScopes.ONLINE, new DataAddress<>("backpacks", null, "contents"))
+				.multi(Document.class, PlayerScopes.ONLINE, new DataAddress<>("backpacks", null, null))
 				.blockOnSubscribe(true)
 				.subscribe();
 
-		this.addCommand(new BackpackCommand().addPermission("core.backpack").addEnforcer(sender -> sender instanceof Player, "system.cmd_player_only").addArgument(PAGE).addArgument(PLAYER));
+		this.addCommand(new CommandBackpack(this));
 	}
 
 	@Override
@@ -51,43 +59,12 @@ public final class ModuleBackpack extends Module {
 		this.subscription.unsubscribe();
 	}
 
-	class BackpackCommand extends Command {
-
-		BackpackCommand()
-		{
-			super("backpack", ModuleBackpack.this, "pack");
-		}
-
-		@Override
-		public void run()
-		{
-			Player sender = (Player) this.getSender();
-			int page = Math.max((int) this.getObject("page"), 1);
-			OfflinePlayer target = (OfflinePlayer) this.getObject("player");
-
-			// TODO: Get max backpacks of "target"
-			int max = 1;
-			// Check if page is < max backpacks
-			if (page > max)
-			{
-				sender.sendLocalizedMessage("core.backpack.limit", max);
-				return;
-			}
-			// Display backpack
-			new Backpack(sender, target, page, max).open(sender);
-		}
-	}
-
-	protected void save(Backpack backpack)
+	public MultiSubscription<UUID, Document> getSubscription()
 	{
-		MutableDocument document = new SimpleDocument();
-
-		backpack.into(document);
-
-		this.subscription.get(backpack.getPlayer().getUniqueId()).setValue(document);
+		return subscription;
 	}
 
-	protected Backpack get(Player player)
+	protected Backpack getBackpack(OfflinePlayer player)
 	{
 		Backpack cached = this.cache.get(player.getUniqueId());
 
@@ -100,17 +77,17 @@ public final class ModuleBackpack extends Module {
 
 		if (document == null || document.getKeys().size() == 0)
 		{
-			return makeBackpack(player);
+			return this.cache.put(player.getUniqueId(), this.makeBackpack(player));
 		}
 
-		return Backpack.fromDocument(player, document);
+		return this.cache.put(player.getUniqueId(), Backpack.fromDocument(player, document));
 	}
 
-	private Backpack makeBackpack(Player player)
+	private Backpack makeBackpack(OfflinePlayer owner)
 	{
-		Backpack backpack = new Backpack(player, player, 1, 1);
+		Backpack backpack = new Backpack(owner, 1, 1);
 
-		this.save(backpack);
+		backpack.save();
 
 		return backpack;
 	}

@@ -1,207 +1,158 @@
 package com.ulfric.core.backpack;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.IntStream;
-
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
 import com.ulfric.config.MutableDocument;
+import com.ulfric.config.SimpleDocument;
+import com.ulfric.data.DataContainer;
+import com.ulfric.lib.coffee.numbers.NumberUtils;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
-import com.ulfric.lib.craft.event.inventory.InventoryClickEvent;
 import com.ulfric.lib.craft.inventory.Inventory;
 import com.ulfric.lib.craft.inventory.InventoryUtils;
+import com.ulfric.lib.craft.inventory.item.ItemParts;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.ItemUtils;
 import com.ulfric.lib.craft.inventory.item.Material;
-import com.ulfric.lib.craft.inventory.item.meta.ItemMeta;
-import com.ulfric.lib.craft.panel.Button;
-import com.ulfric.lib.craft.panel.Panel;
 
-class Backpack extends Panel {
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.IntStream;
 
-	private final static ItemStack NEXT = setName(ItemUtils.getItem(Material.of("ARROW")), "Next Page");
-	private final static ItemStack PREV = setName(ItemUtils.getItem(Material.of("ARROW")), "Previous Page");
-	// TODO: Add these items to fill the bottom row?
-	private final static ItemStack FILL = setName(ItemUtils.getItem(Material.of("EGG")), "Filler");
+class Backpack {
 
-	private final Player player;
-	private final OfflinePlayer target;
-	private final Inventory inventory;
-	private final int maxPages;
-	private int page;
+	private static final int BACKPACK_SIZE = 36;
 
-	Backpack(Player player, OfflinePlayer other, int initialPage, int maxPages)
+	private final OfflinePlayer owner;
+
+	private final Map<Integer, Inventory> pageStorage = Maps.newHashMap();
+	private final DataContainer<UUID, Document> dataContainer;
+
+	private int maxPage;
+
+	Backpack(OfflinePlayer owner, int initialPage, int maxPage)
 	{
-		this.player = player;
-		this.target = other == null ? player : other;
-		this.maxPages = Math.max(maxPages, 1);
-		page = Math.min(Math.max(initialPage, 1), this.maxPages); // Lock page between 1 < page < max
-		inventory = InventoryUtils.newInventory(45, player.getLocalizedMessage("core.backpack.title"));
+		this.owner = owner;
+		this.dataContainer = ModuleBackpack.getInstance().getSubscription().get(this.owner.getUniqueId());
 
-		// TODO: Store local buttons instead?
-		this.buttons.add(Button.builder().addSlot(36, PREV).addAction(e -> this.pageDown()).build());
-		this.buttons.add(Button.builder().addSlot(44, NEXT).addAction(e -> this.pageUp()).build());
+		this.maxPage = Math.max(maxPage, 1);
 	}
 
-	private boolean canPageUp()
+	private void loadPage(int page, Inventory contents)
 	{
-		return page < maxPages;
+		this.pageStorage.put(page, contents);
 	}
 
-	private boolean canPageDown()
+	protected void updatePage(int page, Inventory contents)
 	{
-		return page > 1;
+		Inventory fixedContents = InventoryUtils.newInventory(BACKPACK_SIZE, "");
+
+		IntStream.range(0, BACKPACK_SIZE).forEach(slot -> fixedContents.setItem(slot, contents.getItem(slot)));
+
+		this.pageStorage.put(page, fixedContents);
 	}
 
-	private void pageUp()
+	protected Inventory getContents(int page)
 	{
-		if (this.canPageUp())
-		{
-			// Save current page
-			this.savePage();
-			page++;
-			// Render the new page
-			this.render(player);
-		}
+		return this.pageStorage.get(page);
 	}
 
-	private void pageDown()
+	public boolean inBounds(int page)
 	{
-		if (this.canPageDown())
-		{
-			// Save current page
-			this.savePage();
-			page--;
-			// Render the new page
-			this.render(player);
-		}
+		return page >= 1 && page <= this.maxPage;
 	}
 
-	@Override
-	protected void onInventoryClick(InventoryClickEvent event)
+	protected void save()
 	{
-		// Check if we're clicking the last row of the backpack
-		if (event.getSlot() >= this.inventory.getSize() - 9)
-		{
-			return;
-		}
-		// Don't allow modifying the last row of items
-		event.setCancelled(true);
-		// The rest is handled by the buttons
+		Document document = this.dataContainer.getValue();
+
+		MutableDocument mut = new SimpleDocument(document.deepCopy());
+		this.into(mut);
+
+		dataContainer.setValue(mut);
 	}
 
-	@Override
-	protected void onInventoryClose()
+	protected OfflinePlayer getOwner()
 	{
-		this.savePage();
+		return owner;
 	}
 
-	@Override
-	protected boolean render(Player player)
+	public int getMaxPage()
 	{
-		Map<Integer, ItemStack> pack = Maps.newHashMap(); // TODO: Get backpack items
-		pack.forEach(this::addItem);
-
-		if (this.canPageDown())
-		{
-			// Add prev button
-			addButton(this.buttons.get(0), player.getLocalizedMessage("core.backpack.prev"), this.page - 1);
-		}
-		if (this.canPageUp())
-		{
-			// Add next button
-			addButton(this.buttons.get(1), player.getLocalizedMessage("core.backpack.next"), this.page + 1);
-		}
-		player.openInventory(this.inventory);
-		return true;
+		return maxPage;
 	}
 
-	private void addButton(Button button, String lore, int page)
+	public void open(Player viewer, int page)
 	{
-		button.getSlots().forEach((i, stack) -> addItem(i, updateItem(stack.copy(), lore, page)));
-	}
-
-	private void addItem(int slot, ItemStack stack)
-	{
-		this.inventory.setItem(slot, stack);
-	}
-
-	private void savePage()
-	{
-		// Save backpack data
-		Map<Integer, ItemStack> items = new HashMap<>();
-		for (int i = 0; i < this.inventory.getSize() - 9; i++)
-		{
-			ItemStack item = this.inventory.getItem(i);
-			if (item != null && item.getType() != Material.of("AIR"))
-			{
-				items.put(i, item);
-			}
-		}
-		// TODO: save data
-	}
-
-	private static ItemStack updateItem(ItemStack item, String lore, int page)
-	{
-		ItemMeta meta = item.getMeta();
-		meta.setPluginLore(Lists.newArrayList(String.format(lore, page)));
-		item.setAmount(page);
-		item.setMeta(meta);
-		return item;
-	}
-
-	private static ItemStack setName(ItemStack item, String name)
-	{
-		ItemMeta meta = item.getMeta();
-		meta.setDisplayName(name);
-		item.setMeta(meta);
-		return item;
-	}
-
-	protected Player getPlayer()
-	{
-		return player;
-	}
-
-	protected Inventory getInventory()
-	{
-		return inventory;
-	}
-
-	protected int getPage()
-	{
-		return page;
+		new BackpackPage(ModuleBackpack.getInstance(), this, viewer, page).open();
 	}
 
 	protected void into(MutableDocument document)
 	{
-		document.set("max", maxPages);
+		document.set("max", this.maxPage);
 
-		MutableDocument pages = document.createDocument("pages");
+		MutableDocument pages = document.getDocument("pages");
 
-		IntStream.range(0, this.inventory.getSize()).forEach(i ->
+		if (pages == null)
 		{
-			ItemStack item = inventory.getItem(i);
+			pages = document.createDocument("pages");
+		}
 
-			MutableDocument slot = pages.createDocument(String.valueOf(i));
+		MutableDocument finalPages = pages;
+		this.pageStorage.keySet().forEach(page ->
+		{
+			MutableDocument current = finalPages.getDocument(String.valueOf(page));
 
-			if (item != null && item.getType() != Material.of("AIR"))
+			if (current == null)
 			{
-				// TODO: Serialize item to slot
+				current = finalPages.createDocument(String.valueOf(page));
 			}
-			else
+
+			Inventory inventory = this.pageStorage.get(page);
+
+			MutableDocument finalCurrent = current;
+			IntStream.range(0, inventory.getSize()).forEach(slot ->
 			{
-				pages.remove(String.valueOf(i));
-			}
+				ItemStack item = inventory.getItem(slot);
+
+				if (item == null)
+				{
+					item = ItemUtils.getItem(Material.of("AIR"));
+				}
+
+				finalCurrent.set(String.valueOf(slot), ItemParts.itemToString(item));
+			});
+
 		});
+
 	}
 
-	protected static Backpack fromDocument(Player player, Document document)
+	protected static Backpack fromDocument(OfflinePlayer owner, Document document)
 	{
-		return null;
-	}
+		int maxPage = document.getInteger("max");
 
+		Backpack backpack = new Backpack(owner, 1, maxPage);
+
+		Document pages = document.getDocument("pages");
+
+		pages.getKeys().forEach(key ->
+		{
+			Integer pageNumber = NumberUtils.parseInteger(key);
+
+			Document page = pages.getDocument(String.valueOf(pageNumber));
+
+			Inventory inventory = InventoryUtils.newInventory(BACKPACK_SIZE, "");
+
+			IntStream.range(0, BACKPACK_SIZE).forEach(slot ->
+			{
+				ItemStack item = ItemParts.stringToItem(page.getString(String.valueOf(slot)));
+
+				inventory.setItem(slot, item);
+			});
+
+			backpack.loadPage(pageNumber, inventory);
+		});
+
+		return backpack;
+	}
 }
