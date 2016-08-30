@@ -8,6 +8,7 @@ import com.ulfric.lib.craft.inventory.item.Material;
 import com.ulfric.lib.craft.inventory.item.meta.ItemMeta;
 import com.ulfric.lib.craft.panel.Button;
 import com.ulfric.lib.craft.panel.Panel;
+import com.ulfric.lib.craft.panel.PanelOption;
 import com.ulfric.lib.craft.panel.standard.StandardPanel;
 
 import java.util.stream.IntStream;
@@ -18,12 +19,16 @@ public class BackpackPage {
 
 	private static final ItemStack BACK_BUTTON;
 	private static final ItemStack FORWARD_BUTTON;
+	private static final ItemStack FILLER;
 
 	static
 	{
 		BACK_BUTTON = ItemUtils.getItem(Material.of("ARROW"));
 
 		FORWARD_BUTTON = ItemUtils.getItem(Material.of("ARROW"));
+
+		FILLER = ItemUtils.getItem(Material.of("STAINED_GLASS_PANE"));
+		FILLER.setDurability(15);
 	}
 
 	private final ModuleBackpack base;
@@ -42,10 +47,12 @@ public class BackpackPage {
 	public void open()
 	{
 		StandardPanel panel = Panel.createStandard(
-				INVENTORY_SIZE - (!(this.canPageDown() && this.canPageUp()) ? 9 : 0),
-				this.viewer.getLocalizedMessage("backpacks.title",
-				this.backpack.getOwner().getName(),
-				this.currentPage)
+				INVENTORY_SIZE - (!this.canPageDown() && !this.canPageUp() ? 9 : 0),
+				this.viewer.getLocalizedMessage(
+						"backpacks.title",
+						this.backpack.getOwner().getName(),
+						this.currentPage
+				)
 		);
 
 		Inventory contents = this.backpack.getContents(this.currentPage);
@@ -60,6 +67,20 @@ public class BackpackPage {
 			}
 
 		});
+
+		if (this.canPageDown() || this.canPageUp())
+		{
+			IntStream.range(INVENTORY_SIZE - 8, INVENTORY_SIZE - 1).forEach(slot ->
+					panel.setItem(slot, FILLER.copy()));
+			if (!this.canPageDown())
+			{
+				panel.setItem(INVENTORY_SIZE - 9, FILLER.copy());
+			}
+			if (!this.canPageUp())
+			{
+				panel.setItem(INVENTORY_SIZE - 1, FILLER.copy());
+			}
+		}
 
 		if (this.canPageDown())
 		{
@@ -76,7 +97,8 @@ public class BackpackPage {
 							.addSlot(INVENTORY_SIZE - 9, back)
 							.addAction(event ->
 							{
-								this.pageDown();
+								this.update(panel);
+								this.currentPage--;
 								new BackpackPage(this.base, this.backpack, this.viewer, this.currentPage).open();
 							})
 							.build()
@@ -100,7 +122,8 @@ public class BackpackPage {
 							.addSlot(INVENTORY_SIZE - 1, forward)
 							.addAction(event ->
 							{
-								this.pageUp();
+								this.update(panel);
+								this.currentPage++;
 								new BackpackPage(this.base, this.backpack, this.viewer, this.currentPage).open();
 							})
 							.build()
@@ -121,12 +144,17 @@ public class BackpackPage {
 			}
 			else
 			{
-				this.backpack.updatePage(this.currentPage, contents);
+				this.update(panel);
 			}
 		});
 
-		panel.withCloseConsumer(event -> this.backpack.save());
+		panel.withCloseConsumer(event ->
+		{
+			this.update(panel);
+			this.backpack.save();
+		});
 
+		panel.open(viewer, PanelOption.REPLACE);
 	}
 
 	private boolean canPageUp()
@@ -139,20 +167,9 @@ public class BackpackPage {
 		return this.currentPage > 1;
 	}
 
-	private void pageUp()
+	private void update(StandardPanel panel)
 	{
-		if (this.canPageUp())
-		{
-			this.currentPage++;
-		}
-	}
-
-	private void pageDown()
-	{
-		if (this.canPageDown())
-		{
-			this.currentPage--;
-		}
+		this.backpack.updatePage(this.currentPage, panel.getInventory());
 	}
 
 }

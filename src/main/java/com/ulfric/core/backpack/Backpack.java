@@ -30,7 +30,7 @@ class Backpack {
 
 	private int maxPage;
 
-	Backpack(OfflinePlayer owner, int initialPage, int maxPage)
+	Backpack(OfflinePlayer owner, int maxPage)
 	{
 		this.owner = owner;
 		this.dataContainer = ModuleBackpack.getInstance().getSubscription().get(this.owner.getUniqueId());
@@ -54,7 +54,14 @@ class Backpack {
 
 	protected Inventory getContents(int page)
 	{
-		return this.pageStorage.get(page);
+		Inventory contents = this.pageStorage.get(page);
+
+		if (contents == null)
+		{
+			contents = InventoryUtils.newInventory(BACKPACK_SIZE, "");
+		}
+
+		return contents;
 	}
 
 	public boolean inBounds(int page)
@@ -131,7 +138,7 @@ class Backpack {
 	{
 		int maxPage = document.getInteger("max");
 
-		Backpack backpack = new Backpack(owner, 1, maxPage);
+		Backpack backpack = new Backpack(owner, maxPage);
 
 		Document pages = document.getDocument("pages");
 
@@ -146,6 +153,11 @@ class Backpack {
 			IntStream.range(0, BACKPACK_SIZE).forEach(slot ->
 			{
 				ItemStack item = ItemParts.stringToItem(page.getString(String.valueOf(slot)));
+				if (item == null)
+				{
+					// This should never (theoretically) be called - failsafe
+					item = ItemUtils.getItem(Material.of("AIR"));
+				}
 
 				inventory.setItem(slot, item);
 			});

@@ -91,7 +91,7 @@ public final class ModuleBackpack extends Module {
 
 	private Backpack makeBackpack(OfflinePlayer owner)
 	{
-		Backpack backpack = new Backpack(owner, 1, 1);
+		Backpack backpack = new Backpack(owner, 3);
 
 		backpack.save();
 
