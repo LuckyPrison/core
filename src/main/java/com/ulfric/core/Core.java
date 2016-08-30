@@ -75,7 +75,6 @@ public class Core extends Plugin {
 		this.addModule(new ModuleCandy());
 		this.addModule(new ModuleTrample());
 		this.addModule(new ModuleBackpack());
-		//this.addModule(new ModuleBackpack()); // TODO: Finish this module
 	}
 
 }
