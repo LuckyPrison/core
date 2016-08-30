@@ -16,7 +16,7 @@ public class CommandBackpack extends Command {
 
 		super.addPermission("core.backpack");
 
-		super.addEnforcer(Enforcers.IS_PLAYER, super.getSender().getLocalizedMessage("backpacks.must_be_player"));
+		super.addEnforcer(Enforcers.IS_PLAYER, "backpacks.must_be_player");
 
 		super.addOptionalArgument(OfflinePlayer.ARGUMENT);
 		super.addOptionalArgument(Argument.builder().addResolver(Resolvers.INTEGER).setPath("page").setDefaultValue(1).build());
