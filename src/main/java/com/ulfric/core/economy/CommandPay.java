@@ -3,7 +3,6 @@ package com.ulfric.core.economy;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-import com.ulfric.data.DataUpdate;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.economy.Bank;
@@ -22,7 +21,7 @@ class CommandPay extends Command {
 	{
 		super("pay", module);
 		this.addArgument(CurrencyAmount.ARGUMENT);
-		this.addArgument(OfflinePlayer.ARGUMENT);
+		this.addArgument(OfflinePlayer.ARGUMENT_ASYNC);
 	}
 
 	@Override
@@ -31,7 +30,7 @@ class CommandPay extends Command {
 		CommandSender sender = this.getSender();
 		OfflinePlayer player = (OfflinePlayer) this.getObject("offline-player");
 
-		if (sender == player)
+		if (player.getUniqueId().equals(sender.getUniqueId()))
 		{
 			sender.sendLocalizedMessage("economy.pay_specify_player_self");
 
@@ -39,58 +38,69 @@ class CommandPay extends Command {
 		}
 
 		UUID uuid = sender.getUniqueId();
-		CurrencyAmount amount = (CurrencyAmount) this.getObject("price");
-		Currency currency = amount.getCurrency();
-		long amt = amount.getAmount();
-		String payeeName = player.getName();
-		MoneyFormatter amountFormat = new MoneyFormatter(amt).dualFormatLetter();
 
-		if (uuid != null)
+		if (uuid == null)
 		{
-			BankAccount account = Bank.getOnlineAccount(uuid);
-
-			long balance = account.getBalance(currency);
-
-			long diff = balance - amt;
-
-			if (diff < 0)
+			if (!sender.hasPermission("pay.console"))
 			{
-				sender.sendLocalizedMessage("economy.pay_cannot_afford", new MoneyFormatter(diff).dualFormatLetter());
+				sender.sendLocalizedMessage("economy.pay_cannot_charge");
 
 				return;
 			}
-
-			DataUpdate<Long> take = account.take(amount, "Payment to " + payeeName);
-
-			try
-			{
-				take.get();
-			}
-			catch (InterruptedException|ExecutionException exception)
-			{
-				exception.printStackTrace();
-
-				return;
-			}
-
-			sender.sendLocalizedMessage("economy.pay_paid", payeeName, amountFormat, new MoneyFormatter(account.getBalance(currency)).dualFormatLetter());
 		}
 
-		Player online = player.toPlayer();
-		UUID playerUuid = player.getUniqueId();
-		OfflineBankAccount account = online == null ? Bank.getAccount(playerUuid) : Bank.getOnlineAccount(playerUuid);
+		String payeeName = player.getName();
+		CurrencyAmount amount = (CurrencyAmount) this.getObject("price");
+		Currency currency = amount.getCurrency();
+
+		if (!currency.isPayable())
+		{
+			sender.sendLocalizedMessage("economy.currency_unpayable", currency.getName());
+
+			return;
+		}
+
+		long amt = amount.getAmount();
+
+		BankAccount senderAccount = Bank.getOnlineAccount(uuid);
+
+		long senderBalance = senderAccount.getBalance(currency);
+
+		long difference = amt - senderBalance;
+		if (difference > 0)
+		{
+			sender.sendLocalizedMessage("economy.pay_cannot_afford", new MoneyFormatter(difference).dualFormatWord());
+
+			return;
+		}
+
+		try
+		{
+			senderAccount.take(amount, "Payment to " + payeeName).get();
+		}
+		catch (InterruptedException|ExecutionException e1)
+		{
+			e1.printStackTrace();
+
+			return;
+		}
+
+		OfflineBankAccount recipientAccount = Bank.getAccount(player.getUniqueId());
 
 		String senderName = sender.getName();
 
-		account.give(amount, "Payment from " + senderName);
+		// No get here on purpose
+		recipientAccount.give(amount, "Payment from " + senderName);
 
-		if (online == null) return;
+		String amtFormat = new MoneyFormatter(amt).dualFormatWord().toString();
 
-		BankAccount onlineAccount = account instanceof BankAccount ? (BankAccount) account : Bank.getOnlineAccount(playerUuid);
+		sender.sendLocalizedMessage("economy.payment_sent", payeeName, amtFormat);
 
-		if (onlineAccount == null) return;
+		Player recipient = player.toPlayer();
 
-		online.sendLocalizedMessage("economy.pay_received", senderName, amountFormat, new MoneyFormatter(onlineAccount.getBalance(amount.getCurrency())));
+		if (recipient == null) return;
+
+		recipient.sendLocalizedMessage("economy.payment_received", senderName, amtFormat);
 	}
 
 }
