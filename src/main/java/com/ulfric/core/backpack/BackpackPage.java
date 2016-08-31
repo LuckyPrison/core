@@ -1,5 +1,7 @@
 package com.ulfric.core.backpack;
 
+import java.util.stream.IntStream;
+
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.inventory.Inventory;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
@@ -10,8 +12,6 @@ import com.ulfric.lib.craft.panel.Button;
 import com.ulfric.lib.craft.panel.Panel;
 import com.ulfric.lib.craft.panel.PanelOption;
 import com.ulfric.lib.craft.panel.standard.StandardPanel;
-
-import java.util.stream.IntStream;
 
 public class BackpackPage {
 

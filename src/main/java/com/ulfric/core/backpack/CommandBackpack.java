@@ -34,6 +34,8 @@ public class CommandBackpack extends Command {
 
 		Backpack backpack = ModuleBackpack.getInstance().getBackpack(owner);
 
+		backpack.checkPotentialLimit(getSender());
+
 		int page = (int) super.getObject("page");
 
 		if (!backpack.inBounds(page))
