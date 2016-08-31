@@ -37,6 +37,11 @@ class CommandPay extends Command {
 			return;
 		}
 
+		CurrencyAmount amount = (CurrencyAmount) this.getObject("price");
+		Currency currency = amount.getCurrency();
+		long amt = amount.getAmount();
+
+		String payeeName = player.getName();
 		UUID uuid = sender.getUniqueId();
 
 		if (uuid == null)
@@ -49,40 +54,37 @@ class CommandPay extends Command {
 			}
 		}
 
-		String payeeName = player.getName();
-		CurrencyAmount amount = (CurrencyAmount) this.getObject("price");
-		Currency currency = amount.getCurrency();
-
-		if (!currency.isPayable())
+		else
 		{
-			sender.sendLocalizedMessage("economy.currency_unpayable", currency.getName());
+			if (!currency.isPayable())
+			{
+				sender.sendLocalizedMessage("economy.currency_unpayable", currency.getName());
 
-			return;
-		}
+				return;
+			}
 
-		long amt = amount.getAmount();
+			BankAccount senderAccount = Bank.getOnlineAccount(uuid);
 
-		BankAccount senderAccount = Bank.getOnlineAccount(uuid);
+			long senderBalance = senderAccount.getBalance(currency);
 
-		long senderBalance = senderAccount.getBalance(currency);
+			long difference = amt - senderBalance;
+			if (difference > 0)
+			{
+				sender.sendLocalizedMessage("economy.pay_cannot_afford", new MoneyFormatter(difference).dualFormatWord());
 
-		long difference = amt - senderBalance;
-		if (difference > 0)
-		{
-			sender.sendLocalizedMessage("economy.pay_cannot_afford", new MoneyFormatter(difference).dualFormatWord());
+				return;
+			}
 
-			return;
-		}
+			try
+			{
+				senderAccount.take(amount, "Payment to " + payeeName).get();
+			}
+			catch (InterruptedException|ExecutionException e1)
+			{
+				e1.printStackTrace();
 
-		try
-		{
-			senderAccount.take(amount, "Payment to " + payeeName).get();
-		}
-		catch (InterruptedException|ExecutionException e1)
-		{
-			e1.printStackTrace();
-
-			return;
+				return;
+			}
 		}
 
 		OfflineBankAccount recipientAccount = Bank.getAccount(player.getUniqueId());
