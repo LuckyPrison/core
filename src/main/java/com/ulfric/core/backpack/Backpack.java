@@ -76,17 +76,17 @@ class Backpack {
 		MutableDocument mut = new SimpleDocument(document.deepCopy());
 		this.into(mut);
 
-		dataContainer.setValue(mut);
+		this.dataContainer.setValue(mut);
 	}
 
 	protected OfflinePlayer getOwner()
 	{
-		return owner;
+		return this.owner;
 	}
 
 	public int getMaxPage()
 	{
-		return maxPage;
+		return this.maxPage;
 	}
 
 	public void open(Player viewer, int page)

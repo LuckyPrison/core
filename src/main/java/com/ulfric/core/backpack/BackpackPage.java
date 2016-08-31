@@ -154,7 +154,7 @@ public class BackpackPage {
 			this.backpack.save();
 		});
 
-		panel.open(viewer, PanelOption.REPLACE);
+		panel.open(this.viewer, PanelOption.REPLACE);
 	}
 
 	private boolean canPageUp()
