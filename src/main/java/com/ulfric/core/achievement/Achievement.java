@@ -102,7 +102,11 @@ public final class Achievement implements Named, Runnable, ScopeListener<UUID> {
 	@Override
 	public void onRemove(UUID uuid)
 	{
-		this.counters.remove(uuid);
+		Counter counter = this.counters.remove(uuid);
+
+		if (!counter.hasBeenChanged()) return;
+
+		this.subscription.get(uuid).setValue(counter.toInt());
 	}
 
 	public void increment(UUID uuid)
@@ -150,10 +154,6 @@ public final class Achievement implements Named, Runnable, ScopeListener<UUID> {
 				return;
 			}
 		}
-
-		counter.untouch();
-
-		this.subscription.get(uuid).setValue(value);
 
 		// TODO send update message
 	}
