@@ -2,10 +2,8 @@ package com.ulfric.core.achievement;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.WordUtils;
@@ -17,7 +15,6 @@ import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
 import com.ulfric.data.scope.ScopeListener;
-import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.string.Named;
 import com.ulfric.lib.coffee.string.Strings;
@@ -27,7 +24,7 @@ import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.meta.ItemMeta;
 import com.ulfric.lib.craft.string.ChatUtils;
 
-public final class Achievement implements Named, Runnable, ScopeListener<UUID> {
+public final class Achievement implements Named, ScopeListener<UUID> {
 
 	Achievement(String name, String description, String code, MaterialData item, int min, Achievement parent)
 	{
@@ -52,8 +49,6 @@ public final class Achievement implements Named, Runnable, ScopeListener<UUID> {
 				.subscribe();
 
 		PlayerScopes.ONLINE.addListener(this);
-
-		ThreadUtils.runRepeating(this, 20 * TimeUnit.MINUTES.toSeconds(3));
 	}
 
 	private final String name;
@@ -76,21 +71,6 @@ public final class Achievement implements Named, Runnable, ScopeListener<UUID> {
 	}
 
 	@Override
-	public void run()
-	{
-		for (Entry<UUID, Counter> entry : this.counters.entrySet())
-		{
-			Counter counter = entry.getValue();
-
-			if (!counter.hasBeenChanged()) continue;
-
-			this.subscription.get(entry.getKey()).setValue(counter.toInt());
-
-			counter.untouch();
-		}
-	}
-
-	@Override
 	public void onAddition(UUID uuid)
 	{
 		Integer count = this.subscription.get(uuid).getValue();
@@ -105,7 +85,7 @@ public final class Achievement implements Named, Runnable, ScopeListener<UUID> {
 	{
 		Counter counter = this.counters.remove(uuid);
 
-		if (!counter.hasBeenChanged()) return;
+		if (counter == null || !counter.hasBeenChanged()) return;
 
 		try
 		{
