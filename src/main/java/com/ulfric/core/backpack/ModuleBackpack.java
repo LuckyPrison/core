@@ -1,5 +1,8 @@
 package com.ulfric.core.backpack;
 
+import java.util.Map;
+import java.util.UUID;
+
 import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
 import com.ulfric.data.DataAddress;
@@ -11,22 +14,15 @@ import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 
-import java.util.Map;
-import java.util.UUID;
-
 public final class ModuleBackpack extends Module {
 
 	private static final ModuleBackpack INSTANCE = new ModuleBackpack();
+	private static final int DEFAULT_SIZE = 3; // TODO Default size is needed because Limit of OfflinePlayer can't be found
 
 	public static ModuleBackpack getInstance()
 	{
 		return ModuleBackpack.INSTANCE;
 	}
-
-	// TODO: Resolve
-//	private static final Argument PAGE = Argument.builder().addSimpleResolver(NumberUtils::parseInteger).setPath("page").setDefaultValue(1).build();
-	// TODO: Resolve
-//	private static final Argument PLAYER = OfflinePlayer.ARGUMENT;
 
 	private MultiSubscription<UUID, Document> subscription;
 	private final Map<UUID, Backpack> cache = Maps.newHashMap();
@@ -91,7 +87,7 @@ public final class ModuleBackpack extends Module {
 
 	private Backpack makeBackpack(OfflinePlayer owner)
 	{
-		Backpack backpack = new Backpack(owner, 3);
+		Backpack backpack = new Backpack(owner, DEFAULT_SIZE);
 
 		backpack.save();
 

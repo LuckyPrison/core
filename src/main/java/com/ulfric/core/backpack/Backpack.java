@@ -1,10 +1,15 @@
 package com.ulfric.core.backpack;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.IntStream;
+
 import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.config.SimpleDocument;
 import com.ulfric.data.DataContainer;
+import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.numbers.NumberUtils;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
@@ -14,10 +19,6 @@ import com.ulfric.lib.craft.inventory.item.ItemParts;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.ItemUtils;
 import com.ulfric.lib.craft.inventory.item.Material;
-
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.IntStream;
 
 class Backpack {
 
@@ -92,6 +93,14 @@ class Backpack {
 	public void open(Player viewer, int page)
 	{
 		new BackpackPage(ModuleBackpack.getInstance(), this, viewer, page).open();
+	}
+
+	public void checkPotentialLimit(CommandSender potentialOwner)
+	{
+		if (potentialOwner.getUniqueId().equals(this.owner.getUniqueId()))
+		{
+			this.maxPage = potentialOwner.getLimit("backpacks.max").toInt();
+		}
 	}
 
 	protected void into(MutableDocument document)
