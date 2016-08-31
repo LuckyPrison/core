@@ -46,8 +46,6 @@ public class BackpackPage {
 
 	public void open()
 	{
-		this.backpack.checkPotentialLimit(this.viewer);
-
 		StandardPanel panel = Panel.createStandard(
 				INVENTORY_SIZE - (!this.canPageDown() && !this.canPageUp() ? 9 : 0),
 				this.viewer.getLocalizedMessage(
