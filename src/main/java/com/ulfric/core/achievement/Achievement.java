@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.Validate;
@@ -106,7 +107,14 @@ public final class Achievement implements Named, Runnable, ScopeListener<UUID> {
 
 		if (!counter.hasBeenChanged()) return;
 
-		this.subscription.get(uuid).setValue(counter.toInt());
+		try
+		{
+			this.subscription.retrieveForeignContainer(uuid, (container) -> container.setValue(counter.toInt())).get();
+		}
+		catch (InterruptedException|ExecutionException exception)
+		{
+			exception.printStackTrace();
+		}
 	}
 
 	public void increment(UUID uuid)
