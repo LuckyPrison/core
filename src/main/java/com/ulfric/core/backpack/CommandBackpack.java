@@ -25,7 +25,7 @@ public class CommandBackpack extends Command {
 	@Override
 	public void run()
 	{
-		OfflinePlayer owner = (OfflinePlayer) super.getObject(OfflinePlayer.ARGUMENT);
+		OfflinePlayer owner = (OfflinePlayer) super.getObject(OfflinePlayer.ARGUMENT.getPath());
 
 		if (owner == null)
 		{

@@ -87,9 +87,9 @@ class CommandPay extends Command {
 			}
 		}
 
-		OfflineBankAccount recipientAccount = Bank.getAccount(player.getUniqueId());
-
 		String senderName = sender.getName();
+
+		OfflineBankAccount recipientAccount = Bank.getAccount(player.getUniqueId());
 
 		// No get here on purpose
 		recipientAccount.give(amount, "Payment from " + senderName);

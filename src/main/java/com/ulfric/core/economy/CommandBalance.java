@@ -25,8 +25,8 @@ class CommandBalance extends Command {
 	public void run()
 	{
 		CommandSender sender = this.getSender();
-		Currency currency = (Currency) getObject(Currency.ARGUMENT);
-		OfflinePlayer player = (Player) getObject(OfflinePlayer.ARGUMENT);
+		Currency currency = (Currency) getObject(Currency.ARGUMENT.getPath());
+		OfflinePlayer player = (Player) getObject(OfflinePlayer.ARGUMENT.getPath());
 
 		if (player == null)
 		{
