@@ -1,11 +1,11 @@
 package com.ulfric.core.regions;
 
-import com.ulfric.lib.coffee.command.Command;
+import com.ulfric.lib.coffee.command.BaseCommand;
 import com.ulfric.lib.coffee.module.ModuleBase;
 
-final class CommandRegions extends Command {
+final class CommandRegions extends BaseCommand {
 
-	public CommandRegions(ModuleBase owner)
+	CommandRegions(ModuleBase owner)
 	{
 		super("regions", owner, "region", "rg", "guards", "guard", "gu");
 
@@ -14,12 +14,6 @@ final class CommandRegions extends Command {
 		this.addCommand(new CommandFlag(owner));
 
 		this.addPermission("regions.use");
-	}
-
-	@Override
-	public void run()
-	{
-		// TODO show sub commands
 	}
 
 }

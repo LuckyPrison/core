@@ -13,7 +13,7 @@ import com.ulfric.lib.craft.world.World;
 
 final class MultiItemReward implements Reward {
 
-	public static MultiItemReward valueOf(List<ItemStack> stacks)
+	static MultiItemReward valueOf(List<ItemStack> stacks)
 	{
 		Validate.notEmpty(stacks);
 

@@ -7,7 +7,7 @@ import com.ulfric.lib.craft.entity.player.Player;
 
 final class CommandReward implements Reward {
 
-	public static CommandReward valueOf(String command)
+	static CommandReward valueOf(String command)
 	{
 		Validate.notBlank(command);
 

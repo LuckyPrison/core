@@ -35,6 +35,7 @@ public class ModuleRankup extends Module {
 			public void onJoin(PlayerJoinEvent event)
 			{
 				Scoreboard board = event.getPlayer().getScoreboard();
+
 				board.addElement(new ElementMine(board));
 				board.addElement(new ElementNextMine(board));
 			}
@@ -79,7 +80,7 @@ public class ModuleRankup extends Module {
 
 				if (data == null) continue;
 
-				Rankups.INSTANCE.trackItems.put(track, data);
+				Rankups.INSTANCE.setMaterial(track, data);
 			}
 		}
 

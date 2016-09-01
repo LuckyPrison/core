@@ -12,7 +12,7 @@ import com.ulfric.lib.craft.entity.player.Player;
 
 final class MultiMoneyReward implements Reward {
 
-	public static MultiMoneyReward valueOf(List<CurrencyAmount> amounts)
+	static MultiMoneyReward valueOf(List<CurrencyAmount> amounts)
 	{
 		Validate.notEmpty(amounts);
 		Validate.noNullElements(amounts);

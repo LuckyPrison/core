@@ -9,7 +9,7 @@ import com.ulfric.lib.craft.region.RegionColl;
 
 final class CommandRegionImport extends Command {
 
-	public CommandRegionImport(ModuleBase owner)
+	CommandRegionImport(ModuleBase owner)
 	{
 		super("import", owner);
 

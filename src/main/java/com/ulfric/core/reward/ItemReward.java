@@ -13,7 +13,7 @@ import com.ulfric.lib.craft.world.World;
 
 final class ItemReward implements Reward {
 
-	public static ItemReward valueOf(ItemStack stack)
+	static ItemReward valueOf(ItemStack stack)
 	{
 		Validate.isTrue(!ItemUtils.isEmpty(stack));
 

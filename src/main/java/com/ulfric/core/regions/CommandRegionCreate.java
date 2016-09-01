@@ -14,7 +14,7 @@ import com.ulfric.lib.craft.region.RegionColl;
 
 final class CommandRegionCreate extends Command {
 
-	public CommandRegionCreate(ModuleBase owner)
+	CommandRegionCreate(ModuleBase owner)
 	{
 		super("create", owner);
 

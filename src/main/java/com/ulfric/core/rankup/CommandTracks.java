@@ -7,7 +7,7 @@ import com.ulfric.lib.craft.entity.player.Player;
 
 final class CommandTracks extends Command {
 
-	public CommandTracks(ModuleBase owner)
+	CommandTracks(ModuleBase owner)
 	{
 		super("tracks", owner, "ranks");
 

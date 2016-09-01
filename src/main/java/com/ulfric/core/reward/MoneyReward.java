@@ -8,7 +8,7 @@ import com.ulfric.lib.craft.entity.player.Player;
 
 final class MoneyReward implements Reward {
 
-	public static MoneyReward valueOf(CurrencyAmount amount)
+	static MoneyReward valueOf(CurrencyAmount amount)
 	{
 		Validate.notNull(amount);
 

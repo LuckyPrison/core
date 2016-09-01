@@ -11,7 +11,7 @@ import com.ulfric.lib.craft.potion.PotionUtils;
 
 final class PotionReward implements Reward {
 
-	public static PotionReward valueOf(PotionEffect effect)
+	static PotionReward valueOf(PotionEffect effect)
 	{
 		Validate.notNull(effect);
 

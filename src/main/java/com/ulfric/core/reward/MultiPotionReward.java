@@ -12,7 +12,7 @@ import com.ulfric.lib.craft.potion.PotionUtils;
 
 final class MultiPotionReward implements Reward {
 
-	public static MultiPotionReward valueOf(List<PotionEffect> effects)
+	static MultiPotionReward valueOf(List<PotionEffect> effects)
 	{
 		Validate.notEmpty(effects);
 

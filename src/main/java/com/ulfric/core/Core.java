@@ -25,6 +25,7 @@ import com.ulfric.core.modules.ModuleNameplates;
 import com.ulfric.core.modules.ModulePrivateMessaging;
 import com.ulfric.core.modules.ModuleSpeed;
 import com.ulfric.core.modules.ModuleSpeedyGonzales;
+import com.ulfric.core.modules.ModuleStackSize;
 import com.ulfric.core.modules.ModuleTrample;
 import com.ulfric.core.modules.ModuleTrash;
 import com.ulfric.core.modules.ModuleVanishInterface;
@@ -75,6 +76,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleCandy());
 		this.addModule(new ModuleTrample());
 		this.addModule(ModuleBackpack.getInstance());
+		this.addModule(new ModuleStackSize());
 	}
 
 }

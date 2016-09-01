@@ -8,7 +8,7 @@ import com.ulfric.lib.craft.scoreboard.Scoreboard;
 import com.ulfric.lib.craft.scoreboard.ScoreboardElement;
 import com.ulfric.lib.craft.string.ChatUtils;
 
-class ElementNextMine extends ScoreboardElement {
+final class ElementNextMine extends ScoreboardElement {
 
 	public ElementNextMine(Scoreboard board)
 	{

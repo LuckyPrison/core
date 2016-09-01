@@ -9,7 +9,7 @@ import com.ulfric.lib.craft.entity.player.Player;
 
 final class MultiReward implements Reward {
 
-	public static MultiReward valueOf(List<Reward> rewards)
+	static MultiReward valueOf(List<Reward> rewards)
 	{
 		Validate.notEmpty(rewards);
 		Validate.noNullElements(rewards);

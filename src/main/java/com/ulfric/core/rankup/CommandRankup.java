@@ -9,9 +9,9 @@ import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 
-public class CommandRankup extends Command {
+final class CommandRankup extends Command {
 
-	public CommandRankup(ModuleBase owner)
+	CommandRankup(ModuleBase owner)
 	{
 		super("rankup", owner);
 

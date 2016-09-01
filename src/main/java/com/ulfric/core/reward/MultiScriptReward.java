@@ -13,7 +13,7 @@ import com.ulfric.lib.craft.entity.player.Player;
 
 final class MultiScriptReward implements Reward {
 
-	public static MultiScriptReward valueOf(List<Script> scripts)
+	static MultiScriptReward valueOf(List<Script> scripts)
 	{
 		Validate.notEmpty(scripts);
 		Validate.noNullElements(scripts);

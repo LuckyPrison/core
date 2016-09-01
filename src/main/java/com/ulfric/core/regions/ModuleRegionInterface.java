@@ -12,7 +12,7 @@ import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.Material;
 import com.ulfric.lib.craft.region.RegionColl;
 
-public class ModuleRegionInterface extends Module {
+public final class ModuleRegionInterface extends Module {
 
 	public ModuleRegionInterface()
 	{

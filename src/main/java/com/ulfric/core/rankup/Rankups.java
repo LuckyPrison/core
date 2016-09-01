@@ -32,7 +32,7 @@ public enum Rankups {
 	INSTANCE;
 
 	private final Map<Track, TrackPrices> rankups = Maps.newHashMap();
-	final Map<Track, MaterialData> trackItems = Maps.newHashMap();
+	private final Map<Track, MaterialData> trackItems = Maps.newHashMap();
 	Track defaultTrack;
 
 	public Rankup getActive(Player player)
@@ -68,6 +68,16 @@ public enum Rankups {
 	{
 		TrackPrices costs = this.rankups.get(track);
 		return new Rankup(track, oldGroup, newGroup, costs == null ? null : costs.getPrice(newGroup));
+	}
+
+	public MaterialData getMaterial(Track track)
+	{
+		return this.trackItems.get(track);
+	}
+
+	public MaterialData setMaterial(Track track, MaterialData material)
+	{
+		return this.trackItems.put(track, material);
 	}
 
 	void registerRankup(Group group, CurrencyAmount amount)

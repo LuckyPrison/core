@@ -74,7 +74,7 @@ public class ModuleTrash extends Module {
 
 	private void emptyTrash(InventoryClickEvent event)
 	{
-		event.getInventory().empty(0, this.size-1);
+		event.getInventory().wipe(0, this.size-1);
 		event.setCancelled(true);
 	}
 

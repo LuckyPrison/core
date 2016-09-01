@@ -13,7 +13,7 @@ import com.ulfric.lib.craft.region.RegionColl;
 
 final class CommandFlag extends Command {
 
-	public CommandFlag(ModuleBase owner)
+	CommandFlag(ModuleBase owner)
 	{
 		super("flag", owner);
 

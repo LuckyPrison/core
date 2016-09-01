@@ -10,7 +10,7 @@ import com.ulfric.lib.craft.entity.player.Player;
 
 final class MultiCommandReward implements Reward {
 
-	public static MultiCommandReward valueOf(List<String> commands)
+	static MultiCommandReward valueOf(List<String> commands)
 	{
 		Validate.notEmpty(commands);
 

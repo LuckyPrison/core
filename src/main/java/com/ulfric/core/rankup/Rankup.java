@@ -6,7 +6,7 @@ import com.ulfric.lib.coffee.npermission.Track;
 
 public final class Rankup {
 
-	public Rankup(Track track, Group old, Group next, CurrencyAmount cost)
+	Rankup(Track track, Group old, Group next, CurrencyAmount cost)
 	{
 		this.track = track;
 		this.old = old;
