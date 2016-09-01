@@ -11,12 +11,12 @@ import com.ulfric.lib.coffee.economy.MoneyFormatter;
 import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 
-class CommandBalance extends Command {
+final class CommandBalance extends Command {
 
 	public CommandBalance(ModuleBase module)
 	{
 		super("bal", module, "balance", "money", "cash");
-		this.addArgument(Currency.ARGUMENT);
+		this.addOptionalArgument(Currency.ARGUMENT);
 		this.addOptionalArgument(OfflinePlayer.ARGUMENT);
 	}
 
