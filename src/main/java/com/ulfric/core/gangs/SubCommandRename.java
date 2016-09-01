@@ -2,6 +2,8 @@ package com.ulfric.core.gangs;
 
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.command.Resolvers;
@@ -40,6 +42,13 @@ public class SubCommandRename extends GangCommand {
 		if (length > 10)
 		{
 			sender.sendLocalizedMessage("gangs.rename_max_length", 10);
+			return;
+		}
+
+		if (!StringUtils.isAlpha(gangName))
+		{
+			sender.sendLocalizedMessage("gangs-name-must-be-alpha");
+
 			return;
 		}
 
