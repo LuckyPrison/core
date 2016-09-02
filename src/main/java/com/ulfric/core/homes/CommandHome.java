@@ -1,22 +1,30 @@
 package com.ulfric.core.homes;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
-import com.ulfric.lib.coffee.module.ModuleBase;
+import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
-import com.ulfric.lib.craft.entity.player.PlayerUtils;
-import com.ulfric.lib.craft.location.Location;
 
 public class CommandHome extends Command {
 
-	public CommandHome(ModuleBase owner)
+	private final ModuleHomes base;
+
+	public CommandHome(ModuleHomes owner)
 	{
 		super("home", owner);
+
+		this.base = owner;
 
 		super.addEnforcer(Enforcers.IS_PLAYER, "home.must_be_player");
 
 		super.addOptionalArgument(OfflinePlayer.ARGUMENT);
+		super.addOptionalArgument(Argument.builder().addResolver(Resolvers.STRING).setPath("home-name").build());
 	}
 
 	@Override
@@ -24,25 +32,44 @@ public class CommandHome extends Command {
 	{
 		Player sender = (Player) super.getSender();
 
-		Player target = (Player) super.getObject("offline-player");
+		Player target = (Player) super.getObj("offline-player").orElse(sender);
 
-		if (target != null)
+		String homeName = (String) super.getObj("home-name").orElseGet(() ->
 		{
-			if (!sender.hasPermission("home.other"))
+			List<Home> homes = this.base.getHomes(target);
+			if (homes.size() == 1)
 			{
-				sender.sendLocalizedMessage("home.no_permission");
-
-				return;
+				return homes.get(0).getName();
 			}
-		}
-		else
+			return homes.stream().filter(home -> home.getName().equalsIgnoreCase("home")).findAny().isPresent() ? "home" : null;
+		});
+
+		if (StringUtils.isBlank(homeName))
 		{
-			target = sender;
+			sender.sendLocalizedMessage("home.specify_home");
+
+			return;
 		}
 
-		Location home;
+		Home home = this.base.getHome(target, homeName);
 
-		PlayerUtils.getPlayerData();
+		if (home == null)
+		{
+			sender.sendLocalizedMessage("home.home_not_found");
+
+			return;
+		}
+
+		if (!home.canTeleport(sender))
+		{
+			sender.sendLocalizedMessage("home.no_permission");
+
+			return;
+		}
+
+		sender.sendLocalizedMessage("home.teleporting", homeName);
+
+		home.teleportTo(sender);
 	}
 
 }
