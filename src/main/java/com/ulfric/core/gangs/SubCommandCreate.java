@@ -3,6 +3,8 @@ package com.ulfric.core.gangs;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.Resolvers;
@@ -53,6 +55,13 @@ public class SubCommandCreate extends Command {
 		if (length > 10)
 		{
 			sender.sendLocalizedMessage("gangs.create_max_length", 10);
+
+			return;
+		}
+
+		if (!StringUtils.isAlpha(name))
+		{
+			sender.sendLocalizedMessage("gangs-name-must-be-alpha");
 
 			return;
 		}

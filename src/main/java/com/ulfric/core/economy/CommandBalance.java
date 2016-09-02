@@ -10,14 +10,13 @@ import com.ulfric.lib.coffee.economy.Currency;
 import com.ulfric.lib.coffee.economy.MoneyFormatter;
 import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
-import com.ulfric.lib.craft.entity.player.Player;
 
-class CommandBalance extends Command {
+final class CommandBalance extends Command {
 
 	public CommandBalance(ModuleBase module)
 	{
 		super("bal", module, "balance", "money", "cash");
-		this.addArgument(Currency.ARGUMENT);
+		this.addOptionalArgument(Currency.ARGUMENT);
 		this.addOptionalArgument(OfflinePlayer.ARGUMENT);
 	}
 
@@ -26,10 +25,12 @@ class CommandBalance extends Command {
 	{
 		CommandSender sender = this.getSender();
 		Currency currency = (Currency) getObject(Currency.ARGUMENT.getPath());
-		OfflinePlayer player = (Player) getObject(OfflinePlayer.ARGUMENT.getPath());
+		OfflinePlayer player = (OfflinePlayer) getObject(OfflinePlayer.ARGUMENT.getPath());
 
 		if (player == null)
 		{
+			if (!(sender instanceof OfflinePlayer)) return;
+
 			player = (OfflinePlayer) sender;
 		}
 
@@ -56,12 +57,12 @@ class CommandBalance extends Command {
 
 		Bank.getAccount(uuid).retrieveBalance(currency).whenComplete(ThreadUtils::runOnMain, (bal, error) ->
 		{
-			long balance = bal == null ? 0L : bal;
-
 			if (error != null)
 			{
 				error.printStackTrace();
 			}
+
+			long balance = bal == null ? 0L : bal;
 
 			sender.sendLocalizedMessage("economy.balance_other", playerName, new MoneyFormatter(balance).dualFormatWord());
 		});

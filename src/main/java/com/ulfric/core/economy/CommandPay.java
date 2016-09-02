@@ -1,7 +1,6 @@
 package com.ulfric.core.economy;
 
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
@@ -15,13 +14,13 @@ import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
 
-class CommandPay extends Command {
+final class CommandPay extends Command {
 
 	public CommandPay(ModuleBase module)
 	{
 		super("pay", module);
 		this.addArgument(CurrencyAmount.ARGUMENT);
-		this.addArgument(OfflinePlayer.ARGUMENT_ASYNC);
+		this.addArgument(OfflinePlayer.ARGUMENT);
 	}
 
 	@Override
@@ -75,23 +74,13 @@ class CommandPay extends Command {
 				return;
 			}
 
-			try
-			{
-				senderAccount.take(amount, "Payment to " + payeeName).get();
-			}
-			catch (InterruptedException|ExecutionException e1)
-			{
-				e1.printStackTrace();
-
-				return;
-			}
+			senderAccount.take(amount, "Payment to " + payeeName);
 		}
 
 		String senderName = sender.getName();
 
 		OfflineBankAccount recipientAccount = Bank.getAccount(player.getUniqueId());
 
-		// No get here on purpose
 		recipientAccount.give(amount, "Payment from " + senderName);
 
 		String amtFormat = new MoneyFormatter(amt).dualFormatWord().toString();
