@@ -10,6 +10,7 @@ import com.ulfric.core.control.ModuleControl;
 import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.enchant.ModuleEnchants;
 import com.ulfric.core.gangs.ModuleGangs;
+import com.ulfric.core.homes.ModuleHomes;
 import com.ulfric.core.kit.ModuleKits;
 import com.ulfric.core.luckyblocks.ModuleLuckyBlocks;
 import com.ulfric.core.lwe.ModuleLWE;
@@ -79,6 +80,7 @@ public class Core extends Plugin {
 		this.addModule(ModuleBackpack.getInstance());
 		this.addModule(new ModuleStackSize());
 		this.addModule(new ModulePermissionInterface());
+		this.addModule(new ModuleHomes());
 	}
 
 }
