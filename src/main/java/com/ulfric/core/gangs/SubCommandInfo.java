@@ -21,7 +21,7 @@ public class SubCommandInfo extends GangCommand {
 
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(locale.getFormattedMessage("gangs.info_header", gang.getName()));
+		builder.append(locale.getFormattedMessage("gangs-info-header", gang.getName()));
 		// TODO more info, also allow verbose info
 
 		sender.sendMessage(builder.toString());

@@ -21,13 +21,13 @@ public class SubCommandDemote extends GangCommand {
 	{
 		CommandSender sender = this.getSender();
 
-		OfflinePlayer target = (OfflinePlayer) this.getObject("offline-player");
+		OfflinePlayer target = (OfflinePlayer) this.getObject(OfflinePlayer.ARGUMENT.getPath());
 
 		UUID targetUUID = target.getUniqueId();
 
 		if (targetUUID.equals(sender.getUniqueId()))
 		{
-			sender.sendLocalizedMessage("gangs.demote_self");
+			sender.sendLocalizedMessage("gangs-demote-self");
 
 			return;
 		}
@@ -38,7 +38,7 @@ public class SubCommandDemote extends GangCommand {
 
 		if (member == null)
 		{
-			sender.sendLocalizedMessage("gangs.demote_not_member", gang.getName(), target.getName());
+			sender.sendLocalizedMessage("gangs-demote-not-member", gang.getName(), target.getName());
 
 			return;
 		}
@@ -49,7 +49,7 @@ public class SubCommandDemote extends GangCommand {
 
 		if (member.hasPermission(senderMember.getRank()))
 		{
-			sender.sendLocalizedMessage("gangs.demote_already_ranked", target.getName(), EnumUtils.format(member.getRank()));
+			sender.sendLocalizedMessage("gangs-demote-already-ranked", target.getName(), EnumUtils.format(member.getRank()));
 
 			return;
 		}
@@ -58,7 +58,7 @@ public class SubCommandDemote extends GangCommand {
 
 		if (rank == null)
 		{
-			sender.sendLocalizedMessage("gangs.demote_already_member");
+			sender.sendLocalizedMessage("gangs-demote-already-member");
 
 			return;
 		}
@@ -69,7 +69,7 @@ public class SubCommandDemote extends GangCommand {
 		String rankName = EnumUtils.format(rank);
 		String targetName = target.getName();
 
-		gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs.demoted", senderName, targetName, rankName));
+		gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs-demoted", senderName, targetName, rankName));
 	}
 
 }

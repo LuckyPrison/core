@@ -18,7 +18,7 @@ abstract class GangCommand extends Command {
 			GangMember member = gangs.getMember(cmd.getSender().getUniqueId());
 			if (member == null) return null;
 			return member.getGang();
-		}).setPermission("gangs." + this.getName() + ".others").setUsage("gangs.specify_gang").build());
+		}).setPermission("gangs." + this.getName() + ".others").setUsage("gangs-specify-gang").build());
 
 		if (gangPermission != null)
 		{
@@ -31,7 +31,7 @@ abstract class GangCommand extends Command {
 				if (member == null) return false;
 
 				return member.hasPermission(gangPermission);
-			}, "gangs.must_be_" + gangPermission.name().toLowerCase());
+			}, "gangs-must-be-" + gangPermission.name().toLowerCase());
 		}
 	}
 

@@ -1,15 +1,19 @@
 package com.ulfric.core.modules;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.ObjIntConsumer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import com.google.common.collect.Lists;
 import com.ulfric.config.Document;
 import com.ulfric.core.reward.Reward;
 import com.ulfric.core.reward.Rewards;
+import com.ulfric.lib.coffee.math.RandomUtils;
 import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.coffee.string.Joiner;
 import com.ulfric.lib.craft.block.MaterialData;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.inventory.item.Consumables;
@@ -90,12 +94,23 @@ public class ModuleCandy extends Module {
 		Validate.notNull(reward);
 		Validate.notNull(recipe);
 
+		List<String> strings = Arrays.asList("munch", "crunch");
+
 		return new Candy(material, (player, times) ->
 		{
 			if (times <= 1)
 			{
 				reward.give(player, "Candy");
 			}
+
+			Joiner joiner = Joiner.space().addAfterEffect(StringUtils::capitalize);
+
+			for (int x = 0, n = RandomUtils.randomRange(3, 5); x < n; x++)
+			{
+				joiner.append(RandomUtils.randomValue(strings));
+			}
+
+			player.sendLocalizedMessage("candy-use", joiner.toString());
 
 			// TODO support times on all the reward types, not just potions
 			reward.give(player, "Candy", "times", times);

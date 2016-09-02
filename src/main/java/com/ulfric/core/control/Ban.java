@@ -56,6 +56,7 @@ class Ban extends TimedPunishment {
 		String reason = this.getReason();
 		String expiry = this.hasExpiry() ? this.expiryToString() : null;
 		String referenced = this.getReferencedString();
+		PunishmentHolder holder = this.getHolder();
 
 		for (Player player : PlayerUtils.getOnlinePlayers())
 		{
@@ -63,15 +64,15 @@ class Ban extends TimedPunishment {
 
 			Locale locale = player.getLocale();
 
-			String punished = this.getHolder().getName(player);
+			String punished = holder.getName(player);
 
-			builder.append(locale.getFormattedMessage("ban.header", punished, punisher));
-			builder.append(locale.getFormattedMessage("ban.reason", reason));
-			builder.append(expiry == null ? locale.getRawMessage("ban.expiry_never") : locale.getFormattedMessage("ban.expiry", expiry));
+			builder.append(locale.getFormattedMessage("ban-header", punished, punisher));
+			builder.append(locale.getFormattedMessage("ban-reason", reason));
+			builder.append(expiry == null ? locale.getRawMessage("ban-expiry-never") : locale.getFormattedMessage("ban-expiry", expiry));
 
 			if (referenced != null)
 			{
-				builder.append(locale.getFormattedMessage("ban.referenced", referenced));
+				builder.append(locale.getFormattedMessage("ban-referenced", referenced));
 			}
 
 			player.sendMessage(builder.toString());
@@ -103,29 +104,28 @@ class Ban extends TimedPunishment {
 
 		Locale locale = player == null ? Locale.getDefault() : player.getLocale();
 
-		builder.append(locale.getRawMessage("banned.header"));
+		builder.append(locale.getRawMessage("banned-header"));
 		builder.append('\n');
 
-		builder.append(locale.getFormattedMessage("banned.reason", this.getReason()));
+		builder.append(locale.getFormattedMessage("banned-reason", this.getReason()));
+		builder.append('\n');
+
+		Punisher punisher = this.getPunisher();
+		builder.append(locale.getFormattedMessage("banned-punisher", player == null ? punisher.getName() : punisher.getName(player)));
 		builder.append('\n');
 
 		if (this.hasExpiry())
 		{
-			builder.append(locale.getFormattedMessage("banned.expiry", this.expiryToString()));
+			builder.append(locale.getFormattedMessage("banned-expiry", this.expiryToString()));
 			builder.append('\n');
 		}
 
-		Punisher punisher = this.getPunisher();
-
-		builder.append(locale.getFormattedMessage("banned.punisher", player == null ? punisher.getName() : punisher.getName(player)));
-
-		if (this.getExpiry().minusSeconds(10).isBefore(Instant.now()))
+		if (this.getExpiry().minusSeconds(5).isBefore(Instant.now()))
 		{
-			builder.append('\n');
-			builder.append(locale.getRawMessage("banned.rejoin"));
+			builder.append(locale.getRawMessage("banned-rejoin"));
 		}
 
-		return builder.toString();
+		return builder.toString().trim();
 	}
 
 	private void kickBan(Player player)

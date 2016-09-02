@@ -27,7 +27,7 @@ public class SubCommandDisband extends GangCommand {
 		for (Player player : gang.getOnlinePlayers())
 		{
 			new GangStatusEvent(player, gang, null).fire();
-			player.sendLocalizedMessage("gangs.disbanded", gangName, senderName);
+			player.sendLocalizedMessage("gangs-disbanded", gangName, senderName);
 		}
 
 		for (UUID enemyUUID : gang.getRelations(Relation.ENEMY))
@@ -36,7 +36,7 @@ public class SubCommandDisband extends GangCommand {
 
 			for (Player enemyPlayer : enemy.getOnlinePlayers())
 			{
-				enemyPlayer.sendLocalizedMessage("gangs.disbanded_enemy", gangName, senderName);
+				enemyPlayer.sendLocalizedMessage("gangs-disbanded-enemy", gangName, senderName);
 			}
 		}
 
@@ -46,13 +46,13 @@ public class SubCommandDisband extends GangCommand {
 
 			for (Player allyPlayer : ally.getOnlinePlayers())
 			{
-				allyPlayer.sendLocalizedMessage("gangs.disbanded_ally", gangName, senderName);
+				allyPlayer.sendLocalizedMessage("gangs-disbanded-ally", gangName, senderName);
 			}
 		}
 
 		gangs.deleteGang(gang);
 
-		sender.sendLocalizedMessage("gangs.disbanded_success", gangName, gang.getMemberParticipants().size());
+		sender.sendLocalizedMessage("gangs-disbanded-success", gangName, gang.getMemberParticipants().size());
 	}
 
 }

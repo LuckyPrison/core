@@ -35,14 +35,14 @@ final class CommandFlag extends Command {
 
 		if (!flagData.setData(data))
 		{
-			sender.sendMessage("could not set flag data");
+			sender.sendLocalizedMessage("region-flag-set-failure", flagData, data);
 
 			return;
 		}
 
 		region.save();
 
-		sender.sendMessage("new data: " + flagData.getDataAsString());
+		sender.sendLocalizedMessage("region-flag-set", flagData, flagData.getDataAsString());
 	}
 
 }

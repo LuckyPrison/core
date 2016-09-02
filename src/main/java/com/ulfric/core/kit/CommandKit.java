@@ -28,7 +28,7 @@ final class CommandKit extends Command {
 			if (!sen.hasPermission("kits." + kit.getName())) return null;
 
 			return kit;
-		}).setUsage("kit.specify_kit").build());
+		}).setUsage("kit-specify-kit").build());
 
 		this.addArgument(Argument.builder().setPath("player").setDefaultValue(cmd -> cmd.getSender()).addResolver((sen, str) ->
 		{
@@ -36,7 +36,7 @@ final class CommandKit extends Command {
 
 			if (found == null) return null;
 
-			if (sen.hasPermission("kit.admin")) return found;
+			if (sen.hasPermission("kit.all")) return found;
 
 			Gangs gangs = Gangs.getInstance();
 
@@ -68,25 +68,25 @@ final class CommandKit extends Command {
 
 		final boolean same = sender == player;
 
-		long remaining = kit.give(sender.getUniqueId(), player, same ? "Kit usage" : "Kit from" + sender.getName());
+		long remaining = kit.give(sender.getUniqueId(), player, same ? "Kit usage" : "Kit from " + sender.getName());
 
 		if (remaining == 0)
 		{
 			if (same)
 			{
-				sender.sendLocalizedMessage("kit.used_kit", kit.getName());
+				sender.sendLocalizedMessage("kit-used-kit", kit.getName());
 
 				return;
 			}
 
-			sender.sendLocalizedMessage("kit.used_kit_other", kit.getName(), player.getName());
+			sender.sendLocalizedMessage("kit-used-kit-other", kit.getName(), player.getName());
 
-			player.sendLocalizedMessage("kit.received", kit.getName(), sender.getName());
+			player.sendLocalizedMessage("kit-received", kit.getName(), sender.getName());
 
 			return;
 		}
 
-		sender.sendLocalizedMessage("kit.wait", kit.getName(), TimeUtils.formatMillis(remaining, TimeUnit.MILLISECONDS));
+		sender.sendLocalizedMessage("kit-cooldown", kit.getName(), TimeUtils.formatMillis(remaining, TimeUnit.MILLISECONDS));
 	}
 
 }

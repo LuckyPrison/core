@@ -62,7 +62,7 @@ public class ModulePrivateMessaging extends Module {
 
 			if (target.getUniqueId().equals(sender.getUniqueId()))
 			{
-				sender.sendLocalizedMessage("message.self", message);
+				sender.sendLocalizedMessage("message-self", message);
 
 				return;
 			}
@@ -70,8 +70,8 @@ public class ModulePrivateMessaging extends Module {
 			String targetName = target.getName();
 			String senderName = sender.getName();
 
-			sender.sendLocalizedMessage("message.sent", targetName, message);
-			target.sendLocalizedMessage("message.received", senderName, message);
+			sender.sendLocalizedMessage("message-sent", targetName, message);
+			target.sendLocalizedMessage("message-received", senderName, message);
 
 			ModulePrivateMessaging.this.messagers.put(sender.getUniqueId(), target.getUniqueId());
 			ModulePrivateMessaging.this.messagers.put(target.getUniqueId(), sender.getUniqueId());
@@ -80,7 +80,7 @@ public class ModulePrivateMessaging extends Module {
 			{
 				if (!allPlayers.hasSocialSpy()) continue;
 
-				allPlayers.sendLocalizedMessage("message.socialspy", senderName, targetName, message);
+				allPlayers.sendLocalizedMessage("message-socialspy", senderName, targetName, message);
 			}
 		}
 	}
@@ -99,7 +99,7 @@ public class ModulePrivateMessaging extends Module {
 
 			if (!ModulePrivateMessaging.this.messagers.containsKey(sender.getUniqueId()))
 			{
-				sender.sendLocalizedMessage("reply.no_message_sent");
+				sender.sendLocalizedMessage("reply-no-message-sent");
 
 				return;
 			}
@@ -110,7 +110,7 @@ public class ModulePrivateMessaging extends Module {
 
 			if (target == null && targetUUID != null)
 			{
-				sender.sendLocalizedMessage("reply.recipient_offline");
+				sender.sendLocalizedMessage("reply-recipient-offline");
 
 				return;
 			}
@@ -124,11 +124,11 @@ public class ModulePrivateMessaging extends Module {
 
 			String name = sender.getName();
 
-			sender.sendLocalizedMessage("message.sent", target == null ? sender.getLocalizedMessage("system.console") : target.getName(), message);
+			sender.sendLocalizedMessage("reply-sent", target == null ? sender.getLocalizedMessage("console") : target.getName(), message);
 
 			if (target == null)
 			{
-				ModulePrivateMessaging.this.log(Locale.getDefault().getFormattedMessage("message.received", name, message));
+				ModulePrivateMessaging.this.log(Locale.getDefault().getFormattedMessage("reply-received", name, message));
 
 				return;
 			}
@@ -139,10 +139,10 @@ public class ModulePrivateMessaging extends Module {
 			{
 				if (!allPlayers.hasSocialSpy()) continue;
 
-				allPlayers.sendLocalizedMessage("message.socialspy", name, targetName, message);
+				allPlayers.sendLocalizedMessage("message-socialspy", name, targetName, message);
 			}
 
-			target.sendLocalizedMessage("message.received", name, message);
+			target.sendLocalizedMessage("message-received", name, message);
 		}
 	}
 

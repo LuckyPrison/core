@@ -28,7 +28,7 @@ public class SubCommandInvites extends GangCommand {
 
 		if (list.isEmpty())
 		{
-			sender.sendLocalizedMessage("gangs.invites_none");
+			sender.sendLocalizedMessage("gangs-invites-none");
 
 			return;
 		}
@@ -37,10 +37,10 @@ public class SubCommandInvites extends GangCommand {
 
 		Joiner joiner = Joiner.lineBreak();
 
-		joiner.append(locale.getFormattedMessage("gangs.invites_header", gang.getName(), list.size()));
+		joiner.append(locale.getFormattedMessage("gangs-invites-header", gang.getName(), list.size()));
 		// TODO more info, also allow verbose info
 
-		String raw = locale.getRawMessage("gangs.invites_entry");
+		String raw = locale.getRawMessage("gangs-invites-entry");
 
 		for (UUID uuid : list)
 		{

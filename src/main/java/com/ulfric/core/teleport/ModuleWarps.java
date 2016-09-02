@@ -14,6 +14,7 @@ import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.string.NamedBase;
+import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Actions;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.location.Destination;
@@ -171,7 +172,7 @@ final class ModuleWarps extends Module {
 		{
 			super("warp", ModuleWarps.getInstance());
 
-			this.addArgument(Argument.builder().setPath("warp").addResolver(ModuleWarps.getInstance()::getWarp).setUsage("warp.specify_warp").build());
+			this.addArgument(Argument.builder().setPath("warp").addResolver(ModuleWarps.getInstance()::getWarp).setUsage("warp-specify-warp").build());
 		}
 
 		@Override
@@ -189,7 +190,9 @@ final class ModuleWarps extends Module {
 		{
 			super("setwarp", ModuleWarps.getInstance());
 
-			this.addArgument(Argument.builder().setPath("name").addSimpleResolver(str -> ModuleWarps.getInstance().getWarp(str) == null ? str : null).setUsage("warp.set_specify_unique_name").build());
+			this.addEnforcer(Enforcers.IS_PLAYER, "warp-set-must-be-player");
+
+			this.addArgument(Argument.builder().setPath("name").addSimpleResolver(str -> ModuleWarps.getInstance().getWarp(str) == null ? str : null).setUsage("warp-set-must-be-unique").build());
 			this.addOptionalArgument(Argument.builder().setPath("delay").addResolver(Resolvers.INTEGER).build());
 		}
 
@@ -209,7 +212,7 @@ final class ModuleWarps extends Module {
 
 			warp.save();
 
-			this.getSender().sendLocalizedMessage("warps.set_warp", warp.getName(), warp.getDestination().getDelay());
+			this.getSender().sendLocalizedMessage("warp-set", warp.getName(), warp.getDestination().getDelay());
 		}
 	}
 

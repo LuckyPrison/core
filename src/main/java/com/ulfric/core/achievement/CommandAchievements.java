@@ -11,7 +11,7 @@ final class CommandAchievements extends Command {
 	{
 		super("achievements", owner, "achievement", "goals", "goal");
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "achievements.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "achievements-must-be-player");
 	}
 
 	@Override

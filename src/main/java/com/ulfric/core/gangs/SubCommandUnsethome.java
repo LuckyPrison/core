@@ -20,7 +20,7 @@ public class SubCommandUnsethome extends GangCommand {
 
 		String name = sender.getName();
 
-		gang.getOnlinePlayers().forEach(p -> p.sendLocalizedMessage("gangs.unsethome_by", name));
+		gang.getOnlinePlayers().forEach(p -> p.sendLocalizedMessage("gangs-unsethome-by", name));
 	}
 
 }

@@ -21,7 +21,7 @@ final class CommandRegionCreate extends Command {
 		this.addOptionalArgument(Argument.builder().setPath("weight").addResolver(Resolvers.INTEGER).build());
 		this.addArgument(Argument.builder().setPath("name").addResolver(Resolvers.STRING).build());
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "regions.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "regions-must-be-player");
 	}
 
 	@Override
@@ -41,7 +41,7 @@ final class CommandRegionCreate extends Command {
 
 		if (region != null)
 		{
-			player.sendLocalizedMessage("regions.specify_unique_name", region.getName(), region.getWorld());
+			player.sendLocalizedMessage("regions-specify-unique-name", region.getName(), region.getWorld());
 
 			return;
 		}
@@ -52,7 +52,7 @@ final class CommandRegionCreate extends Command {
 
 		RegionColl.registerRegion(region);
 
-		player.sendLocalizedMessage("regions.region_created", region.getName(), region.getWeight());
+		player.sendLocalizedMessage("regions-created", region.getName(), region.getWeight());
 	}
 
 }

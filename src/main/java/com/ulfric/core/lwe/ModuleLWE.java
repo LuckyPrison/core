@@ -55,14 +55,14 @@ public class ModuleLWE extends Module {
 				{
 					selection.pushLeft(ImmutableVector.of(block.getLocation()));
 
-					player.sendLocalizedMessage("worldedit.selection_updated", "left");
+					player.sendLocalizedMessage("worldedit-selection-updated", "left");
 				}
 
 				else if (action.isRightClick())
 				{
 					selection.pushRight(ImmutableVector.of(block.getLocation()));
 
-					player.sendLocalizedMessage("worldedit.selection_updated", "right");
+					player.sendLocalizedMessage("worldedit-selection-updated", "right");
 				}
 
 				else

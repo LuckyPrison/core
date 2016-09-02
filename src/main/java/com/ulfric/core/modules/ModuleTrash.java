@@ -29,7 +29,7 @@ public class ModuleTrash extends Module {
 	public void onModuleEnable()
 	{
 		Document document = this.getModuleConfig().getRoot();
-		this.item = ItemUtils.getItem(document.getString("item", "ma.ironfence nac.&c&lEmpty<s>Trash"));
+		this.item = ItemUtils.getItem(document.getString("item", "id.ironfence na.&c&lEmpty<s>Trash"));
 		this.size = NumberUtils.roundUp(document.getInteger("size", 45), 9);
 
 		this.log("Setting trash size to " + this.size);
@@ -63,7 +63,7 @@ public class ModuleTrash extends Module {
 
 	void openTrash(Player player)
 	{
-		Panel.createStandard(this.size, player.getLocalizedMessage("core.trash"))
+		Panel.createStandard(this.size, player.getLocalizedMessage("trash-panel"))
 			 .addButton(Button.builder()
 					 		  .addSlot(this.size-1, ModuleTrash.this.item)
 					 		  .addAction(this::emptyTrash)

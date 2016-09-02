@@ -23,7 +23,6 @@ public final class CommandGangs extends BaseCommand {
 		this.addCommand(new SubCommandJoin(owner));
 		this.addCommand(new SubCommandLeave(owner));
 		this.addCommand(new SubCommandKick(owner));
-		this.addCommand(new SubCommandSetrank(owner));
 		this.addCommand(new SubCommandPromote(owner));
 		this.addCommand(new SubCommandDemote(owner));
 		this.addCommand(new SubCommandAlly(owner));

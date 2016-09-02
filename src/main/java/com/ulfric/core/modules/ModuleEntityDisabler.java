@@ -41,6 +41,7 @@ public class ModuleEntityDisabler extends Module {
 	{
 		ConfigFile config = this.getModuleConfig();
 
+		// TODO use enumish set
 		this.blocked = config.getRoot().getStringList("types", ImmutableList.of("WITHER")).stream().map(EntityType::of).filter(Objects::nonNull).collect(Collectors.toSet());
 
 		config.save();

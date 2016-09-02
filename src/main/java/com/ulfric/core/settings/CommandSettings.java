@@ -25,7 +25,7 @@ class CommandSettings extends Command {
 	{
 		super("settings", owner, "setting", "options", "option", /* for legacy users */ "chat");
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "settings.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "settings-must-be-player");
 	}
 
 	@Override
@@ -37,14 +37,14 @@ class CommandSettings extends Command {
 
 		if (settings.isEmpty())
 		{
-			player.sendLocalizedMessage("settings.no_settings");
+			player.sendLocalizedMessage("settings-none");
 
 			return;
 		}
 
 		Locale locale = player.getLocale();
 
-		StandardPanel panel = Panel.createStandard(NumberUtils.roundUp(settings.size(), 9), locale.getRawMessage("settings.panel_header"));
+		StandardPanel panel = Panel.createStandard(NumberUtils.roundUp(settings.size(), 9), locale.getRawMessage("settings-panel-header"));
 
 		UUID uuid = player.getUniqueId();
 

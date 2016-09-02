@@ -8,9 +8,9 @@ import com.ulfric.lib.coffee.npermission.Entity;
 import com.ulfric.lib.coffee.npermission.Permissible;
 import com.ulfric.lib.coffee.npermission.Permissions;
 
-final class CommandAdd extends Command {
+final class CommandCheck extends Command {
 
-	public CommandAdd(ModuleBase owner, Argument addable)
+	public CommandCheck(ModuleBase owner, Argument addable)
 	{
 		super("add", owner);
 

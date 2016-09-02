@@ -4,18 +4,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.commons.lang3.mutable.Mutable;
-import org.apache.commons.lang3.mutable.MutableObject;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.ulfric.lib.coffee.command.CommandSender;
+import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.math.RandomUtils;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.string.Strings;
+import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.player.PlayerFirstJoinEvent;
 
@@ -26,7 +24,9 @@ public class ModuleWelcome extends Module {
 		super("welcome", "A module to help welcome new players to the server", "1.0.0", "Packet");
 	}
 
-	private List<String> messages;
+	List<String> messages;
+	String currentName;
+	Set<UUID> uuids = Sets.newHashSet();
 
 	@Override
 	public void onModuleEnable()
@@ -44,10 +44,9 @@ public class ModuleWelcome extends Module {
 			this.messages.add(string);
 		}
 
-		if (empty)
-		{
-			this.messages.add("Welcome, {0}!");
-		}
+		if (!empty) return;
+
+		this.messages.add("Welcome, {0}!");
 	}
 
 	@Override
@@ -61,44 +60,45 @@ public class ModuleWelcome extends Module {
 	{
 		this.messages = Lists.newArrayList();
 
-		Set<UUID> uuids = Sets.newHashSet();
-		Mutable<String> name = new MutableObject<>();
-
 		this.addListener(new Listener(this)
 		{
 			@Handler
 			public void onJoin(PlayerFirstJoinEvent event)
 			{
-				name.setValue(event.getPlayer().getName());
-				uuids.clear();
+				ModuleWelcome.this.currentName = event.getPlayer().getName();
+				ModuleWelcome.this.uuids.clear();
 			}
 		});
 
-		this.addCommand("welcome", cmd ->
+		this.addCommand(new CommandWelcome());
+	}
+
+	private final class CommandWelcome extends Command
+	{
+		public CommandWelcome()
 		{
-			CommandSender sender = cmd.getSender();
+			super("welcome", ModuleWelcome.this);
 
-			if (!(sender instanceof Player))
+			this.addEnforcer(Enforcers.IS_PLAYER, "welcome-must-be-player");
+		}
+
+		@Override
+		public void run()
+		{
+			Player sender = (Player) this.getSender();
+
+			String name = ModuleWelcome.this.currentName;
+
+			if (name == null)
 			{
-				sender.sendLocalizedMessage("system.must_be_player");
+				sender.sendLocalizedMessage("welcome-no-recent-player");
 
 				return;
 			}
 
-			String player = name.getValue();
-
-			if (player == null)
+			if (!ModuleWelcome.this.uuids.add(sender.getUniqueId()))
 			{
-				sender.sendLocalizedMessage("core.welcome_err_none");
-
-				return;
-			}
-
-			Player from = (Player) sender;
-
-			if (!uuids.add(from.getUniqueId()))
-			{
-				sender.sendLocalizedMessage("core.welcome_err_already");
+				sender.sendLocalizedMessage("welcome-already-welcomed", name);
 
 				return;
 			}
@@ -107,15 +107,15 @@ public class ModuleWelcome extends Module {
 
 			if (message == null)
 			{
-				sender.sendLocalizedMessage("core.welcome_err_format_not_found");
+				sender.sendLocalizedMessage("welcome-no-available-messages");
 
 				return;
 			}
 
 			// TODO reward the sender
 
-			from.chat(Strings.format(message, player));
-		});
+			sender.chat(Strings.format(message, name));
+		}
 	}
 
 }

@@ -11,7 +11,7 @@ class ElementBalance extends ScoreboardElement {
 
 	public ElementBalance(Scoreboard board)
 	{
-		super(board, "balance");
+		super(board, "balance-element");
 	}
 
 	@Override

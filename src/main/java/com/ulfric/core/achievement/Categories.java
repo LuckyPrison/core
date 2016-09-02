@@ -37,7 +37,7 @@ public enum Categories {
 
 	public void openPanel(Player player)
 	{
-		StandardPanel panel = Panel.createStandard(NumberUtils.roundUp(this.categories.size(), 9), "Select a Category");
+		StandardPanel panel = Panel.createStandard(NumberUtils.roundUp(this.categories.size(), 9), player.getLocalizedMessage("select-category"));
 
 		UUID uuid = player.getUniqueId();
 

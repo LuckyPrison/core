@@ -19,7 +19,7 @@ class CommandSet extends Command {
 	{
 		super("set", owner);
 
-		this.addArgument(Argument.builder().setPath("material").addSimpleResolver(MaterialData::of).setUsage("worldedit.specify_set_type").build());
+		this.addArgument(Argument.builder().setPath("material").addSimpleResolver(MaterialData::of).setUsage("worldedit-specify-set-type").build());
 	}
 
 	@Override
@@ -32,7 +32,7 @@ class CommandSet extends Command {
 
 		if (!selection.isComplete())
 		{
-			player.sendLocalizedMessage("worldedit.selection_not_complete");
+			player.sendLocalizedMessage("worldedit-selection-not-complete");
 
 			return;
 		}
@@ -56,7 +56,7 @@ class CommandSet extends Command {
 
 			change.run();
 
-			player.sendLocalizedMessage("worldedit.setting_blocks", shape.getName(), counter);
+			player.sendLocalizedMessage("worldedit-setting-blocks", shape.getName(), counter);
 		});
 	}
 

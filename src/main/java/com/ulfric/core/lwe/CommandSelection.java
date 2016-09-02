@@ -13,7 +13,7 @@ final class CommandSelection extends Command {
 	{
 		super("selection", owner, "select", "sel");
 
-		this.addArgument(Argument.builder().setPath("shape").addSimpleResolver(str -> EnumUtils.valueOf(str, Shapes.class, 4)).setUsage("worldedit.selection_specify_type").build());
+		this.addArgument(Argument.builder().setPath("shape").addSimpleResolver(str -> EnumUtils.valueOf(str, Shapes.class, 4)).setUsage("worldedit-selection-specify-type").build());
 	}
 
 	@Override
@@ -25,7 +25,7 @@ final class CommandSelection extends Command {
 
 		player.setSelection(shape.newSelection());
 
-		player.sendLocalizedMessage("worldedit.selection_type_set", player.getSelection().getName());
+		player.sendLocalizedMessage("worldedit-selection-type-set", player.getSelection().getName());
 	}
 
 }

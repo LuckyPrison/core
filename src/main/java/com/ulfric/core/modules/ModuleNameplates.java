@@ -95,7 +95,7 @@ public class ModuleNameplates extends Module {
 			Scoreboard scoreboard = player.getScoreboard();
 
 			ScoreboardTeam self = scoreboard.getOrCreateTeam(player, "_self");
-			self.setPrefix(player.getLocalizedMessage("nameplate.self"));
+			self.setPrefix(player.getLocalizedMessage("nameplate-self"));
 			self.addEntry(player.getName());
 		};
 
@@ -260,7 +260,7 @@ public class ModuleNameplates extends Module {
 		{
 			super("nameplates", ModuleNameplates.this, "nameplate");
 
-			this.addEnforcer(Enforcers.IS_PLAYER, "nameplate.must_be_player");
+			this.addEnforcer(Enforcers.IS_PLAYER, "nameplate-must-be-player");
 		}
 
 		@Override
@@ -281,12 +281,12 @@ public class ModuleNameplates extends Module {
 
 			if (availableNameplates.isEmpty())
 			{
-				player.sendLocalizedMessage("nameplate.none_available");
+				player.sendLocalizedMessage("nameplate-none-available");
 
 				return;
 			}
 
-			StandardPanel panel = Panel.createStandard(NumberUtils.roundUp(availableNameplates.size(), 9), player.getLocalizedMessage("nameplate.panel"));
+			StandardPanel panel = Panel.createStandard(NumberUtils.roundUp(availableNameplates.size(), 9), player.getLocalizedMessage("nameplate-panel"));
 
 			slot = 0;
 

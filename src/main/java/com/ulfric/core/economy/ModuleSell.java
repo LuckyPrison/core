@@ -163,7 +163,7 @@ final class ModuleSell extends Module {
 
 				if (line == null)
 				{
-					player.sendLocalizedMessage("economy.sellall_sign_broken");
+					player.sendLocalizedMessage("economy-sellall-sign-broken");
 
 					return;
 				}
@@ -172,7 +172,7 @@ final class ModuleSell extends Module {
 
 				if (!player.hasPermission("sellall." + line))
 				{
-					player.sendLocalizedMessage("economy.sellall_missing_permission", line);
+					player.sendLocalizedMessage("economy-sellall-missing-permission", line);
 
 					return;
 				}
@@ -181,7 +181,7 @@ final class ModuleSell extends Module {
 
 				if (values == null)
 				{
-					player.sendLocalizedMessage("economy.sellall_missing_resource", line);
+					player.sendLocalizedMessage("economy-sellall-missing-resource", line);
 
 					return;
 				}
@@ -213,14 +213,14 @@ final class ModuleSell extends Module {
 
 				if (total == 0)
 				{
-					player.sendLocalizedMessage("economy.sellall_no_items", line);
+					player.sendLocalizedMessage("economy-sellall-no-items", line);
 
 					return;
 				}
 
 				CurrencyAmount amt = CurrencyAmount.of(Currency.getDefaultCurrency(), total);
 
-				player.sendLocalizedMessage("economy.sellall", count, amt.toFormatter().dualFormatWord());
+				player.sendLocalizedMessage("economy-sellall", count, amt.toFormatter().dualFormatWord());
 
 				Bank.getOnlineAccount(player.getUniqueId()).give(amt, "SellAll " + line);
 			}

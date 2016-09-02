@@ -13,11 +13,11 @@ final class CommandTeleportHere extends Command {
 	{
 		super("teleporthere", owner, "telehere", "tphere");
 
-		this.addArgument(Argument.builder().setPath("player").addResolver(PlayerUtils::getOnlinePlayer).setUsage("teleport.specify_player").build());
+		this.addArgument(Argument.builder().setPath("player").addResolver(PlayerUtils::getOnlinePlayer).setUsage("teleport-here-specify-player").build());
 
-		this.addPermission("teleport.use");
+		this.addPermission("moderator");
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "teleport.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "teleport-here-must-be-player");
 	}
 
 	@Override

@@ -12,17 +12,17 @@ final class CommandMutateperm extends BaseCommand {
 	{
 		super("permission", owner, "perm");
 
-		this.addArgument(Argument.builder().addSimpleResolver(str ->
+		Argument addable = Argument.builder().addSimpleResolver(str ->
 		{
 			Permission p = Permissions.getPermission(str);
 
 			if (p == null) return null;
 
 			return Addable.valueOf(p);
-		}).setPath("addable").setUsage("permissions.specify_perm").build());
+		}).setPath("addable").setUsage("permissions-specify-perm").build();
 
-		this.addCommand(new CommandAdd(owner));
-		this.addCommand(new CommandRemove(owner));
+		this.addCommand(new CommandAdd(owner, addable));
+		this.addCommand(new CommandRemove(owner, addable));
 	}
 
 }

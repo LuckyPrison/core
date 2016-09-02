@@ -49,7 +49,7 @@ public class BackpackPage {
 		StandardPanel panel = Panel.createStandard(
 				INVENTORY_SIZE - (!this.canPageDown() && !this.canPageUp() ? 9 : 0),
 				this.viewer.getLocalizedMessage(
-						"backpacks.title",
+						"backpacks-title",
 						this.backpack.getOwner().getName(),
 						this.currentPage
 				)
@@ -88,7 +88,7 @@ public class BackpackPage {
 
 			ItemMeta meta = back.getMeta();
 
-			meta.setDisplayName(this.viewer.getLocalizedMessage("backpacks.prev"));
+			meta.setDisplayName(this.viewer.getLocalizedMessage("backpacks-prev"));
 
 			back.setMeta(meta);
 
@@ -113,7 +113,7 @@ public class BackpackPage {
 
 			ItemMeta meta = forward.getMeta();
 
-			meta.setDisplayName(this.viewer.getLocalizedMessage("backpacks.forward"));
+			meta.setDisplayName(this.viewer.getLocalizedMessage("backpacks-forward"));
 
 			forward.setMeta(meta);
 

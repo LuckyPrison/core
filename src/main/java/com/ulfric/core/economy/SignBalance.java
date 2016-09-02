@@ -25,7 +25,7 @@ class SignBalance extends SignListener {
 			currency = Currency.getDefaultCurrency();
 		}
 
-		player.sendLocalizedMessage("economy.balance_self", player.getName(), new MoneyFormatter(Bank.getOnlineAccount(player.getUniqueId()).getBalance(currency)).dualFormatWord());
+		player.sendLocalizedMessage("economy-balance", player.getName(), new MoneyFormatter(Bank.getOnlineAccount(player.getUniqueId()).getBalance(currency)).dualFormatWord());
 	}
 
 }

@@ -1,17 +1,15 @@
 package com.ulfric.core.rankup;
 
 import com.ulfric.lib.coffee.npermission.Group;
-import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.scoreboard.Scoreboard;
 import com.ulfric.lib.craft.scoreboard.ScoreboardElement;
-import com.ulfric.lib.craft.string.ChatUtils;
 
 final class ElementMine extends ScoreboardElement {
 
 	ElementMine(Scoreboard board)
 	{
-		super(board, "mine");
+		super(board, "mine-element");
 	}
 
 	@Override
@@ -25,7 +23,7 @@ final class ElementMine extends ScoreboardElement {
 
 		if (group == null) return null;
 
-		return Strings.format(ChatUtils.color("&a{0} (&e/mine&a)"), group.getName());
+		return updater.getLocalizedMessage("next-mine-value", group.getName());
 	}
 
 }

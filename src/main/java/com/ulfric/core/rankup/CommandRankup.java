@@ -1,10 +1,14 @@
 package com.ulfric.core.rankup;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.economy.Bank;
 import com.ulfric.lib.coffee.economy.BankAccount;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.coffee.economy.MoneyFormatter;
+import com.ulfric.lib.coffee.math.RandomUtils;
 import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
@@ -15,7 +19,7 @@ final class CommandRankup extends Command {
 	{
 		super("rankup", owner);
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "rankup.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "rankup-must-be-player");
 	}
 
 	@Override
@@ -27,7 +31,7 @@ final class CommandRankup extends Command {
 
 		if (rankup == null)
 		{
-			player.sendLocalizedMessage("rankup.no_rank_found");
+			player.sendLocalizedMessage("rankup-no-rank-found");
 
 			return;
 		}
@@ -44,7 +48,7 @@ final class CommandRankup extends Command {
 
 			if (balance < costAmount)
 			{
-				player.sendLocalizedMessage("rankup.cannot_afford", new MoneyFormatter(costAmount - balance).dualFormatWord(), rankup.getNext().getName());
+				player.sendLocalizedMessage("rankup-cannot-afford", new MoneyFormatter(costAmount - balance).dualFormatWord(), rankup.getNext().getName());
 
 				return;
 			}
@@ -61,9 +65,11 @@ final class CommandRankup extends Command {
 			player.swapGroups(rankup.getOld(), rankup.getNext());
 		}
 
-		player.sendLocalizedMessage("rankup.ranked_up", rankup.getNext().getName());
+		player.sendLocalizedMessage("rankup-success", rankup.getNext().getName(), RandomUtils.randomValue(this.randomEncouragement));
 
 		// TODO fireworks - 
 	}
+
+	private final List<String> randomEncouragement = Arrays.asList("Nice work!", "Good job!", "Great work!", "Nice job!", "Good work!", "Good job!", "Amazing work!", "Stellar job!", "Excellent work!", "Excellent job!", "Very nice!", "You'll be at the top in no time!", "Congrats!");
 
 }

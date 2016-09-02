@@ -34,9 +34,9 @@ public class ModuleEmailInterface extends Module {
 		{
 			super("email", ModuleEmailInterface.this);
 
-			this.addArgument(Argument.builder().setPath("address").addSimpleResolver(EmailUtils::parseAddress).setUsage("email.specify_address").build());
+			this.addArgument(Argument.builder().setPath("address").addSimpleResolver(EmailUtils::parseAddress).setUsage("email-specify-address").build());
 
-			this.addEnforcer(Enforcers.IS_PLAYER, "email.must_be_player");
+			this.addEnforcer(Enforcers.IS_PLAYER, "email-must-be-player");
 		}
 
 		@Override
@@ -48,7 +48,7 @@ public class ModuleEmailInterface extends Module {
 
 			if (pending != null)
 			{
-				player.sendLocalizedMessage("email.pending", pending);
+				player.sendLocalizedMessage("email-pending", pending);
 
 				return;
 			}
@@ -61,9 +61,9 @@ public class ModuleEmailInterface extends Module {
 			String code = RandomStringUtils.randomAlphabetic(6);
 			player.setMetadata("pending_email_code", code);
 
-			player.sendLocalizedMessage("email.verify", addy);
+			player.sendLocalizedMessage("email-verify", addy);
 
-			ThreadUtils.runAsync(() -> player.sendEmail(player.getLocalizedMessage("email.confirmation_subject"), player.getLocalizedMessage("email.confirmation_subject", code)));
+			ThreadUtils.runAsync(() -> player.sendEmail(player.getLocalizedMessage("email-confirmation-subject"), player.getLocalizedMessage("email-confirmation-body", code)));
 		}
 	}
 
@@ -73,9 +73,9 @@ public class ModuleEmailInterface extends Module {
 		{
 			super("confirm", ModuleEmailInterface.this);
 
-			this.addArgument(Argument.builder().setPath("code").addResolver(Resolvers.STRING).setUsage("confirm.code_required").build());
+			this.addArgument(Argument.builder().setPath("code").addResolver(Resolvers.STRING).setUsage("confirm-code-required").build());
 
-			this.addEnforcer(Enforcers.IS_PLAYER, "confirm.must_be_player");
+			this.addEnforcer(Enforcers.IS_PLAYER, "confirm-must-be-player");
 		}
 
 		@Override
@@ -88,7 +88,7 @@ public class ModuleEmailInterface extends Module {
 
 			if (code == null)
 			{
-				player.sendLocalizedMessage("confirm.no_code_found");
+				player.sendLocalizedMessage("confirm-no-code-found");
 
 				return;
 			}
@@ -97,18 +97,18 @@ public class ModuleEmailInterface extends Module {
 
 			if (distance == -1)
 			{
-				player.sendLocalizedMessage("confirm.incorrect");
+				player.sendLocalizedMessage("confirm-incorrect");
 
 				return;
 			}
 
-			player.sendLocalizedMessage("confirm.correct");
+			player.sendLocalizedMessage("confirm-correct");
 
 			player.removeMetadata("pending_email_code");
 
 			EmailUtils.setEmailAddress(player.getUniqueId(), String.valueOf(player.getMetadata("pending_email", true)));
 
-			ThreadUtils.runAsync(() -> player.sendEmail(player.getLocalizedMessage("email.confirmed_subject"), player.getLocalizedMessage("email.confirmed")));
+			ThreadUtils.runAsync(() -> player.sendEmail(player.getLocalizedMessage("email-confirmed-subject"), player.getLocalizedMessage("email-confirmed-body")));
 		}
 	}
 

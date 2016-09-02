@@ -11,7 +11,7 @@ class ElementPlayercount extends ScoreboardElement {
 
 	public ElementPlayercount(Scoreboard board, float multiplier)
 	{
-		super(board, "playercount");
+		super(board, "playercount-element");
 
 		this.multiplier = multiplier;
 	}
@@ -21,7 +21,7 @@ class ElementPlayercount extends ScoreboardElement {
 	@Override
 	public String getText(Player updater)
 	{
-		if (!updater.hasPermission("core.scoreboard.playercount")) return null;
+		if (!updater.hasPermission("scoreboard.playercount")) return null;
 
 		return String.valueOf(NumberFormat.getIntegerInstance().format((int) (PlayerUtils.countOnlinePlayers() * this.multiplier)));
 	}

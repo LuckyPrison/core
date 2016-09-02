@@ -14,11 +14,13 @@ final class CommandTeleportPosition extends Command {
 	{
 		super("teleportposition", owner, "teleposition", "telepos", "tppos");
 
-		this.addArgument(Argument.builder().setPath("x").addResolver(Resolvers.DOUBLE).setUsage("teleport.tppos_specify_x").build());
-		this.addArgument(Argument.builder().setPath("y").addResolver(Resolvers.DOUBLE).setUsage("teleport.tppos_specify_y").build());
-		this.addArgument(Argument.builder().setPath("z").addResolver(Resolvers.DOUBLE).setUsage("teleport.tppos_specify_z").build());
+		this.addArgument(Argument.builder().setPath("x").addResolver(Resolvers.DOUBLE).setUsage("teleport-position-specify-x").build());
+		this.addArgument(Argument.builder().setPath("y").addResolver(Resolvers.DOUBLE).setUsage("teleport-position-specify-y").build());
+		this.addArgument(Argument.builder().setPath("z").addResolver(Resolvers.DOUBLE).setUsage("teleport-position-specify-z").build());
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "teleport.tppos_must_be_player");
+		this.addPermission("moderator");
+
+		this.addEnforcer(Enforcers.IS_PLAYER, "teleport-position-must-be-player");
 	}
 
 	@Override

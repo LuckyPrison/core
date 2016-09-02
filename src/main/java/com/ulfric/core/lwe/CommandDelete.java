@@ -30,7 +30,7 @@ class CommandDelete extends Command {
 
 		if (!selection.isComplete())
 		{
-			player.sendLocalizedMessage("worldedit.selection_not_complete");
+			player.sendLocalizedMessage("worldedit-selection-not-complete");
 
 			return;
 		}
@@ -54,7 +54,7 @@ class CommandDelete extends Command {
 
 			change.run();
 
-			player.sendLocalizedMessage("worldedit.setting_blocks", shape.getName(), counter);
+			player.sendLocalizedMessage("worldedit-setting-blocks", shape.getName(), counter);
 		});
 	}
 

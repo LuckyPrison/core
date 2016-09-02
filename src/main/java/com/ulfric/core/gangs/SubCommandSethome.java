@@ -10,7 +10,7 @@ public class SubCommandSethome extends GangCommand {
 	{
 		super("sethome", GangRank.OFFICER, owner);
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "gangs.sethome_must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "gangs-sethome-must-be-player");
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class SubCommandSethome extends GangCommand {
 		gang.setHome(player.getLocation());
 
 		String playerName = player.getName();
-		gang.getOnlinePlayers().forEach(p -> p.sendLocalizedMessage("gangs.sethome_by", playerName));
+		gang.getOnlinePlayers().forEach(p -> p.sendLocalizedMessage("gangs-sethome-by", playerName));
 	}
 
 }

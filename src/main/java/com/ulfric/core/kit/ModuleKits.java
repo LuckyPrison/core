@@ -34,7 +34,7 @@ public final class ModuleKits extends Module {
 
 				if (defaultKit == null)
 				{
-					player.sendLocalizedMessage("kits.default_kit_not_found");
+					player.sendLocalizedMessage("kits-default-kit-not-found");
 
 					return;
 				}

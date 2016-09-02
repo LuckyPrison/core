@@ -38,7 +38,7 @@ public class ModuleGameModeInterface extends Module {
 				if (value == null) return null;
 
 				return GameMode.byId(value);
-			}).setUsage("gamemode.specify_gamemode").build());
+			}).setUsage("gamemode-specify-gamemode").build());
 		}
 
 		@Override
@@ -52,7 +52,7 @@ public class ModuleGameModeInterface extends Module {
 			{
 				if (!(sender instanceof Player))
 				{
-					sender.sendLocalizedMessage("gamemode.specify_player");
+					sender.sendLocalizedMessage("gamemode-specify-player");
 
 					return;
 				}
@@ -68,12 +68,12 @@ public class ModuleGameModeInterface extends Module {
 			{
 				if (player == sender)
 				{
-					sender.sendLocalizedMessage("gamemode.already_mode", mode.getFormattedName());
+					sender.sendLocalizedMessage("gamemode-already-mode", mode.getFormattedName());
 
 					return;
 				}
 
-				sender.sendLocalizedMessage("gamemode.already_mode_other", player.getName(), mode.getFormattedName());
+				sender.sendLocalizedMessage("gamemode-already-mode-other", player.getName(), mode.getFormattedName());
 
 				return;
 			}
@@ -82,7 +82,7 @@ public class ModuleGameModeInterface extends Module {
 
 			if (player == sender) return;
 
-			sender.sendLocalizedMessage("gamemode.changed_other", player.getName(), mode.getFormattedName());
+			sender.sendLocalizedMessage("gamemode-changed-other", player.getName(), mode.getFormattedName());
 		}
 	}
 

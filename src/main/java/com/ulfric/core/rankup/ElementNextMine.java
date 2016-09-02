@@ -12,7 +12,7 @@ final class ElementNextMine extends ScoreboardElement {
 
 	public ElementNextMine(Scoreboard board)
 	{
-		super(board, "next_mine");
+		super(board, "next-mine-element");
 	}
 
 	@Override

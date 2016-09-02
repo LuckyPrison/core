@@ -1,5 +1,6 @@
 package com.ulfric.core.permissions;
 
+import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.module.ModuleBase;
@@ -9,9 +10,11 @@ import com.ulfric.lib.coffee.npermission.Permissions;
 
 final class CommandRemove extends Command {
 
-	public CommandRemove(ModuleBase owner)
+	public CommandRemove(ModuleBase owner, Argument addable)
 	{
 		super("remove", owner, "delete", "del");
+
+		this.addArgument(addable);
 	}
 
 	@Override

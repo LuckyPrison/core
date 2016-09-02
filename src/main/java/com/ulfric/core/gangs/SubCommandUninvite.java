@@ -30,25 +30,25 @@ public class SubCommandUninvite extends InviteGangCommand {
 
 		if (member != null)
 		{
-			sender.sendLocalizedMessage("gangs.uninvite_already_member", member.getName(), EnumUtils.format(member.getRank()));
+			sender.sendLocalizedMessage("gangs-uninvite-already-member", member.getName(), EnumUtils.format(member.getRank()));
 
 			return;
 		}
 
 		if (!gang.isInvited(targetUUID))
 		{
-			sender.sendLocalizedMessage("gangs.uninvite_not_invited", offlinePlayer.getName());
+			sender.sendLocalizedMessage("gangs-uninvite-not-invited", offlinePlayer.getName());
 
 			return;
 		}
 
 		gang.removeInvite(targetUUID);
 
-		sender.sendLocalizedMessage("gangs.uninvited_success", offlinePlayer.getName());
+		sender.sendLocalizedMessage("gangs-uninvited-success", offlinePlayer.getName());
 
 		if (onlinePlayer == null) return;
 
-		onlinePlayer.sendLocalizedMessage("gangs.uninvited_to", sender.getName(), gang.getName());
+		onlinePlayer.sendLocalizedMessage("gangs-uninvited-to", sender.getName(), gang.getName());
 	}
 
 }

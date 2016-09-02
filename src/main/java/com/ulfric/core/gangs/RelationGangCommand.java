@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.Validate;
 
 import com.ulfric.lib.coffee.command.CommandSender;
+import com.ulfric.lib.coffee.enums.EnumUtils;
 import com.ulfric.lib.coffee.module.ModuleBase;
 
 class RelationGangCommand extends GangCommand {
@@ -33,7 +34,7 @@ class RelationGangCommand extends GangCommand {
 
 		if (member != null && member.getGang().equals(gang))
 		{
-			sender.sendLocalizedMessage("gangs.relation_set_self", gang.getName());
+			sender.sendLocalizedMessage("gangs-relation-set-self", gang.getName());
 
 			return;
 		}
@@ -62,12 +63,12 @@ class RelationGangCommand extends GangCommand {
 				gang.setRelation(memberGang.getUniqueId(), this.relation);
 			}
 
-			gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs.relation_set_other", senderName, gangName));
+			gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs-relation-set-other", senderName, gangName, EnumUtils.format(this.relation)));
 		}
 
 		String otherGangName = gang.getName();
 
-		memberGang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs.relation_set", senderName, otherGangName));
+		memberGang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs-relation-set", senderName, otherGangName, EnumUtils.format(this.relation)));
 	}
 
 }

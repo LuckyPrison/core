@@ -10,7 +10,7 @@ final class CommandWorldEdit extends BaseCommand {
 	{
 		super("worldedit", owner, "we");
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "worldedit.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "worldedit-must-be-player");
 
 		this.addPermission("worldedit.use");
 

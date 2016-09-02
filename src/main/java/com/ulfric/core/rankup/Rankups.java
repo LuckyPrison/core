@@ -106,16 +106,16 @@ public enum Rankups {
 	public void openPanel(Player player)
 	{
 		Locale locale = player.getLocale();
-		StandardPanel panel = Panel.createStandard(NumberUtils.roundUp(this.trackItems.size(), 9), locale.getRawMessage("tracks.panel"));
+		StandardPanel panel = Panel.createStandard(NumberUtils.roundUp(this.trackItems.size(), 9), locale.getRawMessage("tracks-panel"));
 
 		int index = 0;
 
 		Track currentTrack = player.getCurrentTrack();
 
-		String title = locale.getRawMessage("track.panel_item_title");
-		String rightClick = locale.getRawMessage("track.panel_right_click");
-		String leftClick = locale.getRawMessage("track.panel_left_click");
-		String completeMessage = locale.getRawMessage("track.complete");
+		String title = locale.getRawMessage("track-panel-item-title");
+		String rightClick = locale.getRawMessage("track-panel-item-right-click");
+		String leftClick = locale.getRawMessage("track-panel-item-left-click");
+		String completeMessage = locale.getRawMessage("track-complete");
 
 		Collection<Group> parents = player.getParents();
 
@@ -137,7 +137,7 @@ public enum Rankups {
 
 			if (track.equals(currentTrack))
 			{
-				lore.add(player.getLocalizedMessage("track.panel_current_track"));
+				lore.add(player.getLocalizedMessage("track-panel-current"));
 
 				lore.add(Strings.EMPTY);
 
@@ -211,7 +211,7 @@ public enum Rankups {
 								{
 									clicked.closeInventory();
 
-									clicked.sendLocalizedMessage("tracks.cannot_afford", track.getName(), amount.toFormatter().dualFormatWord());
+									clicked.sendLocalizedMessage("tracks-cannot-afford", track.getName(), amount.toFormatter().dualFormatWord());
 
 									return;
 								}
@@ -221,13 +221,12 @@ public enum Rankups {
 
 							clicked.addGroup(first);
 						}
-						// TODO charge player to join the track
 
 						clicked.setCurrentTrack(track);
 
 						clicked.closeInventory();
 
-						clicked.sendLocalizedMessage("tracks.set", track.getName());
+						clicked.sendLocalizedMessage("tracks-set", track.getName());
 					}
 				});
 			}
@@ -248,13 +247,13 @@ public enum Rankups {
 
 		Locale locale = player.getLocale();
 
-		StandardPanel panel = Panel.createStandard(NumberUtils.roundUp(map.size(), 9), locale.getFormattedMessage("tracks.track_panel", track.getName()));
+		StandardPanel panel = Panel.createStandard(NumberUtils.roundUp(map.size(), 9), locale.getFormattedMessage("tracks-track-panel", track.getName()));
 
 		Material material = Material.of("STAINED_GLASS_PANE");
 
-		String displayName = locale.getRawMessage("tracks.track_panel_entry_name");
-		String attained = locale.getRawMessage("tracks.track_panel_entry_attained");
-		String cost = locale.getRawMessage("tracks.track_panel_entry_cost");
+		String displayName = locale.getRawMessage("tracks-track-panel-entry-item-title");
+		String attained = locale.getRawMessage("tracks-track-panel-entry-attained");
+		String cost = locale.getRawMessage("tracks-track-panel-entry-cost");
 
 		for (Group group : map.getGroups())
 		{
@@ -278,14 +277,14 @@ public enum Rankups {
 
 				CurrencyAmount amount = map.getPrice(group);
 
-				lore.add(Strings.format(cost, amount == null ? "FREE" : amount.toFormatter().wordFormat()));
+				lore.add(Strings.format(cost, amount == null ? "FREE" : amount.toFormatter().letterFormat()));
 			}
 
 			meta.setAllLore(lore);
 
 			item.setMeta(meta);
 
-			
+			panel.addItem(item);
 		}
 
 		panel.open(player);

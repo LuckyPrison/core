@@ -20,7 +20,7 @@ public class SubCommandInvite extends InviteGangCommand {
 	{
 		CommandSender sender = this.getSender();
 
-		OfflinePlayer offlinePlayer = (OfflinePlayer) this.getObject("offline-player");
+		OfflinePlayer offlinePlayer = (OfflinePlayer) this.getObject(OfflinePlayer.ARGUMENT.getPath());
 		Player onlinePlayer = offlinePlayer.toPlayer();
 		UUID targetUUID = offlinePlayer.getUniqueId();
 
@@ -30,25 +30,25 @@ public class SubCommandInvite extends InviteGangCommand {
 
 		if (member != null)
 		{
-			sender.sendLocalizedMessage("gangs.invite_already_member", member.getName(), EnumUtils.format(member.getRank()));
+			sender.sendLocalizedMessage("gangs-invite-already-member", member.getName(), EnumUtils.format(member.getRank()));
 
 			return;
 		}
 
 		if (gang.isInvited(targetUUID))
 		{
-			sender.sendLocalizedMessage("gangs.invite_already_invited", offlinePlayer.getName());
+			sender.sendLocalizedMessage("gangs-invite-already-invited", offlinePlayer.getName());
 
 			return;
 		}
 
 		gang.addInvite(targetUUID);
 
-		sender.sendLocalizedMessage("gangs.invited_success", offlinePlayer.getName());
+		sender.sendLocalizedMessage("gangs-invited-success", offlinePlayer.getName());
 
 		if (onlinePlayer == null) return;
 
-		onlinePlayer.sendLocalizedMessage("gangs.invited_to", sender.getName(), gang.getName());
+		onlinePlayer.sendLocalizedMessage("gangs-invited-to", sender.getName(), gang.getName());
 	}
 
 }

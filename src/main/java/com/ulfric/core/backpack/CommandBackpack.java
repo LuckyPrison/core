@@ -16,7 +16,7 @@ public class CommandBackpack extends Command {
 
 		super.addPermission("core.backpack");
 
-		super.addEnforcer(Enforcers.IS_PLAYER, "backpacks.must_be_player");
+		super.addEnforcer(Enforcers.IS_PLAYER, "backpacks-must-be-player");
 
 		super.addOptionalArgument(OfflinePlayer.ARGUMENT);
 		super.addOptionalArgument(Argument.builder().addResolver(Resolvers.INTEGER).setPath("page").setDefaultValue(1).build());
@@ -40,7 +40,7 @@ public class CommandBackpack extends Command {
 
 		if (!backpack.inBounds(page))
 		{
-			super.getSender().sendLocalizedMessage("backpacks.invalid_page", page);
+			super.getSender().sendLocalizedMessage("backpacks-invalid-page", page);
 
 			return;
 		}

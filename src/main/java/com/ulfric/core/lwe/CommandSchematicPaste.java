@@ -12,7 +12,7 @@ public class CommandSchematicPaste extends Command {
 	{
 		super("paste", owner);
 
-		this.addArgument(Argument.builder().setPath("schem").addSimpleResolver(Schematic::valueOf).setUsage("worldedit.specify_schematic").build());
+		this.addArgument(Argument.builder().setPath("schem").addSimpleResolver(Schematic::valueOf).setUsage("worldedit-specify-schematic").build());
 	}
 
 	@Override

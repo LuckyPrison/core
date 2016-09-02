@@ -12,17 +12,17 @@ final class CommandMutategroup extends BaseCommand {
 	{
 		super("group", owner);
 
-		this.addArgument(Argument.builder().addSimpleResolver(str ->
+		Argument addable = Argument.builder().addSimpleResolver(str ->
 		{
 			Group group = Permissions.getGroup(str);
 
 			if (group == null) return null;
 
 			return Addable.valueOf(group);
-		}).setPath("addable").setUsage("permissions.specify_group").build());
+		}).setPath("addable").setUsage("permissions-specify-group").build();
 
-		this.addCommand(new CommandAdd(owner));
-		this.addCommand(new CommandRemove(owner));
+		this.addCommand(new CommandAdd(owner, addable));
+		this.addCommand(new CommandRemove(owner, addable));
 	}
 
 }

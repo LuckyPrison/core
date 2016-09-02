@@ -42,7 +42,7 @@ public class ModuleGodmodeInterface extends Module {
 	{
 		ElementGodmode(Scoreboard board)
 		{
-			super(board, "godmode");
+			super(board, null);
 		}
 
 		@Override
@@ -50,7 +50,7 @@ public class ModuleGodmodeInterface extends Module {
 		{
 			if (!updater.isInvulnerable()) return null;
 
-			return "core.scoreboard_godmode";
+			return "godmode-element";
 		}
 	}
 
@@ -75,7 +75,7 @@ public class ModuleGodmodeInterface extends Module {
 			{
 				if (!(sender instanceof Player))
 				{
-					sender.sendLocalizedMessage("godmode.specify_player");
+					sender.sendLocalizedMessage("godmode-specify-player");
 
 					return;
 				}
@@ -89,12 +89,12 @@ public class ModuleGodmodeInterface extends Module {
 
 				if (player == sender)
 				{
-					sender.sendLocalizedMessage("godmode.ungodded");
+					sender.sendLocalizedMessage("godmode-ungodded");
 
 					return;
 				}
 
-				sender.sendLocalizedMessage("godmode.ungodded_other", player.getName());
+				sender.sendLocalizedMessage("godmode-ungodded-other", player.getName());
 
 				return;
 			}
@@ -103,12 +103,12 @@ public class ModuleGodmodeInterface extends Module {
 
 			if (player == sender)
 			{
-				sender.sendLocalizedMessage("godmode.godded");
+				sender.sendLocalizedMessage("godmode-godded");
 
 				return;
 			}
 
-			sender.sendLocalizedMessage("godmode.godded_other", player.getName());
+			sender.sendLocalizedMessage("godmode-godded-other", player.getName());
 		}
 	}
 

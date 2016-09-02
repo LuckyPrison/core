@@ -87,7 +87,7 @@ public class ModuleVanishInterface extends Module {
 	{
 		ElementVanish(Scoreboard board)
 		{
-			super(board, "vanish");
+			super(board, null);
 		}
 
 		@Override
@@ -95,7 +95,7 @@ public class ModuleVanishInterface extends Module {
 		{
 			if (updater.isNotVanished()) return null;
 
-			return "core.scoreboard_vanish";
+			return "vanish-element";
 		}
 	}
 
@@ -120,7 +120,7 @@ public class ModuleVanishInterface extends Module {
 			{
 				if (!(sender instanceof Player))
 				{
-					sender.sendLocalizedMessage("vanish.specify_player");
+					sender.sendLocalizedMessage("vanish-specify-player");
 
 					return;
 				}
@@ -134,12 +134,12 @@ public class ModuleVanishInterface extends Module {
 
 				if (player == sender)
 				{
-					sender.sendLocalizedMessage("vanish.unvanished");
+					sender.sendLocalizedMessage("vanish-unvanished");
 
 					return;
 				}
 
-				sender.sendLocalizedMessage("vanish.unvanished_other", player.getName());
+				sender.sendLocalizedMessage("vanish-unvanished-other", player.getName());
 
 				return;
 			}
@@ -148,12 +148,12 @@ public class ModuleVanishInterface extends Module {
 
 			if (player == sender)
 			{
-				sender.sendLocalizedMessage("vanish.vanished");
+				sender.sendLocalizedMessage("vanish-vanished");
 
 				return;
 			}
 
-			sender.sendLocalizedMessage("vanish.vanished_other", player.getName());
+			sender.sendLocalizedMessage("vanish-vanished-other", player.getName());
 		}
 	}
 

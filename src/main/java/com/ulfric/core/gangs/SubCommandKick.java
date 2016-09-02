@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.enums.EnumUtils;
-import com.ulfric.lib.coffee.locale.Locale;
 import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
@@ -23,13 +22,13 @@ public class SubCommandKick extends GangCommand {
 	{
 		CommandSender sender = this.getSender();
 
-		OfflinePlayer target = (OfflinePlayer) this.getObject("offline-player");
+		OfflinePlayer target = (OfflinePlayer) this.getObject(OfflinePlayer.ARGUMENT.getPath());
 
 		UUID targetUUID = target.getUniqueId();
 
 		if (targetUUID.equals(sender.getUniqueId()))
 		{
-			sender.sendLocalizedMessage("gangs.kick_self");
+			sender.sendLocalizedMessage("gangs-kick-self");
 
 			return;
 		}
@@ -40,7 +39,7 @@ public class SubCommandKick extends GangCommand {
 
 		if (member == null)
 		{
-			sender.sendLocalizedMessage("gangs.kick_not_member", gang.getName(), target.getName());
+			sender.sendLocalizedMessage("gangs-kick-not-member", gang.getName(), target.getName());
 
 			return;
 		}
@@ -51,7 +50,7 @@ public class SubCommandKick extends GangCommand {
 		{
 			if (member.hasPermission(senderMember.getRank()))
 			{
-				sender.sendLocalizedMessage("gangs.cannot_kick_ranked", target.getName(), EnumUtils.format(member.getRank()));
+				sender.sendLocalizedMessage("gangs-cannot-kick-ranked", target.getName(), EnumUtils.format(member.getRank()));
 
 				return;
 			}
@@ -62,19 +61,19 @@ public class SubCommandKick extends GangCommand {
 		String senderName = sender.getName();
 		String targetName = target.getName();
 
-		gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs.kicked_other", senderName, targetName));
+		gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs-kicked-other", senderName, targetName));
 
 		Player player = target.toPlayer();
 
-		Locale locale = player == null ? Locale.getDefault() : player.getLocale();
+		//Locale locale = player == null ? Locale.getDefault() : player.getLocale();
 
-		target.sendEmail(locale.getRawMessage("gangs.kick_email_subject"), locale.getFormattedMessage("gangs.kick_email_body", gang.getName(), senderName));
+		//target.sendEmail(locale.getRawMessage("gangs-kick-email-subject"), locale.getFormattedMessage("gangs.kick_email_body", gang.getName(), senderName));
 
 		if (player == null) return;
 
 		new GangStatusEvent(player, gang, null).fire();
 
-		player.sendLocalizedMessage("gangs.kicked", gang.getName(), senderName);
+		player.sendLocalizedMessage("gangs-kicked", gang.getName(), senderName);
 	}
 
 }

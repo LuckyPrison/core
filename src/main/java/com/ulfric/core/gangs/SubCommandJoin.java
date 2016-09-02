@@ -12,7 +12,7 @@ public class SubCommandJoin extends GangCommand {
 	{
 		super("join", null, owner);
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "gangs.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "gangs-join-must-be-player");
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class SubCommandJoin extends GangCommand {
 
 		if (membership != null)
 		{
-			sender.sendLocalizedMessage("gangs.already_in_gang", membership.getGang().getName());
+			sender.sendLocalizedMessage("gangs-already-in-gang", membership.getGang().getName());
 
 			return;
 		}
@@ -36,18 +36,18 @@ public class SubCommandJoin extends GangCommand {
 
 		if (!gang.isInvited(sender.getUniqueId()) && !sender.hasPermission("gangs.admin"))
 		{
-			sender.sendLocalizedMessage("gangs.not_invited", gang.getName());
+			sender.sendLocalizedMessage("gangs-not-invited", gang.getName());
 
 			return;
 		}
 
 		String name = sender.getName();
 
-		gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs.joined_other", name));
+		gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs-joined-other", name));
 
 		gang.addNewMember(uuid);
 
-		sender.sendLocalizedMessage("gangs.joined", gang.getName());
+		sender.sendLocalizedMessage("gangs-joined", gang.getName());
 
 		new GangStatusEvent(sender, null, gang).fire();
 	}

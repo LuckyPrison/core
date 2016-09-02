@@ -1,8 +1,12 @@
 package com.ulfric.core.permissions;
 
+import org.apache.commons.lang3.mutable.Mutable;
+import org.apache.commons.lang3.mutable.MutableObject;
+
 import com.ulfric.core.permissions.Addable.LimitAddable;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.BaseCommand;
+import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.coffee.npermission.Permissible;
 
@@ -12,19 +16,33 @@ final class CommandMutatelimit extends BaseCommand {
 	{
 		super("limit", owner);
 
-		this.addArgument(Argument.builder().addSimpleResolver(str ->
+		// HACKY STUFF BRUH
+
+		Mutable<Command> add = new MutableObject<>();
+		Argument addArg = this.newArg(add);
+		Command addCommand = new CommandAdd(owner, addArg);
+		add.setValue(addCommand);
+		this.addCommand(addCommand);
+
+		Mutable<Command> remove = new MutableObject<>();
+		Argument removeArg = this.newArg(remove);
+		Command removeCommand = new CommandRemove(owner, removeArg);
+		add.setValue(removeCommand);
+		this.addCommand(removeCommand);
+	}
+
+	private Argument newArg(Mutable<Command> mutable)
+	{
+		return Argument.builder().addSimpleResolver(str ->
 		{
-			Permissible permissible = (Permissible) this.getObject("permissible");
+			Permissible permissible = (Permissible) mutable.getValue().getObject("permissible");
 
 			LimitAddable limit = LimitAddable.valueOf(permissible, str);
 
 			if (limit == null) return null;
 
 			return Addable.valueOf(limit);
-		}).setPath("addable").setUsage("permissions.specify_limit").build());
-
-		this.addCommand(new CommandAdd(owner));
-		this.addCommand(new CommandRemove(owner));
+		}).setPath("addable").setUsage("permissions-specify-limit").build();
 	}
 
 }

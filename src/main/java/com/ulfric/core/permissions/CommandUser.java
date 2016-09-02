@@ -20,7 +20,7 @@ final class CommandUser extends BaseCommand {
 			if (player == null) return null;
 
 			return Permissions.getEntity(player.getUniqueId());
-		}).setPath("permissible").setUsage("permissions.specify_user").build());
+		}).setPath("permissible").setUsage("permissions-specify-user").build());
 
 		this.addCommand(new CommandMutateperm(owner));
 		this.addCommand(new CommandMutategroup(owner));

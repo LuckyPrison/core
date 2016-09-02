@@ -84,8 +84,8 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 	@Override
 	public void onFirstEnable()
 	{
-		this.enabled = State.builder().setText("chat.setting_nicknames_enabled").build();
-		this.disabled = State.builder().setText("chat.setting_nicknames_disabled").build();
+		this.enabled = State.builder().setText("chat-setting-nicknames-enabled").build();
+		this.disabled = State.builder().setText("chat-setting-nicknames-disabled").build();
 		//this.dunabled = State.builder().setText("chat.setting_nicknames_dunabled").build();
 
 		this.addCommand(new CommandNickname());

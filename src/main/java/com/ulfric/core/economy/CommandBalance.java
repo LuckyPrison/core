@@ -42,12 +42,12 @@ final class CommandBalance extends Command {
 
 			if (sender == player)
 			{
-				sender.sendLocalizedMessage("economy.balance_self", money);
+				sender.sendLocalizedMessage("economy-balance", money);
 
 				return;
 			}
 
-			sender.sendLocalizedMessage("economy.balance_other", player.getName(), money);
+			sender.sendLocalizedMessage("economy-balance-other", player.getName(), money);
 
 			return;
 		}
@@ -64,7 +64,7 @@ final class CommandBalance extends Command {
 
 			long balance = bal == null ? 0L : bal;
 
-			sender.sendLocalizedMessage("economy.balance_other", playerName, new MoneyFormatter(balance).dualFormatWord());
+			sender.sendLocalizedMessage("economy-balance-other", playerName, new MoneyFormatter(balance).dualFormatWord());
 		});
 	}
 

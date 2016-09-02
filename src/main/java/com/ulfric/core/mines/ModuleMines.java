@@ -166,7 +166,7 @@ public class ModuleMines extends Module {
 
 			for (Player player : PlayerUtils.getOnlinePlayers())
 			{
-				player.sendLocalizedMessage("mines.reset", resetString);
+				player.sendLocalizedMessage("mines-reset", resetString);
 			}
 		}, 30 * 20);
 	}

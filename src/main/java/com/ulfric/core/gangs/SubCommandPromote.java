@@ -27,7 +27,7 @@ public class SubCommandPromote extends GangCommand {
 
 		if (targetUUID.equals(sender.getUniqueId()))
 		{
-			sender.sendLocalizedMessage("gangs.promote_self");
+			sender.sendLocalizedMessage("gangs-promote-self");
 
 			return;
 		}
@@ -38,7 +38,7 @@ public class SubCommandPromote extends GangCommand {
 
 		if (member == null)
 		{
-			sender.sendLocalizedMessage("gangs.promote_not_member", gang.getName(), target.getName());
+			sender.sendLocalizedMessage("gangs-promote-not-member", gang.getName(), target.getName());
 
 			return;
 		}
@@ -49,7 +49,7 @@ public class SubCommandPromote extends GangCommand {
 
 		if (member.hasPermission(senderMember.getRank()))
 		{
-			sender.sendLocalizedMessage("gangs.promote_already_ranked", target.getName(), EnumUtils.format(member.getRank()));
+			sender.sendLocalizedMessage("gangs-promote-already-ranked", target.getName(), EnumUtils.format(member.getRank()));
 
 			return;
 		}
@@ -58,7 +58,7 @@ public class SubCommandPromote extends GangCommand {
 
 		if (rank == null || rank == GangRank.LEADER)
 		{
-			sender.sendLocalizedMessage("gangs.promote_use_setrank");
+			sender.sendLocalizedMessage("gangs-promote-use-setowner");
 
 			return;
 		}
@@ -69,7 +69,7 @@ public class SubCommandPromote extends GangCommand {
 		String rankName = EnumUtils.format(rank);
 		String targetName = target.getName();
 
-		gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs.promoted", senderName, targetName, rankName));
+		gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs-promote-success", senderName, targetName, rankName));
 	}
 
 }

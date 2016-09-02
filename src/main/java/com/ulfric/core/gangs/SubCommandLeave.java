@@ -12,7 +12,7 @@ public class SubCommandLeave extends GangCommand {
 	{
 		super("leave", GangRank.MEMBER, owner, "quit");
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "gangs.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "gangs-leave-must-be-player");
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class SubCommandLeave extends GangCommand {
 		{
 			if (gang.getMemberParticipants().size() != 1)
 			{
-				sender.sendLocalizedMessage("gangs.cannot_leave_leader");
+				sender.sendLocalizedMessage("gangs-cannot-leave-leader");
 
 				return;
 			}
@@ -41,7 +41,7 @@ public class SubCommandLeave extends GangCommand {
 			String name = sender.getName();
 			String gangName = gang.getName();
 
-			sender.sendLocalizedMessage("gangs.left_disbanded", gangName);
+			sender.sendLocalizedMessage("gangs-left-disbanded", gangName);
 
 			for (UUID enemyUUID : gang.getRelations(Relation.ENEMY))
 			{
@@ -49,7 +49,7 @@ public class SubCommandLeave extends GangCommand {
 
 				for (Player enemyPlayer : enemy.getOnlinePlayers())
 				{
-					enemyPlayer.sendLocalizedMessage("gangs.disbanded_enemy", gangName, name);
+					enemyPlayer.sendLocalizedMessage("gangs-disbanded-enemy", gangName, name);
 				}
 			}
 
@@ -59,7 +59,7 @@ public class SubCommandLeave extends GangCommand {
 
 				for (Player allyPlayer : ally.getOnlinePlayers())
 				{
-					allyPlayer.sendLocalizedMessage("gangs.disbanded_ally", gangName, name);
+					allyPlayer.sendLocalizedMessage("gangs-disbanded-ally", gangName, name);
 				}
 			}
 
@@ -70,9 +70,9 @@ public class SubCommandLeave extends GangCommand {
 
 		gang.removeMember(uuid);
 
-		gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs.member_left", sender.getName()));
+		gang.getOnlinePlayers().forEach(player -> player.sendLocalizedMessage("gangs-member-left", sender.getName()));
 
-		sender.sendLocalizedMessage("gangs.left", gang.getName());
+		sender.sendLocalizedMessage("gangs-left", gang.getName());
 
 		new GangStatusEvent(sender, gang, null).fire();
 	}

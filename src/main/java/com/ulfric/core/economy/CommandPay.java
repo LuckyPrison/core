@@ -31,7 +31,7 @@ final class CommandPay extends Command {
 
 		if (player.getUniqueId().equals(sender.getUniqueId()))
 		{
-			sender.sendLocalizedMessage("economy.pay_specify_player_self");
+			sender.sendLocalizedMessage("economy-pay-specify-player-self");
 
 			return;
 		}
@@ -47,7 +47,7 @@ final class CommandPay extends Command {
 		{
 			if (!sender.hasPermission("pay.console"))
 			{
-				sender.sendLocalizedMessage("economy.pay_cannot_charge");
+				sender.sendLocalizedMessage("economy-pay-cannot-charge");
 
 				return;
 			}
@@ -57,7 +57,7 @@ final class CommandPay extends Command {
 		{
 			if (!currency.isPayable())
 			{
-				sender.sendLocalizedMessage("economy.currency_unpayable", currency.getName());
+				sender.sendLocalizedMessage("economy-currency-unpayable", currency.getName());
 
 				return;
 			}
@@ -69,7 +69,7 @@ final class CommandPay extends Command {
 			long difference = amt - senderBalance;
 			if (difference > 0)
 			{
-				sender.sendLocalizedMessage("economy.pay_cannot_afford", new MoneyFormatter(difference).dualFormatWord());
+				sender.sendLocalizedMessage("economy-pay-cannot-afford", new MoneyFormatter(difference).dualFormatWord());
 
 				return;
 			}
@@ -85,13 +85,13 @@ final class CommandPay extends Command {
 
 		String amtFormat = new MoneyFormatter(amt).dualFormatWord().toString();
 
-		sender.sendLocalizedMessage("economy.payment_sent", payeeName, amtFormat);
+		sender.sendLocalizedMessage("economy-payment-sent", payeeName, amtFormat);
 
 		Player recipient = player.toPlayer();
 
 		if (recipient == null) return;
 
-		recipient.sendLocalizedMessage("economy.payment_received", senderName, amtFormat);
+		recipient.sendLocalizedMessage("economy-payment-received", senderName, amtFormat);
 	}
 
 }

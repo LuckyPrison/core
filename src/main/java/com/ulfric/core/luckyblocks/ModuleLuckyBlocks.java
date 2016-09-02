@@ -57,7 +57,6 @@ public final class ModuleLuckyBlocks extends Module {
 
 				block.setType(air);
 
-				// TODO - Adam Edwards @ 8/23/2016 - should we do this on the next tick?
 				luckyblock.use(player, block);
 			}
 		});

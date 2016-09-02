@@ -17,9 +17,9 @@ final class CommandWorld extends Command {
 
 		this.addOptionalArgument(Argument.builder().setPath("world").addSimpleResolver(WorldUtils::getWorld).build());
 
-		this.addPermission("world.use");
+		this.addPermission("teleport.use");
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "world.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "world-must-be-player");
 	}
 
 	@Override
@@ -30,7 +30,7 @@ final class CommandWorld extends Command {
 
 		if (world == null)
 		{
-			player.sendMessage(StringUtils.mergeNicely(WorldUtils.getWorlds()));
+			player.sendLocalizedMessage("world-list", StringUtils.mergeNicely(WorldUtils.getWorlds()));
 
 			return;
 		}

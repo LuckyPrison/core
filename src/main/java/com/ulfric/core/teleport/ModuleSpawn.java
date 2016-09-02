@@ -75,7 +75,7 @@ final class ModuleSpawn extends Module {
 		{
 			super("spawn", ModuleSpawn.this);
 
-			this.addEnforcer(Enforcers.IS_PLAYER, "spawn.must_be_player");
+			this.addEnforcer(Enforcers.IS_PLAYER, "spawn-must-be-player");
 		}
 
 		@Override
@@ -95,7 +95,7 @@ final class ModuleSpawn extends Module {
 
 			this.addPermission("setspawn.use");
 
-			this.addEnforcer(Enforcers.IS_PLAYER, "spawn.must_be_player");
+			this.addEnforcer(Enforcers.IS_PLAYER, "spawn-set-must-be-player");
 		}
 
 		@Override
@@ -112,7 +112,7 @@ final class ModuleSpawn extends Module {
 
 			config.save();
 
-			player.sendLocalizedMessage("setspawn.set", location);
+			player.sendLocalizedMessage("spawn-set", location);
 		}
 	}
 

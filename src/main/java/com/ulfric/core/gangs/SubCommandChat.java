@@ -21,7 +21,7 @@ final class SubCommandChat extends GangCommand {
 			return ChatChannel.getNext(channel);
 		}).build());
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "gangs.chat_must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "gangs-chat-must-be-player");
 	}
 
 	@Override
@@ -35,14 +35,14 @@ final class SubCommandChat extends GangCommand {
 
 		if (channel == currentChannel)
 		{
-			player.sendLocalizedMessage("gangs.chat_channel_already", EnumUtils.format(channel));
+			player.sendLocalizedMessage("gangs-chat-channel-already", EnumUtils.format(channel));
 
 			return;
 		}
 
 		player.setMetadata("gang_channel", channel);
 
-		player.sendLocalizedMessage("gangs.chat_channel_set", EnumUtils.format(channel));
+		player.sendLocalizedMessage("gangs-chat-channel-set", EnumUtils.format(channel));
 	}
 
 }

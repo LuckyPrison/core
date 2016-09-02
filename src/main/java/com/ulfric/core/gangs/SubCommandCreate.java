@@ -20,9 +20,9 @@ public class SubCommandCreate extends Command {
 	{
 		super("create", owner, "new", "open");
 
-		this.addArgument(Argument.builder().setPath("gang_name").addResolver(Resolvers.STRING).setUsage("gangs.create_specify_name").build());
+		this.addArgument(Argument.builder().setPath("gang_name").addResolver(Resolvers.STRING).setUsage("gangs-create-specify-name").build());
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "gangs.create_must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "gangs-create-must-be-player");
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class SubCommandCreate extends Command {
 
 		if (member != null)
 		{
-			sender.sendLocalizedMessage("gangs.create_already_member", EnumUtils.format(member.getRank()), member.getGang().getName());
+			sender.sendLocalizedMessage("gangs-create-already-member", EnumUtils.format(member.getRank()), member.getGang().getName());
 
 			return;
 		}
@@ -47,7 +47,7 @@ public class SubCommandCreate extends Command {
 
 		if (length < 3)
 		{
-			sender.sendLocalizedMessage("gangs.create_min_length", 3);
+			sender.sendLocalizedMessage("gangs-create-min-length", 3);
 
 			return;
 		}
@@ -70,7 +70,7 @@ public class SubCommandCreate extends Command {
 
 		if (gang != null)
 		{
-			sender.sendLocalizedMessage("gangs.create_name_taken", gang.getName(), TimeUtils.formatMillis(TimeUtils.instantSince(gang.getCreated()).toEpochMilli(), TimeUnit.MILLISECONDS, TimeUnit.SECONDS));
+			sender.sendLocalizedMessage("gangs-create-name-taken", gang.getName(), TimeUtils.formatMillis(TimeUtils.instantSince(gang.getCreated()).toEpochMilli(), TimeUnit.MILLISECONDS, TimeUnit.SECONDS));
 
 			return;
 		}
@@ -86,7 +86,7 @@ public class SubCommandCreate extends Command {
 
 		gang = Gang.newGang(gangs, gangUUID, name, sender.getUniqueId());
 
-		sender.sendLocalizedMessage("gangs.created_gang", gang.getName());
+		sender.sendLocalizedMessage("gangs-created-gang", gang.getName());
 
 		new GangStatusEvent(sender, null, gang).fire();
 	}

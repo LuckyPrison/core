@@ -9,9 +9,9 @@ final class CommandTracks extends Command {
 
 	CommandTracks(ModuleBase owner)
 	{
-		super("tracks", owner, "ranks");
+		super("tracks", owner, "ranks", "packs");
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "tracks.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "tracks-must-be-player");
 	}
 
 	@Override

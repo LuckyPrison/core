@@ -13,6 +13,7 @@ import com.ulfric.lib.coffee.math.RandomUtils;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
+import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.event.player.PlayerKillPlayerEvent;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.Material;
@@ -80,6 +81,8 @@ public class ModuleBeheading extends Module {
 				}
 
 				world.dropItem(headLocation, ModuleBeheading.this.newSkull(killed.getName(), killer.getName()));
+
+				PlayerUtils.broadcastLocalized("playerskull-behead", killed.getName(), killer.getName());
 			}
 		});
 	}
@@ -90,8 +93,10 @@ public class ModuleBeheading extends Module {
 		{
 			super("playerskull", ModuleBeheading.this, "skull");
 
-			this.addArgument(Argument.builder().setPath("owner").addResolver(Resolvers.STRING).setUsage("playerskull.specify_owner").build());
-			this.addEnforcer(Enforcers.IS_PLAYER, "playerskull.must_be_player");
+			this.addPermission("playerskull.use");
+
+			this.addArgument(Argument.builder().setPath("owner").addResolver(Resolvers.STRING).setUsage("playerskull-specify-owner").build());
+			this.addEnforcer(Enforcers.IS_PLAYER, "playerskull-must-be-player");
 		}
 
 		@Override
@@ -100,7 +105,7 @@ public class ModuleBeheading extends Module {
 			Player player = (Player) this.getSender();
 			String owner = (String) this.getObject("owner");
 
-			player.sendLocalizedMessage("playerskull.spawned", owner);
+			player.sendLocalizedMessage("playerskull-spawned", owner);
 			player.getInventory().addItem(ModuleBeheading.this.newSkull(owner, null));
 		}
 	}
@@ -117,7 +122,7 @@ public class ModuleBeheading extends Module {
 
 		skull.setOwner(owner);
 
-		skull.setDisplayName(owner + " 's Head");
+		skull.setDisplayName(owner + "'s Head");
 
 		if (killer != null)
 		{
