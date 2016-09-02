@@ -30,6 +30,7 @@ import com.ulfric.core.modules.ModuleTrample;
 import com.ulfric.core.modules.ModuleTrash;
 import com.ulfric.core.modules.ModuleVanishInterface;
 import com.ulfric.core.modules.ModuleWelcome;
+import com.ulfric.core.permissions.ModulePermissionInterface;
 import com.ulfric.core.playerlist.ModulePlayerList;
 import com.ulfric.core.rankup.ModuleRankup;
 import com.ulfric.core.regions.ModuleRegionInterface;
@@ -77,6 +78,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleTrample());
 		this.addModule(ModuleBackpack.getInstance());
 		this.addModule(new ModuleStackSize());
+		this.addModule(new ModulePermissionInterface());
 	}
 
 }
