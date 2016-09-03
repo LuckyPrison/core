@@ -44,7 +44,7 @@ public final class Achievement implements Named, ScopeListener<UUID> {
 		DataManager.get().ensureTableCreated(store, "achievements");
 
 		this.subscription = store
-				.multi(Integer.class, PlayerScopes.ONLINE, new DataAddress<>("achievements", null, code))
+				.multi(Integer.class, PlayerScopes.ONLINE, new DataAddress<>("achievements", code))
 				.blockOnSubscribe(true)
 				.subscribe();
 
