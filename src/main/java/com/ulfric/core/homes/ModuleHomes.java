@@ -152,7 +152,7 @@ public class ModuleHomes extends Module {
 	{
 		this.getHomes(home.getOwner()).remove(home);
 
-		DataContainer<UUID, Document> container = this.subscription.retrieveForeignContainer(home.getOwner().getUniqueId(), FunctionUtils.self());
+		DataContainer<UUID, Document> container = this.subscription.subscribeToForeign(home.getOwner().getUniqueId(), FunctionUtils.self());
 
 		try
 		{
@@ -162,6 +162,7 @@ public class ModuleHomes extends Module {
 		{
 			e.printStackTrace();
 		}
+
 	}
 
 }

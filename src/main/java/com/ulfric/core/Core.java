@@ -24,6 +24,7 @@ import com.ulfric.core.modules.ModuleGameModeInterface;
 import com.ulfric.core.modules.ModuleGodmodeInterface;
 import com.ulfric.core.modules.ModuleNameplates;
 import com.ulfric.core.modules.ModulePrivateMessaging;
+import com.ulfric.core.modules.ModuleRenameFix;
 import com.ulfric.core.modules.ModuleSpeed;
 import com.ulfric.core.modules.ModuleSpeedyGonzales;
 import com.ulfric.core.modules.ModuleStackSize;
@@ -81,6 +82,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleStackSize());
 		this.addModule(new ModulePermissionInterface());
 		this.addModule(new ModuleHomes());
+		this.addModule(new ModuleRenameFix());
 	}
 
 }
