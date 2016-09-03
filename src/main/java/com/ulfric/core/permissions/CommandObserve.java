@@ -4,15 +4,13 @@ import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.module.ModuleBase;
-import com.ulfric.lib.coffee.npermission.Entity;
 import com.ulfric.lib.coffee.npermission.Permissible;
-import com.ulfric.lib.coffee.npermission.Permissions;
 
-final class CommandCheck extends Command {
+final class CommandObserve extends Command {
 
-	public CommandCheck(ModuleBase owner, Argument addable)
+	public CommandObserve(ModuleBase owner, Argument addable)
 	{
-		super("add", owner);
+		super("observe", owner, "check", "view");
 
 		this.addArgument(addable);
 	}
@@ -24,18 +22,9 @@ final class CommandCheck extends Command {
 		Permissible permissible = (Permissible) this.getObject("permissible");
 		Addable addable = (Addable) this.getObject("addable");
 
-		if (addable.add(permissible))
-		{
-			sender.sendLocalizedMessage("permissions-add-success", permissible, addable);
+		String observe = addable.observe(permissible);
 
-			return;
-		}
-
-		sender.sendLocalizedMessage("permissions-add-failure", permissible, addable);
-
-		if (!(permissible instanceof Entity)) return;
-
-		Permissions.saveEntity((Entity) permissible);
+		sender.sendLocalizedMessage("permissions-observe", permissible, addable, observe);
 	}
 
 }

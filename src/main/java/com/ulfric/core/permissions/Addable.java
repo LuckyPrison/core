@@ -32,6 +32,7 @@ interface Addable {
 
 	boolean add(Permissible permissible);
 	boolean remove(Permissible permissible);
+	String observe(Permissible permissible);
 
 	final static class PermissionAddable implements Addable
 	{
@@ -58,6 +59,12 @@ interface Addable {
 		public String toString()
 		{
 			return "permission " + this.permission.getEntered();
+		}
+
+		@Override
+		public String observe(Permissible permissible)
+		{
+			return permissible.testPermission(this.permission.getNode()).name();
 		}
 	}
 
@@ -86,6 +93,12 @@ interface Addable {
 		public String toString()
 		{
 			return "group " + this.group.getName();
+		}
+
+		@Override
+		public String observe(Permissible permissible)
+		{
+			return String.valueOf(permissible.hasGroup(this.group));
 		}
 	}
 
@@ -159,6 +172,12 @@ interface Addable {
 		public String toString()
 		{
 			return "limit " + this.path + ' ' + this.limit.toString();
+		}
+
+		@Override
+		public String observe(Permissible permissible)
+		{
+			return this.limit.isLargerThan(permissible.getLimit(this.path)) ? "smaller or equal to" : "bigger";
 		}
 	}
 
