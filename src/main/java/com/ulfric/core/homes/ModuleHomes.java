@@ -44,7 +44,7 @@ public class ModuleHomes extends Module {
 		database.ensureTableCreated("homes");
 
 		this.subscription = database.multi(
-				Document.class, PlayerScopes.ONLINE, new DataAddress<>("homes", null, "data")
+				Document.class, PlayerScopes.ONLINE, new DataAddress<>("homes", "data")
 		).blockOnSubscribe(true).subscribe();
 
 		super.addCommand(new CommandHome(this));
@@ -152,7 +152,7 @@ public class ModuleHomes extends Module {
 	{
 		this.getHomes(home.getOwner()).remove(home);
 
-		DataContainer<UUID, Document> container = this.subscription.subscribeToForeign(home.getOwner().getUniqueId(), FunctionUtils.self());
+		DataContainer<UUID, Document> container = this.subscription.retrieveForeignContainer(home.getOwner().getUniqueId(), FunctionUtils.self());
 
 		try
 		{
