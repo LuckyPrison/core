@@ -30,24 +30,25 @@ class CommandUnCombatTag extends Command {
 		{
 			if (player.getUniqueId().equals(sender.getUniqueId()))
 			{
-				sender.sendLocalizedMessage("combattag.remove_self_not_tagged");
+				sender.sendLocalizedMessage("combattag-remove-self-not-tagged");
 
 				return;
 			}
 
-			sender.sendLocalizedMessage("combattag.remove_other_not_tagged", player.getName());
+			sender.sendLocalizedMessage("combattag-remove-other-not-tagged", player.getName());
 
 			return;
 		}
 
 		if (player.getUniqueId().equals(sender.getUniqueId()))
 		{
-			sender.sendLocalizedMessage("combattag.remove_self");
+			sender.sendLocalizedMessage("combattag-remove-self");
 
 			return;
 		}
 
-		sender.sendLocalizedMessage("combattag.remove_other", player.getName());
+		player.sendLocalizedMessage("combattag-removed-by", sender.getName());
+		sender.sendLocalizedMessage("combattag-remove-other", player.getName());
 	}
 
 }

@@ -28,24 +28,24 @@ class CommandCombatTag extends Command {
 		{
 			if (player.getUniqueId().equals(sender.getUniqueId()))
 			{
-				sender.sendLocalizedMessage("combattag.check_self_not_tagged");
+				sender.sendLocalizedMessage("combattag-check-self-not-tagged");
 
 				return;
 			}
 
-			sender.sendLocalizedMessage("combattag.check_other_not_tagged", player.getName());
+			sender.sendLocalizedMessage("combattag-check-other-not-tagged", player.getName());
 
 			return;
 		}
 
 		if (player.getUniqueId().equals(sender.getUniqueId()))
 		{
-			sender.sendLocalizedMessage("combattag.check_self_tagged");
+			sender.sendLocalizedMessage("combattag-check-self-tagged");
 
 			return;
 		}
 
-		sender.sendLocalizedMessage("combattag.check_other_tagged", player.getName());
+		sender.sendLocalizedMessage("combattag-check-other-tagged", player.getName());
 	}
 
 }

@@ -32,8 +32,8 @@ class ModuleChatToggler extends Module {
 	@Override
 	public void onFirstEnable()
 	{
-		this.enabled = State.builder().setText("chat.setting_state_enabled").build();
-		this.disabled = State.builder().setText("chat.setting_state_disabled").build();
+		this.enabled = State.builder().setText("chat-setting-state-enabled").build();
+		this.disabled = State.builder().setText("chat-setting-state-disabled").build();
 
 		this.addListener(new Listener(this)
 		{
@@ -44,7 +44,7 @@ class ModuleChatToggler extends Module {
 
 				if (ModuleChatToggler.this.setting.getState(player.getUniqueId()) == ModuleChatToggler.this.disabled)
 				{
-					player.sendLocalizedMessage("chat.must_enable_chat");
+					player.sendLocalizedMessage("chat-must-enable-chat");
 
 					event.setCancelled(true);
 
@@ -79,8 +79,8 @@ class ModuleChatToggler extends Module {
 		}
 
 		String name = settings.getString("name", "chat");
-		String itemName = "chat.setting_name";
-		String description = "chat.setting_description";
+		String itemName = "chat-setting-name";
+		String description = "chat-setting-description";
 		ItemStack item = ItemParts.stringToItem(settings.getString("itemstack", "id.STAINED_GLASS_PANE"));
 		ItemMeta meta = item.getMeta();
 		meta.setDisplayName(itemName);

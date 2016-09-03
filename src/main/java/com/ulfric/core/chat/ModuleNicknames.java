@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.StringUtils;
 
 import com.ulfric.config.Document;
 import com.ulfric.core.settings.Setting;
@@ -16,7 +17,6 @@ import com.ulfric.data.scope.PlayerScopes;
 import com.ulfric.data.scope.ScopeListener;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
-import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.module.Module;
@@ -104,6 +104,7 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 		{
 			Settings.INSTANCE.removeSetting(this.setting);
 		}
+
 		PlayerScopes.ONLINE.removeListener(this);
 		this.subscription.unsubscribe();
 	}
@@ -123,8 +124,8 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 		}
 
 		String name = settings.getString("name", "nicknames");
-		String itemName = "chat.setting_name_nickname";
-		String description = "chat.setting_description_nickname";
+		String itemName = "chat-setting-name-nickname";
+		String description = "chat-setting-description-nickname";
 		ItemStack item = ItemParts.stringToItem(settings.getString("itemstack", "id.NAME_TAG"));
 		ItemMeta meta = item.getMeta();
 		meta.setDisplayName(itemName);
@@ -155,7 +156,7 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 
 			this.addPermission("nickname.use");
 
-			this.addEnforcer(Enforcers.IS_PLAYER, "nickname.must_be_player");
+			this.addEnforcer(Enforcers.IS_PLAYER, "nickname-must-be-player");
 
 			this.addOptionalArgument(Argument.builder().setPath("off").addResolver(Resolvers.ignoreCase("off", "disable", "clear")).build());
 			this.addOptionalArgument(Argument.builder().setPath("nick").addResolver(Resolvers.STRING).build());
@@ -166,11 +167,13 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 		@Override
 		public void run()
 		{
-			CommandSender sender = this.getSender();
+			Player sender = (Player) this.getSender();
 
 			if (this.hasObject("off"))
 			{
-				// TODO handle disabling
+				ModuleNicknames.this.subscription.get(sender.getUniqueId()).setValue(Strings.EMPTY);
+				sender.setNickname(null);
+				sender.sendLocalizedMessage("nickname-cleared");
 
 				return;
 			}
@@ -179,7 +182,16 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 
 			if (!(nickObject instanceof String))
 			{
-				// TODO send nick
+				String nick = sender.getNickname();
+
+				if (nick == null)
+				{
+					sender.sendLocalizedMessage("nickname-none");
+
+					return;
+				}
+
+				sender.sendLocalizedMessage("nickname-view", nick);
 
 				return;
 			}
@@ -211,11 +223,18 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 						}
 					}
 				}
+
+				if (!StringUtils.isAlphanumeric(ChatUtils.stripColor(nick)))
+				{
+					sender.sendLocalizedMessage("nickname-must-be-alphanumeric");
+
+					return;
+				}
 			}
 
 			ModuleNicknames.this.subscription.get(sender.getUniqueId()).setValue(nick);
 
-			sender.sendLocalizedMessage("nickname.set", nick);
+			sender.sendLocalizedMessage("nickname-set", nick);
 		}
 	}
 

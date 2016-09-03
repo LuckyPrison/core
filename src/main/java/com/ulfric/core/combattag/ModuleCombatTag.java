@@ -90,12 +90,12 @@ public class ModuleCombatTag extends Module {
 
 				if (!Tags.INSTANCE.createTag(damagerUUID, damagedUUID, ModuleCombatTag.this.ticks))
 				{
-					damager.sendLocalizedMessage("combattag.tagged_you_attacked", damaged.getName(), ModuleCombatTag.this.seconds);
+					damager.sendLocalizedMessage("combattag-tagged-you-attacked", damaged.getName(), ModuleCombatTag.this.seconds);
 				}
 
 				if (Tags.INSTANCE.createTag(damagedUUID, damagerUUID, ModuleCombatTag.this.ticks)) return;
 
-				damaged.sendLocalizedMessage("combattag.tagged_damaged", damager.getName(), ModuleCombatTag.this.seconds);
+				damaged.sendLocalizedMessage("combattag-tagged-damaged", damager.getName(), ModuleCombatTag.this.seconds);
 			}
 
 			@Handler
@@ -122,7 +122,7 @@ public class ModuleCombatTag extends Module {
 
 				if (tag == null) return;
 
-				player.sendLocalizedMessage("combattag.no_teleport");
+				player.sendLocalizedMessage("combattag-no-teleport");
 
 				event.setCancelled(true);
 			}
@@ -152,7 +152,7 @@ public class ModuleCombatTag extends Module {
 
 				long remaining = System.currentTimeMillis() - tag.getCreated();
 
-				tagger.sendLocalizedMessage("combattag.killed_enemy", player.getName(), TimeUtils.formatMillis(remaining, TimeUnit.MILLISECONDS));
+				tagger.sendLocalizedMessage("combattag-killed-enemy", player.getName(), TimeUtils.formatMillis(remaining, TimeUnit.MILLISECONDS));
 
 				// TODO is it possible to kick a player as they're disconnecting, and show them the kick page? Glitch if so, but seems plausible
 			}
@@ -162,7 +162,7 @@ public class ModuleCombatTag extends Module {
 
 		if (category == null)
 		{
-			category = Category.builder().setName("Combat").setItem(MaterialData.of(Material.of("DIAMOND_SWORD"))).build();
+			category = Category.builder().setName("Combat").setItem(MaterialData.of("DIAMOND_SWORD")).build();
 
 			Categories.INSTANCE.register(category);
 		}
