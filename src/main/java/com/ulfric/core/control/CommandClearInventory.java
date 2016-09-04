@@ -24,7 +24,7 @@ class CommandClearInventory extends Command {
 			if (!(sender instanceof Player)) return null;
 
 			return Punishments.getInstance().getHolder(sender.getUniqueId());
-		}).setPermission("clearinventory.other").build());
+		}).setDefaultValue(cmd -> Punishments.getInstance().getHolder(cmd.getSender().getUniqueId())).setPermission("clearinventory.other").build());
 	}
 
 	@Override
