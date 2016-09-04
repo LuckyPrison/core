@@ -131,7 +131,7 @@ public enum Rankups {
 
 			meta.setDisplayName(Strings.format(title, track.getName()));
 
-			List<String> lore = Lists.newArrayList(Strings.EMPTY);
+			List<String> lore = Lists.newArrayList("");
 
 			Button.Builder button = Button.builder();
 
@@ -139,7 +139,7 @@ public enum Rankups {
 			{
 				lore.add(player.getLocalizedMessage("track-panel-current"));
 
-				lore.add(Strings.EMPTY);
+				lore.add("");
 
 				lore.add(rightClick);
 
@@ -171,7 +171,7 @@ public enum Rankups {
 
 				lore.add(Strings.format(completeMessage, NumberUtils.percentage(total, complete)));
 
-				lore.add(Strings.EMPTY);
+				lore.add("");
 
 				if (complete < total)
 				{
@@ -263,7 +263,7 @@ public enum Rankups {
 
 			meta.setDisplayName(Strings.format(displayName, group.getName()));
 
-			List<String> lore = Lists.newArrayList(Strings.EMPTY);
+			List<String> lore = Lists.newArrayList("");
 
 			if (parents.contains(group))
 			{

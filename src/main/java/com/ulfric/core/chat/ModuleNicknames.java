@@ -20,7 +20,6 @@ import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.module.Module;
-import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
@@ -171,7 +170,7 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 
 			if (this.hasObject("off"))
 			{
-				ModuleNicknames.this.subscription.get(sender.getUniqueId()).setValue(Strings.EMPTY);
+				ModuleNicknames.this.subscription.get(sender.getUniqueId()).setValue("");
 				sender.setNickname(null);
 				sender.sendLocalizedMessage("nickname-cleared");
 
@@ -204,7 +203,7 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 			{
 				nick = ChatUtils.stripNaughtyColors(nick);
 
-				nick = this.pattern.matcher(nick).replaceAll(Strings.EMPTY);
+				nick = this.pattern.matcher(nick).replaceAll("");
 
 				if (nick.length() > 16)
 				{

@@ -4,6 +4,7 @@ import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.region.RegionList;
+import com.ulfric.lib.coffee.string.WordUtils;
 import com.ulfric.lib.craft.block.Block;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.player.PlayerInteractEvent;
@@ -56,7 +57,7 @@ public final class ModuleRegionInterface extends Module {
 					return;
 				}
 
-				player.sendMessage(list.toString());
+				player.sendMessage(WordUtils.merge(list));
 			}
 		});
 	}

@@ -19,7 +19,7 @@ import com.ulfric.lib.coffee.event.Event;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
-import com.ulfric.lib.coffee.string.StringUtils;
+import com.ulfric.lib.coffee.string.WordUtils;
 import com.ulfric.lib.coffee.time.TimeUtils;
 import com.ulfric.lib.craft.block.MaterialData;
 import com.ulfric.lib.craft.entity.player.GameMode;
@@ -58,7 +58,7 @@ public class ModuleCombatTag extends Module {
 		this.log("Tag time (in ticks): " + this.ticks);
 		this.log("Tag time (in seconds): " + this.seconds);
 		this.log("Bypass permission: " + this.permission);
-		this.log("Ignoring gamemodes: " + StringUtils.mergeNicely(this.ignoreGameModes));
+		this.log("Ignoring gamemodes: " + WordUtils.merge(this.ignoreGameModes));
 	}
 
 	@Override

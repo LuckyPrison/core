@@ -18,7 +18,6 @@ import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.numbers.NumberUtils;
 import com.ulfric.lib.coffee.string.Patterns;
-import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.craft.block.MaterialData;
 import com.ulfric.lib.craft.block.Sign;
 import com.ulfric.lib.craft.entity.player.Player;
@@ -168,7 +167,7 @@ final class ModuleSell extends Module {
 					return;
 				}
 
-				line = line.replace(" ", Strings.EMPTY);
+				line = line.replace(" ", "");
 
 				if (!player.hasPermission("sellall." + line))
 				{

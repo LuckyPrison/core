@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.module.ModuleBase;
-import com.ulfric.lib.coffee.string.StringUtils;
+import com.ulfric.lib.coffee.string.WordUtils;
 
 class CommandUnmute extends Command {
 
@@ -80,7 +80,7 @@ class CommandUnmute extends Command {
 			return;
 		}
 
-		sender.sendLocalizedMessage("unmute.expired", StringUtils.mergeNicely(ids));
+		sender.sendLocalizedMessage("unmute.expired", WordUtils.merge(ids));
 	}
 
 }

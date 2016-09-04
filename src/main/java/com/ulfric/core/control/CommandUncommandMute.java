@@ -7,7 +7,7 @@ import com.ulfric.lib.coffee.collection.ListUtils;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.module.ModuleBase;
-import com.ulfric.lib.coffee.string.StringUtils;
+import com.ulfric.lib.coffee.string.WordUtils;
 
 class CommandUncommandMute extends Command {
 
@@ -62,7 +62,7 @@ class CommandUncommandMute extends Command {
 			return;
 		}
 
-		sender.sendLocalizedMessage("uncommandmute.expired", StringUtils.mergeNicely(ids));
+		sender.sendLocalizedMessage("uncommandmute.expired", WordUtils.merge(ids));
 	}
 
 }

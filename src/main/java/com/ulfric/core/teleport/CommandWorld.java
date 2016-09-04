@@ -3,7 +3,7 @@ package com.ulfric.core.teleport;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.module.ModuleBase;
-import com.ulfric.lib.coffee.string.StringUtils;
+import com.ulfric.lib.coffee.string.WordUtils;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.world.World;
@@ -30,7 +30,7 @@ final class CommandWorld extends Command {
 
 		if (world == null)
 		{
-			player.sendLocalizedMessage("world-list", StringUtils.mergeNicely(WorldUtils.getWorlds()));
+			player.sendLocalizedMessage("world-list", WordUtils.merge(WorldUtils.getWorlds()));
 
 			return;
 		}

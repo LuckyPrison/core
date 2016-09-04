@@ -48,7 +48,7 @@ public final class Category implements Named, Comparable<Category> {
 
 		List<String> lore = Lists.newArrayListWithCapacity(2);
 
-		lore.add(Strings.EMPTY);
+		lore.add("");
 		lore.add(ChatUtils.color(Strings.format("{0}% Complete", this.completePercentage(uuid))));
 
 		meta.setAllLore(lore);

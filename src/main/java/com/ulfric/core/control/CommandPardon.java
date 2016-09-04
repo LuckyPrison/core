@@ -7,7 +7,7 @@ import com.ulfric.lib.coffee.collection.ListUtils;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.module.ModuleBase;
-import com.ulfric.lib.coffee.string.StringUtils;
+import com.ulfric.lib.coffee.string.WordUtils;
 
 class CommandPardon extends Command {
 
@@ -62,7 +62,7 @@ class CommandPardon extends Command {
 			return;
 		}
 
-		sender.sendLocalizedMessage("control.pardon_expired", StringUtils.mergeNicely(ids));
+		sender.sendLocalizedMessage("control.pardon_expired", WordUtils.merge(ids));
 	}
 
 }

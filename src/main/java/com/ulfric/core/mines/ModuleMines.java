@@ -14,7 +14,7 @@ import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.region.Region;
 import com.ulfric.lib.coffee.region.RegionList;
-import com.ulfric.lib.coffee.string.StringUtils;
+import com.ulfric.lib.coffee.string.WordUtils;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.event.block.BlockBreakEvent;
@@ -162,7 +162,7 @@ public class ModuleMines extends Module {
 
 			if (reset.isEmpty()) return;
 
-			String resetString = StringUtils.mergeNicely(reset);
+			String resetString = WordUtils.merge(reset);
 
 			for (Player player : PlayerUtils.getOnlinePlayers())
 			{

@@ -8,7 +8,7 @@ import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.module.ModuleBase;
-import com.ulfric.lib.coffee.string.StringUtils;
+import com.ulfric.lib.coffee.string.WordUtils;
 import com.ulfric.lib.craft.entity.player.Player;
 
 class CommandClearInventory extends Command {
@@ -66,11 +66,11 @@ class CommandClearInventory extends Command {
 
 		if (size == 1)
 		{
-			sender.sendLocalizedMessage("clearinventory.cleared_single", StringUtils.mergeNicely(players));
+			sender.sendLocalizedMessage("clearinventory.cleared_single", WordUtils.merge(players));
 		}
 		else
 		{
-			sender.sendLocalizedMessage("clearinventory.cleared_multi", size, StringUtils.mergeNicely(players));
+			sender.sendLocalizedMessage("clearinventory.cleared_multi", size, WordUtils.merge(players));
 		}
 
 		players.forEach(Player::clearInventory);

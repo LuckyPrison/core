@@ -169,7 +169,7 @@ public final class Achievement implements Named, ScopeListener<UUID> {
 
 		List<String> lore = Lists.newArrayList();
 
-		lore.add(Strings.EMPTY);
+		lore.add("");
 
 		int progress = this.getProgress(uuid);
 
@@ -182,7 +182,7 @@ public final class Achievement implements Named, ScopeListener<UUID> {
 
 		if (lore.size() > 1)
 		{
-			lore.add(Strings.EMPTY);
+			lore.add("");
 		}
 
 		if (progress >= this.min)
@@ -206,7 +206,7 @@ public final class Achievement implements Named, ScopeListener<UUID> {
 
 			if (parentLocal != null)
 			{
-				lore.add(Strings.EMPTY);
+				lore.add("");
 
 				do
 				{

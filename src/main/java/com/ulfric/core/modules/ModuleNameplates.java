@@ -1,5 +1,13 @@
 package com.ulfric.core.modules;
 
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
 import com.google.common.collect.Maps;
 import com.ulfric.config.ConfigFile;
 import com.ulfric.config.MutableDocument;
@@ -28,14 +36,6 @@ import com.ulfric.lib.craft.panel.standard.StandardPanel;
 import com.ulfric.lib.craft.scoreboard.Scoreboard;
 import com.ulfric.lib.craft.scoreboard.ScoreboardTeam;
 import com.ulfric.lib.craft.string.ChatUtils;
-
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class ModuleNameplates extends Module {
 
