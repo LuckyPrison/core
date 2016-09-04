@@ -10,6 +10,7 @@ final class CommandPermissions extends BaseCommand {
 		super("permissions", owner, "permission", "perm");
 
 		this.addCommand(new CommandUser(owner));
+		this.addCommand(new CommandGroup(owner));
 		/* 
 		 * 
 		 * perm user Packet perm add sethome.use
