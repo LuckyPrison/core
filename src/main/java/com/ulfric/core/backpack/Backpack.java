@@ -24,6 +24,7 @@ class Backpack {
 
 	private static final int BACKPACK_SIZE = 36;
 
+	private final ModuleBackpack base;
 	private final OfflinePlayer owner;
 
 	private final Map<Integer, Inventory> pageStorage = Maps.newHashMap();
@@ -31,10 +32,12 @@ class Backpack {
 
 	private int maxPage;
 
-	Backpack(OfflinePlayer owner, int maxPage)
+	Backpack(ModuleBackpack base, OfflinePlayer owner, int maxPage)
 	{
+		this.base = base;
+
 		this.owner = owner;
-		this.dataContainer = ModuleBackpack.getInstance().getSubscription().get(this.owner.getUniqueId());
+		this.dataContainer = this.base.getSubscription().get(this.owner.getUniqueId());
 
 		this.maxPage = Math.max(maxPage, 1);
 	}
@@ -92,7 +95,7 @@ class Backpack {
 
 	public void open(Player viewer, int page)
 	{
-		new BackpackPage(ModuleBackpack.getInstance(), this, viewer, page).open();
+		new BackpackPage(this.base, this, viewer, page).open();
 	}
 
 	public void checkPotentialLimit(CommandSender potentialOwner)
@@ -143,11 +146,11 @@ class Backpack {
 
 	}
 
-	protected static Backpack fromDocument(OfflinePlayer owner, Document document)
+	protected static Backpack fromDocument(ModuleBackpack base, OfflinePlayer owner, Document document)
 	{
 		int maxPage = document.getInteger("max");
 
-		Backpack backpack = new Backpack(owner, maxPage);
+		Backpack backpack = new Backpack(base, owner, maxPage);
 
 		Document pages = document.getDocument("pages");
 

@@ -78,7 +78,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleSpeed());
 		this.addModule(new ModuleCandy());
 		this.addModule(new ModuleTrample());
-		this.addModule(ModuleBackpack.getInstance());
+		this.addModule(new ModuleBackpack());
 		this.addModule(new ModuleStackSize());
 		this.addModule(new ModulePermissionInterface());
 		this.addModule(new ModuleHomes());

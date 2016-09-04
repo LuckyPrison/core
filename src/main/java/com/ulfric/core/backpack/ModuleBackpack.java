@@ -16,18 +16,12 @@ import com.ulfric.lib.craft.entity.player.PlayerUtils;
 
 public final class ModuleBackpack extends Module {
 
-	private static final ModuleBackpack INSTANCE = new ModuleBackpack();
 	private static final int DEFAULT_SIZE = 3; // TODO Default size is needed because Limit of OfflinePlayer can't be found
-
-	public static ModuleBackpack getInstance()
-	{
-		return ModuleBackpack.INSTANCE;
-	}
 
 	private MultiSubscription<UUID, Document> subscription;
 	private final Map<UUID, Backpack> cache = Maps.newHashMap();
 
-	private ModuleBackpack()
+	public ModuleBackpack()
 	{
 		super("backpack", "Backpack command module", "1.0.0", "[feildmaster, insou]");
 	}
@@ -78,7 +72,7 @@ public final class ModuleBackpack extends Module {
 			return backpack;
 		}
 
-		Backpack backpack = Backpack.fromDocument(player, document);
+		Backpack backpack = Backpack.fromDocument(this, player, document);
 
 		this.cache.put(player.getUniqueId(), backpack);
 
@@ -87,7 +81,7 @@ public final class ModuleBackpack extends Module {
 
 	private Backpack makeBackpack(OfflinePlayer owner)
 	{
-		Backpack backpack = new Backpack(owner, DEFAULT_SIZE);
+		Backpack backpack = new Backpack(this, owner, DEFAULT_SIZE);
 
 		backpack.save();
 
