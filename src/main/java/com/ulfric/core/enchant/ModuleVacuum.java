@@ -38,7 +38,7 @@ final class ModuleVacuum extends Module {
 
 				if (ListUtils.isEmpty(player.getInventory().addItem(item))) return;
 
-				player.sendTitle(player.getLocalizedMessage("vacuum.inventory_full"), null, 5, 50, 5);
+				player.sendTitle(player.getLocalizedMessage("vacuum-inventory-full"), null, 5, 50, 5);
 			}
 		});
 	}

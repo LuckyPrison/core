@@ -101,13 +101,13 @@ public final class ModuleEnchants extends Module {
 
 						Vector defensive = ImmutableVector.of(location);
 						int radius = Math.min(level + 2, 6);
-						int r3 = radius / 3;
+						int r = Math.round(radius / 1.5F);
 						int max = (int) (level + Math.round((radius) / 1.75));
 
 						for (int i = 0; i < max; i++)
 						{
 							int x = RandomUtils.nextInt(radius);
-							int y = RandomUtils.nextInt(r3);
+							int y = RandomUtils.nextInt(r);
 							int z = RandomUtils.nextInt(radius);
 
 							if (RandomUtils.nextBoolean())

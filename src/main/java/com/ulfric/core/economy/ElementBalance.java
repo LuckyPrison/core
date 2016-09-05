@@ -17,7 +17,7 @@ class ElementBalance extends ScoreboardElement {
 	@Override
 	public String getText(Player updater)
 	{
-		return new MoneyFormatter(Bank.getOnlineAccount(updater.getUniqueId()).getBalance(Currency.getDefaultCurrency())).letterFormat().toString();
+		return updater.getLocalizedMessage("balance-element-content", new MoneyFormatter(Bank.getOnlineAccount(updater.getUniqueId()).getBalance(Currency.getDefaultCurrency())).letterFormat());
 	}
 
 }

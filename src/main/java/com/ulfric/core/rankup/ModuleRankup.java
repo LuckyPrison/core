@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
+import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.economy.BalanceChangeEvent;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.coffee.event.Handler;
@@ -76,7 +77,23 @@ public final class ModuleRankup extends Module {
 
 				Scoreboard board = player.getScoreboard();
 
-				board.elementFromClazz(ElementNextMine.class).update(player);
+				ElementNextMine element = board.elementFromClazz(ElementNextMine.class);
+
+				if (element != null)
+				{
+					element.update(player);
+
+					return;
+				}
+
+				ThreadUtils.runLater(() ->
+				{
+					ElementNextMine e = board.elementFromClazz(ElementNextMine.class);
+
+					if (e == null) return;
+
+					e.update(player);
+				}, 1);
 			}
 
 			@Handler

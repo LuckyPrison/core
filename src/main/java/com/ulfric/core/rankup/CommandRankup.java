@@ -68,6 +68,8 @@ final class CommandRankup extends Command {
 			account.take(price, "Rankup to " + name);
 		}
 
+		player.swapGroups(rankup.getOldGroup(), rankup.getNewGroup());
+
 		new PlayerRankupEvent(player).fire();
 
 		player.sendLocalizedMessage("rankup-success", name, RandomUtils.randomValue(this.randomEncouragement));

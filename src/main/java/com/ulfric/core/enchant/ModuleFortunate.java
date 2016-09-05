@@ -31,6 +31,10 @@ final class ModuleFortunate extends Module {
 			@Handler(ignoreCancelled = true)
 			public void onBreak(BlockBreakEvent event)
 			{
+				ItemStack custom = event.getCustomItem();
+
+				if (custom == null) return;
+
 				Player player = event.getPlayer();
 
 				if (!player.getWorld().equals(defaultWorld)) return;
@@ -51,10 +55,6 @@ final class ModuleFortunate extends Module {
 
 					return;
 				}
-
-				ItemStack custom = event.getCustomItem();
-
-				if (custom == null) return;
 
 				custom.setAmount((int) Math.round(Math.max(Math.ceil(level / RandomUtils.randomRange(4.2D, 5.2D)), 4)));
 			}

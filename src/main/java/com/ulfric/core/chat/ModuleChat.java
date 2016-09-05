@@ -2,6 +2,7 @@ package com.ulfric.core.chat;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +21,7 @@ import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.npermission.Group;
 import com.ulfric.lib.coffee.npermission.Permissions;
 import com.ulfric.lib.coffee.npermission.Track;
+import com.ulfric.lib.coffee.string.Strings;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.event.player.AsyncPlayerChatEvent;
 import com.ulfric.lib.craft.event.player.AsyncPlayerFormattedChatEvent;
@@ -30,7 +32,7 @@ import googletranslate.com.google.api.GoogleAPIException;
 import googletranslate.com.google.api.translate.Language;
 import googletranslate.com.google.api.translate.Translate;
 
-public class ModuleChat extends Module {
+public final class ModuleChat extends Module {
 
 	public ModuleChat()
 	{
@@ -62,6 +64,11 @@ public class ModuleChat extends Module {
 				final String message = event.getMessage();
 				Map<String, Set<Player>> recipients = Maps.newHashMap();
 
+				for (Player vanillaRecipient : vanillaRecipients)
+				{
+					recipients.computeIfAbsent(vanillaRecipient.getLocale().getLanguage(), k -> new HashSet<>()).add(vanillaRecipient);
+				}
+
 				AsyncPlayerFormattedChatEvent call = new AsyncPlayerFormattedChatEvent(player, message, recipients);
 
 				String format = null;
@@ -71,7 +78,7 @@ public class ModuleChat extends Module {
 				if (!CollectionUtils.isEmpty(groups))
 				{
 					Track premium = Permissions.getTrack("premium");
-					Track mine = Permissions.getTrack("mine");
+					Track mine = Permissions.getTrack("mines");
 
 					StringBuilder builder = new StringBuilder();
 
@@ -88,17 +95,21 @@ public class ModuleChat extends Module {
 						break;
 					}
 
-					Iterator<Group> premiumIterator = ListUtils.reverseIterator(premium.getGroups());
-					while (premiumIterator.hasNext())
+					if (premium != null)
 					{
-						Group group = premiumIterator.next();
-						if (!groups.contains(group)) continue;
+						Iterator<Group> premiumIterator = ListUtils.reverseIterator(premium.getGroups());
+						while (premiumIterator.hasNext())
+						{
+							Group group = premiumIterator.next();
+							if (!groups.contains(group)) continue;
 
-						builder.append(" [");
-						builder.append(group.getName());
-						builder.append(']');
+							builder.append(ChatUtils.color("&6"));
+							builder.append(" [");
+							builder.append(group.getName());
+							builder.append(']');
 
-						break;
+							break;
+						}
 					}
 
 					groupFormat = builder.toString();
@@ -152,26 +163,22 @@ public class ModuleChat extends Module {
 
 				Set<Map.Entry<String, Set<Player>>> entries = recipients.entrySet();
 
-				// TODO console logging
+				String senderLoc = player.getLocale().getLanguage();
+				Set<Player> sameLangRecip = recipients.remove(senderLoc);
 
-				if (entries.size() <= 1)
+				String slFormat = format.replace("{message}", message);
+				for (Player recipient : sameLangRecip)
 				{
-					format = format.replace("{message}", message);
-
-					for (Map.Entry<String, Set<Player>> recipientEntry : entries)
-					{
-						for (Player recipient : recipientEntry.getValue())
-						{
-							recipient.sendMessage(format.replace("{player}", ModuleNicknames.getName(player, recipient)));
-						}
-					}
-
-					return;
+					recipient.sendMessage(slFormat.replace("{player}", ModuleNicknames.getName(player, recipient)));
 				}
+
+				this.log(Strings.format("{0} [{1}]: {2}", ChatUtils.stripColor(groupFormat), player.getName(), message));
+
+				if (entries.isEmpty()) return;
 
 				String lowerMessage = message.toLowerCase();
 
-				Language senderLanguage = Language.fromString(player.getLocale().getLanguage());
+				Language senderLanguage = Language.fromString(senderLoc);
 
 				assert senderLanguage != null;
 
@@ -316,7 +323,7 @@ public class ModuleChat extends Module {
 				continue;
 			}
 
-			this.formats.put(group, ChatUtils.color(format));
+			this.formats.put(group, ChatUtils.deserialize(format));
 
 			count++;
 		}

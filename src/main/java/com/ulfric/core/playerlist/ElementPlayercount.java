@@ -23,7 +23,7 @@ class ElementPlayercount extends ScoreboardElement {
 	{
 		if (!updater.hasPermission("scoreboard.playercount")) return null;
 
-		return String.valueOf(NumberFormat.getIntegerInstance().format((int) (PlayerUtils.countOnlinePlayers() * this.multiplier)));
+		return updater.getLocalizedMessage("playercount-element-content", NumberFormat.getIntegerInstance().format((int) (PlayerUtils.countOnlinePlayers() * this.multiplier)));
 	}
 
 }
