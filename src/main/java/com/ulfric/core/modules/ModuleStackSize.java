@@ -40,6 +40,8 @@ public final class ModuleStackSize extends Module {
 			{
 				Player player = event.getPlayer();
 
+				if (player.getCursorItem().getAmount() <= 64) return;
+
 				if (!player.getInventory().equals(event.getClicked())) return;
 
 				ThreadUtils.run(player::refreshInventory);

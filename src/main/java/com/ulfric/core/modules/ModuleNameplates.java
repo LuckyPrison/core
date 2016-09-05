@@ -16,6 +16,7 @@ import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
 import com.ulfric.lib.coffee.command.Command;
+import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
@@ -71,32 +72,38 @@ public class ModuleNameplates extends Module {
 
 		this.consumer = (player, plate) ->
 		{
-			String prefix = plate.getPrefix();
-			String name = player.getName();
-
-			for (Player allPlayers : PlayerUtils.getOnlinePlayers())
+			ThreadUtils.run(() ->
 			{
-				if (allPlayers == player) continue;
+				String prefix = plate.getPrefix();
+				String name = player.getName();
 
-				Scoreboard scoreboard = allPlayers.getScoreboard();
+				for (Player allPlayers : PlayerUtils.getOnlinePlayers())
+				{
+					if (allPlayers == player) continue;
 
-				ScoreboardTeam team = scoreboard.getTeam(allPlayers, name);
+					Scoreboard scoreboard = allPlayers.getScoreboard();
 
-				String currentPrefix = team.getPrefix();
+					ScoreboardTeam team = scoreboard.getTeam(allPlayers, name);
 
-				currentPrefix = currentPrefix == null ? "" : currentPrefix;
+					String currentPrefix = team.getPrefix();
 
-				team.setPrefix(currentPrefix + prefix);
-			}
+					currentPrefix = currentPrefix == null ? "" : currentPrefix;
+
+					team.setPrefix(currentPrefix + prefix);
+				}
+			});
 		};
 
 		Consumer<Player> youConsumer = player ->
 		{
-			Scoreboard scoreboard = player.getScoreboard();
+			ThreadUtils.run(() ->
+			{
+				Scoreboard scoreboard = player.getScoreboard();
 
-			ScoreboardTeam self = scoreboard.getOrCreateTeam(player, "_self");
-			self.setPrefix(player.getLocalizedMessage("nameplate-self"));
-			self.addEntry(player.getName());
+				ScoreboardTeam self = scoreboard.getOrCreateTeam(player, "_self");
+				self.setPrefix(player.getLocalizedMessage("nameplate-self"));
+				self.addEntry(player.getName());
+			});
 		};
 
 		this.addListener(new Listener(this)

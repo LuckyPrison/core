@@ -15,11 +15,7 @@ final class ElementMine extends ScoreboardElement {
 	@Override
 	public String getText(Player updater)
 	{
-		Rankup rankup = Rankups.INSTANCE.getActive(updater);
-
-		if (rankup == null) return null;
-
-		Group group = rankup.getOld();
+		Group group = updater.getCurrentGroup();
 
 		if (group == null) return null;
 

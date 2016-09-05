@@ -1,9 +1,10 @@
 package com.ulfric.core.rankup;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.Map;
 
-import com.ulfric.config.ConfigFile;
+import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
+import com.ulfric.lib.coffee.economy.BalanceChangeEvent;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
@@ -11,23 +12,49 @@ import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.npermission.Group;
 import com.ulfric.lib.coffee.npermission.Permissions;
 import com.ulfric.lib.coffee.npermission.Track;
-import com.ulfric.lib.craft.block.MaterialData;
 import com.ulfric.lib.craft.entity.player.Player;
+import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.event.player.PlayerJoinEvent;
 import com.ulfric.lib.craft.scoreboard.Scoreboard;
 
-public class ModuleRankup extends Module {
+public final class ModuleRankup extends Module {
 
-	public ModuleRankup()
+	public static final ModuleRankup INSTANCE = new ModuleRankup();
+
+	private ModuleRankup()
 	{
-		super("rankup", "Rankups module", "1.0.0", "Packet");
+		super("rankup", "Module for handling rankups", "1.0.0", "Packet");
+	}
+
+	private Map<Track, Map<Group, CurrencyAmount>> prices;
+
+	public Rankup getNextRank(Player player)
+	{
+		if (this.prices == null) return null;
+
+		Group next = player.getNextGroup();
+
+		if (next == null) return null;
+
+		Track track = player.getCurrentTrack();
+
+		if (track == null) return null;
+
+		Map<Group, CurrencyAmount> amts = this.prices.get(track);
+
+		if (amts == null) return null;
+
+		Group current = player.getCurrentGroup();
+
+		return new Rankup(current, next, amts.get(next));
 	}
 
 	@Override
 	public void onFirstEnable()
 	{
+		this.prices = Maps.newHashMap();
+
 		this.addCommand(new CommandRankup(this));
-		this.addCommand(new CommandTracks(this));
 
 		this.addListener(new Listener(this)
 		{
@@ -38,6 +65,18 @@ public class ModuleRankup extends Module {
 
 				board.addElement(new ElementMine(board));
 				board.addElement(new ElementNextMine(board));
+			}
+
+			@Handler
+			public void onBalanceChange(BalanceChangeEvent event)
+			{
+				Player player = PlayerUtils.getPlayer(event.getAccount().getUniqueId());
+
+				if (player == null) return;
+
+				Scoreboard board = player.getScoreboard();
+
+				board.elementFromClazz(ElementNextMine.class).update(player);
 			}
 
 			@Handler
@@ -56,60 +95,58 @@ public class ModuleRankup extends Module {
 	@Override
 	public void onModuleEnable()
 	{
-		ConfigFile config = this.getModuleConfig();
+		Document doc = this.getModuleConfig().getRoot().getDocument("rankups");
 
-		Document document = config.getRoot();
+		if (doc == null) return;
 
-		Rankups.INSTANCE.defaultTrack = Permissions.getTrack(document.getString("default-track", "mines"));
+		int total = 0;
 
-		Document tracksDoc = document.getDocument("tracks");
-
-		if (tracksDoc != null)
+		for (String key : doc.getKeys(false))
 		{
-			for (String key : tracksDoc.getKeys(false))
+			Document rankupDoc = doc.getDocument(key);
+
+			if (rankupDoc == null) continue;
+
+			Track track = Permissions.getTrack(rankupDoc.getString("track", key));
+
+			if (track == null) continue;
+
+			Map<Group, CurrencyAmount> rankups = this.prices.computeIfAbsent(track, k -> Maps.newTreeMap());
+
+			Document ranks = rankupDoc.getDocument("ranks");
+
+			if (ranks == null) continue;
+
+			for (String rankKey : ranks.getKeys(false))
 			{
-				Document trackDoc = tracksDoc.getDocument(key);
-
-				if (trackDoc == null) continue;
-
-				Track track = Permissions.getTrack(trackDoc.getString("track", key));
-
-				if (track == null) continue;
-
-				MaterialData data = MaterialData.of(trackDoc.getString("material", "dirt"));
-
-				if (data == null) continue;
-
-				Rankups.INSTANCE.setMaterial(track, data);
-			}
-		}
-
-		Document ranksDoc = document.getDocument("rankups");
-
-		if (ranksDoc != null)
-		{
-			for (String key : ranksDoc.getKeys(false))
-			{
-				Document rankDoc = ranksDoc.getDocument(key);
+				Document rankDoc = ranks.getDocument(rankKey);
 
 				if (rankDoc == null) continue;
 
-				Group group = Permissions.getGroup(rankDoc.getString("group", key));
+				Group rank = Permissions.getGroup(rankDoc.getString("group", rankKey));
 
-				if (group == null) continue;
+				if (rank == null) continue;
 
-				String cost = rankDoc.getString("price");
-				CurrencyAmount price = StringUtils.isBlank(cost) ? null : CurrencyAmount.valueOf(cost);
+				if (!track.hasGroup(rank)) continue;
 
-				Rankups.INSTANCE.registerRankup(group, price);
+				String priceStr = rankDoc.getString("price");
+				System.out.println(priceStr);
+				CurrencyAmount amt = priceStr == null ? null : CurrencyAmount.valueOf(priceStr);
+
+				System.out.println(amt);
+				if (rankups.put(rank, amt) != null) continue;
+
+				total++;
 			}
 		}
+
+		this.log("Registered " + total + " rankups");
 	}
 
 	@Override
 	public void onModuleDisable()
 	{
-		Rankups.INSTANCE.clear();
+		this.prices.clear();
 	}
 
 }

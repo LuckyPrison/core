@@ -107,7 +107,7 @@ final class ModuleSell extends Module {
 
 				if (priced.put(material, price) != null)
 				{
-					this.log("Price specified twice in: prices." + key);
+					this.log("Price specified twice in: prices." + key + " (" + materialData + ")");
 				}
 
 				total++;

@@ -18,11 +18,11 @@ final class ElementNextMine extends ScoreboardElement {
 	@Override
 	public String getText(Player updater)
 	{
-		Rankup rankup = Rankups.INSTANCE.getActive(updater);
+		Rankup rankup = ModuleRankup.INSTANCE.getNextRank(updater);
 
 		if (rankup == null) return null;
 
-		CurrencyAmount cost = rankup.getCost();
+		CurrencyAmount cost = rankup.getPrice();
 
 		if (cost == null) return null;
 
@@ -44,7 +44,7 @@ final class ElementNextMine extends ScoreboardElement {
 
 		StringBuilder builder = new StringBuilder();
 
-		int count = (int) Math.max(Math.min(percent, 19), 1);
+		int count = (int) Math.max(Math.min(percent / 5, 19), 1);
 
 		int remainder = 20 - count;
 

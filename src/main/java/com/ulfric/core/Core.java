@@ -70,7 +70,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleRegionInterface());
 		this.addModule(new ModuleMines());
 		this.addModule(new ModuleKits());
-		this.addModule(new ModuleRankup());
+		this.addModule(ModuleRankup.INSTANCE);
 		this.addModule(ModuleLuckyBlocks.INSTANCE);
 		this.addModule(new ModuleSpeedyGonzales());
 		this.addModule(new ModuleLWE());

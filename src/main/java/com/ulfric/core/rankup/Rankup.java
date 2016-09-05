@@ -2,41 +2,33 @@ package com.ulfric.core.rankup;
 
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.coffee.npermission.Group;
-import com.ulfric.lib.coffee.npermission.Track;
 
 public final class Rankup {
 
-	Rankup(Track track, Group old, Group next, CurrencyAmount cost)
+	Rankup(Group oldGroup, Group newGroup, CurrencyAmount price)
 	{
-		this.track = track;
-		this.old = old;
-		this.next = next;
-		this.cost = cost;
+		this.oldGroup = oldGroup;
+		this.newGroup = newGroup;
+		this.price = price;
 	}
 
-	private final Track track;
-	private final Group old;
-	private final Group next;
-	private final CurrencyAmount cost;
+	private final Group oldGroup;
+	private final Group newGroup;
+	private final CurrencyAmount price;
 
-	public Track getTrack()
+	public Group getOldGroup()
 	{
-		return this.track;
+		return this.oldGroup;
 	}
 
-	public Group getOld()
+	public Group getNewGroup()
 	{
-		return this.old;
+		return this.newGroup;
 	}
 
-	public Group getNext()
+	public CurrencyAmount getPrice()
 	{
-		return this.next;
-	}
-
-	public CurrencyAmount getCost()
-	{
-		return this.cost;
+		return this.price;
 	}
 
 }
