@@ -13,7 +13,12 @@ import com.ulfric.lib.craft.block.Block;
 import com.ulfric.lib.craft.block.MaterialData;
 import com.ulfric.lib.craft.entity.player.Player;
 
-abstract class LuckyBlock extends NamedBase {
+public abstract class LuckyBlock extends NamedBase {
+
+	public static boolean isLuckyBlock(Block block)
+	{
+		return ModuleLuckyBlocks.INSTANCE.isLuckyBlock(block);
+	}
 
 	LuckyBlock(String name, MaterialData data, List<Weighted<Reward>> rewards, int weight)
 	{

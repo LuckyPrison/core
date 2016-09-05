@@ -18,12 +18,23 @@ import com.ulfric.lib.craft.inventory.item.Material;
 
 public final class ModuleLuckyBlocks extends Module {
 
-	public ModuleLuckyBlocks()
+	public static final ModuleLuckyBlocks INSTANCE = new ModuleLuckyBlocks();
+
+	private ModuleLuckyBlocks()
 	{
 		super("luckyblocks", "LuckyBlocks!", "1.0.0", "Packet");
 	}
 
 	Map<Material, Map<Byte, LuckyBlock>> luckyblocks = new EnumishMap<>(Material.length());
+
+	boolean isLuckyBlock(Block block)
+	{
+		Map<Byte, LuckyBlock> map = this.luckyblocks.get(block.getType());
+
+		if (map == null) return false;
+
+		return map.get(block.getData()) != null;
+	}
 
 	@Override
 	public void onFirstEnable()

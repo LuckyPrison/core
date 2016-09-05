@@ -71,7 +71,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleMines());
 		this.addModule(new ModuleKits());
 		this.addModule(new ModuleRankup());
-		this.addModule(new ModuleLuckyBlocks());
+		this.addModule(ModuleLuckyBlocks.INSTANCE);
 		this.addModule(new ModuleSpeedyGonzales());
 		this.addModule(new ModuleLWE());
 		this.addModule(new ModuleColoredSigns());

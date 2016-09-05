@@ -38,9 +38,11 @@ public final class ModuleStackSize extends Module {
 			@Handler
 			public void onClick(InventoryClickEvent event)
 			{
-				if (!event.getPlayer().getInventory().equals(event.getClicked())) return;
+				Player player = event.getPlayer();
 
-				ThreadUtils.run(event.getPlayer()::refreshInventory);
+				if (!player.getInventory().equals(event.getClicked())) return;
+
+				ThreadUtils.run(player::refreshInventory);
 			}
 		});
 	}

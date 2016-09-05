@@ -25,7 +25,7 @@ public final class Kit extends NamedBase {
 
 		long cooldown = document.getLong("cooldown", 0L);
 
-		Document rewards = document.getDocument("rewards");
+		Document rewards = document.getDocument("contents");
 
 		Reward multi = Rewards.parseMultiReward(rewards);
 

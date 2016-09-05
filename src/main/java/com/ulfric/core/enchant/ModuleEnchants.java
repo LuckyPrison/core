@@ -2,16 +2,21 @@ package com.ulfric.core.enchant;
 
 import java.util.List;
 import java.util.Set;
+import java.util.SortedMap;
 
 import org.apache.commons.lang.Validate;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.ulfric.config.ConfigFile;
 import com.ulfric.config.Document;
+import com.ulfric.core.luckyblocks.LuckyBlock;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
+import com.ulfric.lib.coffee.location.ImmutableVector;
 import com.ulfric.lib.coffee.location.Vector;
 import com.ulfric.lib.coffee.location.VectorPattern;
+import com.ulfric.lib.coffee.math.RandomUtils;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.persist.FileUtils;
 import com.ulfric.lib.craft.block.Block;
@@ -67,6 +72,7 @@ public final class ModuleEnchants extends Module {
 				for (Enchant enchant : enchs.getAll())
 				{
 					Enchantment ench = enchant.getEnchantment();
+					int level = enchant.getLevel();
 
 					if (ench instanceof VectorPatternEnchantment)
 					{
@@ -77,9 +83,44 @@ public final class ModuleEnchants extends Module {
 
 						VectorPatternEnchantment pattern = (VectorPatternEnchantment) ench;
 
-						pattern.getPattern().transform(location, vectors);
+						pattern.getPattern(level).transform(location, vectors);
+					}
 
-						continue;
+					else if (ench == EnchantmentBlasting.INSTANCE)
+					{
+						if (vectors == null)
+						{
+							vectors = Sets.newHashSet();
+						}
+
+						Vector defensive = ImmutableVector.of(location);
+						int radius = Math.min(level + 2, 6);
+						int r3 = radius / 3;
+						int max = (int) (level + Math.round((radius) / 1.75));
+
+						for (int i = 0; i < max; i++)
+						{
+							int x = RandomUtils.nextInt(radius);
+							int y = RandomUtils.nextInt(r3);
+							int z = RandomUtils.nextInt(radius);
+
+							if (RandomUtils.nextBoolean())
+							{
+								x = -x;
+							}
+
+							if (RandomUtils.nextBoolean())
+							{
+								y = -y;
+							}
+
+							if (RandomUtils.nextBoolean())
+							{
+								z = -z;
+							}
+
+							vectors.add(defensive.add(x, y, z));
+						}
 					}
 				}
 
@@ -94,6 +135,8 @@ public final class ModuleEnchants extends Module {
 					if (toBreak.getTypeOrdinal() == 0) continue;
 
 					if (toBreak.getType().getBestTool() == null) continue;
+
+					if (LuckyBlock.isLuckyBlock(toBreak)) continue;
 
 					player.breakBlock(toBreak);
 				}
@@ -121,16 +164,21 @@ public final class ModuleEnchants extends Module {
 
 			if (type.equals("vector-pattern"))
 			{
-				VectorPattern pattern = VectorPattern.fromDocument(document.getDocument("vector-pattern"));
+				SortedMap<Integer, VectorPattern> map = Maps.newTreeMap();
 
-				enchant = VectorPatternEnchantment.newEnchantment(name, id, max, pattern, conflicts);
+				for (String key : document.getKeys(false))
+				{
+					Document vecDoc = document.getDocument(key);
+
+					map.putIfAbsent(vecDoc.getInteger("level"), VectorPattern.fromDocument(vecDoc.getDocument("vector-pattern")));
+				}
+
+				enchant = VectorPatternEnchantment.newEnchantment(name, id, max, map, conflicts);
 			}
 			else
 			{
 				enchant = Enchantment.newEnchantment(name, id, max, conflicts, null);
 			}
-
-			enchant.register();
 
 			Validate.notNull(enchant);
 
@@ -138,12 +186,18 @@ public final class ModuleEnchants extends Module {
 
 			enchant.register();
 		}
+
+		EnchantmentBlasting.INSTANCE.register();
 	}
 
 	@Override
 	public void onModuleDisable()
 	{
 		this.enchants.forEach(Enchantment::unregister);
+
+		this.enchants.clear();
+
+		EnchantmentBlasting.INSTANCE.unregister();
 	}
 
 }
