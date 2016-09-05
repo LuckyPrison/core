@@ -25,11 +25,13 @@ final class ModuleFlightEnchant extends Module {
 			@Handler(ignoreCancelled = true)
 			public void onHold(PlayerItemHeldEvent event)
 			{
+				ItemStack newItem = event.getNewItem();
+
+				if (newItem == null) return;
+
 				Player player = event.getPlayer();
 
 				if (creative.equals(player.getGameMode())) return;
-
-				ItemStack newItem = event.getNewItem();
 
 				Enchantment flight = EnchantmentFlight.INSTANCE;
 
