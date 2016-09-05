@@ -6,6 +6,7 @@ import java.util.SortedMap;
 
 import org.apache.commons.lang.Validate;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.ulfric.config.ConfigFile;
@@ -68,6 +69,9 @@ public final class ModuleEnchants extends Module {
 				EnchantList enchs = hand.enchants();
 
 				Location location = block.getLocation();
+				int bx = location.getIntX();
+				int by = location.getIntY();
+				int bz = location.getIntZ();
 
 				Set<Vector> vectors = null;
 
@@ -85,7 +89,7 @@ public final class ModuleEnchants extends Module {
 
 						VectorPatternEnchantment pattern = (VectorPatternEnchantment) ench;
 
-						pattern.getPattern(level).transform(location, vectors);
+						pattern.getPattern(level).transform(bx, by, bz, vectors);
 					}
 
 					else if (ench == EnchantmentBlasting.INSTANCE)
@@ -160,7 +164,7 @@ public final class ModuleEnchants extends Module {
 			int id = document.getLong("id").intValue();
 			int max = document.getLong("max").intValue();
 			String type = document.getString("type", "normal");
-			List<Integer> conflicts = document.getIntegerList("conflicts");
+			List<Integer> conflicts = document.getIntegerList("conflicts", ImmutableList.of());
 
 			Enchantment enchant = null;
 
@@ -168,11 +172,13 @@ public final class ModuleEnchants extends Module {
 			{
 				SortedMap<Integer, VectorPattern> map = Maps.newTreeMap();
 
+				document = document.getDocument("vectors");
+
 				for (String key : document.getKeys(false))
 				{
 					Document vecDoc = document.getDocument(key);
 
-					map.putIfAbsent(vecDoc.getInteger("level"), VectorPattern.fromDocument(vecDoc.getDocument("vector-pattern")));
+					map.putIfAbsent(vecDoc.getInteger("level"), VectorPattern.fromDocument(vecDoc.getDocument("pattern")));
 				}
 
 				enchant = VectorPatternEnchantment.newEnchantment(name, id, max, map, conflicts);
@@ -187,6 +193,8 @@ public final class ModuleEnchants extends Module {
 			Validate.isTrue(this.enchants.add(enchant));
 
 			enchant.register();
+
+			this.log("Loaded enchantment: " + enchant.getName() + " with ID " + enchant.getId());
 		}
 
 		EnchantmentBlasting.INSTANCE.register();

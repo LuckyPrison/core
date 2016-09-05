@@ -37,7 +37,7 @@ public final class VectorPatternEnchantment extends Enchantment {
 
 	public VectorPattern getPattern(int level)
 	{
-		VectorPattern pattern = this.patterns.get(level - 1);
+		VectorPattern pattern = this.patterns.get(level);
 
 		if (pattern != null) return pattern;
 

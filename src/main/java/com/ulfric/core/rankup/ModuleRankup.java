@@ -130,10 +130,8 @@ public final class ModuleRankup extends Module {
 				if (!track.hasGroup(rank)) continue;
 
 				String priceStr = rankDoc.getString("price");
-				System.out.println(priceStr);
 				CurrencyAmount amt = priceStr == null ? null : CurrencyAmount.valueOf(priceStr);
 
-				System.out.println(amt);
 				if (rankups.put(rank, amt) != null) continue;
 
 				total++;

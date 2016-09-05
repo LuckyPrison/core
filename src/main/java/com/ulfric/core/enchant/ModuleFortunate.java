@@ -47,7 +47,7 @@ final class ModuleFortunate extends Module {
 
 				if (level <= 0)
 				{
-					event.getCustomItem().setAmount(4);
+					event.setDroppedItemAmount(4);
 
 					return;
 				}
