@@ -48,6 +48,8 @@ public final class ModuleEnchants extends Module {
 		this.enchants = Sets.newHashSet();
 		this.addCommand(new CommandEnchant(this));
 
+		this.addListener(new EnchantSign(this));
+
 		this.addListener(new Listener(this)
 		{
 			@Handler(ignoreCancelled = true)
