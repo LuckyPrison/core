@@ -57,7 +57,7 @@ final class ModuleSpawn extends Module {
 
 		if (destDoc == null)
 		{
-			this.destination = Destination.newDestination(WorldUtils.getWorlds().get(0).getSpawnPoint(), 5);
+			this.destination = Destination.newDestination(WorldUtils.getWorlds().get(0).getSpawnPoint(), 100);
 
 			root.set("destination", this.destination.toDocument());
 
