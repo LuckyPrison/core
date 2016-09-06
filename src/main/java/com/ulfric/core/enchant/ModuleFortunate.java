@@ -31,7 +31,6 @@ final class ModuleFortunate extends Module {
 			@Handler(ignoreCancelled = true)
 			public void onBreak(BlockBreakEvent event)
 			{
-				System.out.println("1");
 				ItemStack custom = event.getCustomItem();
 
 				if (custom == null) return;

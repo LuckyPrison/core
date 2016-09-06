@@ -169,7 +169,7 @@ final class ModuleSell extends Module {
 
 				line = line.replace(" ", "");
 
-				if (!player.hasPermission("sellall." + line))
+				if (!player.hasPermission("sellsigns." + line.toLowerCase()))
 				{
 					player.sendLocalizedMessage("economy-sellall-missing-permission", line);
 
