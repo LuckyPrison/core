@@ -39,7 +39,6 @@ public final class ModuleLuckyBlocks extends Module {
 	@Override
 	public void onFirstEnable()
 	{
-		final Material air = Material.of("AIR");
 		this.addListener(new Listener(this)
 		{
 			@Handler(ignoreCancelled = true)
@@ -66,7 +65,7 @@ public final class ModuleLuckyBlocks extends Module {
 					return;
 				}
 
-				block.setType(air);
+				block.setType(null);
 
 				luckyblock.use(player, block);
 			}

@@ -8,7 +8,7 @@ final class CommandWorldEdit extends BaseCommand {
 
 	CommandWorldEdit(ModuleBase owner)
 	{
-		super("worldedit", owner, "we");
+		super("worldedit", owner, "we", "lwe");
 
 		this.addEnforcer(Enforcers.IS_PLAYER, "worldedit-must-be-player");
 
