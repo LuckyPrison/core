@@ -36,6 +36,7 @@ public final class ModuleBackpack extends Module {
 		this.subscription = database
 				.multi(Document.class, PlayerScopes.ONLINE, new DataAddress<>("backpacks", null, "data"))
 				.blockOnSubscribe(true)
+				.blockOnUnsubscribe(true)
 				.subscribe();
 
 		this.addCommand(new CommandBackpack(this));

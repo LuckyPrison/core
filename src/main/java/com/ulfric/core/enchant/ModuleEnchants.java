@@ -127,6 +127,11 @@ public final class ModuleEnchants extends Module {
 
 							vectors.add(defensive.add(x, y, z));
 						}
+
+						if (RandomUtils.nextBoolean())
+						{
+							player.sendExplosion(location);
+						}
 					}
 				}
 

@@ -62,10 +62,15 @@ public final class ModuleRankup extends Module {
 			@Handler
 			public void onJoin(PlayerJoinEvent event)
 			{
-				Scoreboard board = event.getPlayer().getScoreboard();
+				ThreadUtils.run(() ->
+				{
+					Scoreboard board = event.getPlayer().getScoreboard();
 
-				board.addElement(new ElementMine(board));
-				board.addElement(new ElementNextMine(board));
+					board.addElement(new ElementMine(board));
+					board.addElement(new ElementNextMine(board));
+
+					board.update(event.getPlayer());
+				});
 			}
 
 			@Handler

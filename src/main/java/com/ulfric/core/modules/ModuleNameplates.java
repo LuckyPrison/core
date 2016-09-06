@@ -66,6 +66,7 @@ public class ModuleNameplates extends Module {
 						 		  this.playerNameplates.put(newValue.getAddress().getId(), new NameplateKey(newValue.getValue(), false));
 						 	  })
 						 	  .blockOnSubscribe(true)
+						 	 .blockOnUnsubscribe(true)
 						 	  .subscribe();
 
 		Executor executor = Executors.newSingleThreadExecutor();

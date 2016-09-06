@@ -193,7 +193,7 @@ public final class Setting extends NamedBase implements Comparable<Setting>, Sco
 
 			DocumentStore database = PlayerUtils.getPlayerData();
 
-			MultiSubscription<UUID, Integer> subscription = database.multi(Integer.class, PlayerScopes.ONLINE, new DataAddress<>("settings", null, this.name)).blockOnSubscribe(true).subscribe();
+			MultiSubscription<UUID, Integer> subscription = database.multi(Integer.class, PlayerScopes.ONLINE, new DataAddress<>("settings", null, this.name)).blockOnSubscribe(true).blockOnUnsubscribe(true).subscribe();
 
 			Validate.notNull(this.item);
 

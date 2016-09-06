@@ -41,7 +41,7 @@ public class ModuleNotes extends Module {
 
 			manager.ensureTableCreated(store, name);
 
-			this.documents.put(type, store.document(new DataAddress<>(name, "notes", null)).blockOnSubscribe(true).subscribe());
+			this.documents.put(type, store.document(new DataAddress<>(name, "notes", null)).blockOnSubscribe(true).blockOnUnsubscribe(true).subscribe());
 		}
 
 		this.addCommand(new CommandNote(this));

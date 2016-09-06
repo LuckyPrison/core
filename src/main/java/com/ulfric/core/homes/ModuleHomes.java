@@ -45,7 +45,7 @@ public class ModuleHomes extends Module {
 
 		this.subscription = database.multi(
 				Document.class, PlayerScopes.ONLINE, new DataAddress<>("homes", "data")
-		).blockOnSubscribe(true).subscribe();
+		).blockOnSubscribe(true).blockOnUnsubscribe(true).subscribe();
 
 		super.addCommand(new CommandHome(this));
 		super.addCommand(new CommandSethome(this));

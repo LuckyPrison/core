@@ -20,9 +20,9 @@ import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.location.Destination;
 import com.ulfric.lib.craft.location.Location;
 
-final class ModuleWarps extends Module {
+public final class ModuleWarps extends Module {
 
-	private static final ModuleWarps INSTANCE = new ModuleWarps();
+	public static final ModuleWarps INSTANCE = new ModuleWarps();
 
 	public static ModuleWarps getInstance()
 	{
@@ -43,7 +43,7 @@ final class ModuleWarps extends Module {
 		return warp.getDestination();
 	}
 
-	Warp getWarp(CommandSender sender, String name)
+	public Warp getWarp(CommandSender sender, String name)
 	{
 		String lower = name.toLowerCase();
 
@@ -55,6 +55,8 @@ final class ModuleWarps extends Module {
 			{
 				return found;
 			}
+
+			found = null;
 		}
 
 		int lowest = 4;
@@ -72,6 +74,8 @@ final class ModuleWarps extends Module {
 			if (distance == 0) return warp;
 
 			if (distance == -1) continue;
+
+			if (distance >= warp.getName().length()) continue;
 
 			lowest = distance;
 			found = warp;

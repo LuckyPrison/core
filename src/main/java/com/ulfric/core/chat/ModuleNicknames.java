@@ -93,7 +93,7 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 
 		DataManager.get().ensureTableCreated(store, "nicknames");
 
-		this.subscription = store.multi(String.class, PlayerScopes.ONLINE, new DataAddress<>("nicknames", null, "nickname")).blockOnSubscribe(true).subscribe();
+		this.subscription = store.multi(String.class, PlayerScopes.ONLINE, new DataAddress<>("nicknames", null, "nickname")).blockOnSubscribe(true).blockOnUnsubscribe(true).subscribe();
 	}
 
 	@Override

@@ -110,6 +110,7 @@ public class ModuleMines extends Module {
 		this.resetQueue = Sets.newHashSet();
 
 		this.addCommand(new CommandMineReset(this));
+		this.addCommand(new CommandMine(this));
 
 		this.addListener(new Listener(this)
 		{

@@ -46,6 +46,7 @@ public final class Achievement implements Named, ScopeListener<UUID> {
 		this.subscription = store
 				.multi(Integer.class, PlayerScopes.ONLINE, new DataAddress<>("achievements", code))
 				.blockOnSubscribe(true)
+				.blockOnUnsubscribe(true)
 				.subscribe();
 
 		PlayerScopes.ONLINE.addListener(this);

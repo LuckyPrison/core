@@ -50,7 +50,7 @@ public final class ModuleControl extends Module {
 
 			manager.ensureTableCreated(store, name);
 
-			this.documents.put(type, store.document(new DataAddress<>(name, "punishments", null)).blockOnSubscribe(true).subscribe());
+			this.documents.put(type, store.document(new DataAddress<>(name, "punishments", null)).blockOnSubscribe(true).blockOnUnsubscribe(true).subscribe());
 		}
 
 		this.allowedCommandMutes = Sets.newHashSet();
