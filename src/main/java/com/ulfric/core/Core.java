@@ -45,6 +45,7 @@ import com.ulfric.core.pweather.ModulePlayerWeather;
 import com.ulfric.core.rankup.ModuleRankup;
 import com.ulfric.core.regions.ModuleRegionInterface;
 import com.ulfric.core.settings.ModuleSettings;
+import com.ulfric.core.shutdown.ModuleShutdown;
 import com.ulfric.core.teleport.ModuleTeleport;
 import com.ulfric.lib.bukkit.module.Plugin;
 
@@ -99,6 +100,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleFly());
 		this.addModule(new ModulePlayerTime());
 		this.addModule(new ModulePlayerWeather());
+		this.addModule(new ModuleShutdown());
 	}
 
 }
