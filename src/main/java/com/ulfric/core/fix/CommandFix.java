@@ -50,9 +50,9 @@ public class CommandFix extends Command {
 
 		OfflineBankAccount account = ModuleEconomy.get().getAccount(player.getUniqueId());
 
-		CurrencyAmount cost = CurrencyAmount.of(this.base.getCurrency(), this.base.getCost());
+		CurrencyAmount cost = this.base.getAmount();
 
-		account.retrieveBalance(this.base.getCurrency()).whenComplete((balance, throwable) ->
+		account.retrieveBalance(cost.getCurrency()).whenComplete((balance, throwable) ->
 		{
 			if (balance < cost.getAmount())
 			{
