@@ -44,7 +44,7 @@ public final class ModuleEnchants extends Module {
 	public void onFirstEnable()
 	{
 		this.addModule(new ModuleDropModifier());
-		this.addModule(new ModuleFlightEnchant());
+		this.addModule(ModuleFlightEnchant.INSTANCE);
 		this.addModule(new ModuleAutosellEnchant());
 
 		this.enchants = Sets.newHashSet();

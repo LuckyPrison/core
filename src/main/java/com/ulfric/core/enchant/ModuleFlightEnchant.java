@@ -9,7 +9,9 @@ import com.ulfric.lib.craft.event.player.PlayerItemHeldEvent;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.enchant.Enchantment;
 
-final class ModuleFlightEnchant extends Module {
+public final class ModuleFlightEnchant extends Module {
+
+	public static final ModuleFlightEnchant INSTANCE = new ModuleFlightEnchant();
 
 	public ModuleFlightEnchant()
 	{
@@ -33,19 +35,33 @@ final class ModuleFlightEnchant extends Module {
 
 				if (newItem != null)
 				{
-					Enchantment flight = EnchantmentFlight.INSTANCE;
-
-					if (newItem.enchants().contains(flight))
+					if (ModuleFlightEnchant.this.enchantPresent(player, newItem))
 					{
 						player.setCanFly(true);
-
-						return;
+					}
+					else
+					{
+						if (!player.containsMetadata("flight") || !player.getMetadataAsBoolean("flight"))
+						{
+							player.setCanFly(false);
+						}
 					}
 				}
-
-				player.setCanFly(false);
 			}
 		});
+	}
+
+	public boolean enchantPresent(Player player)
+	{
+		return this.enchantPresent(player, player.getMainHand());
+	}
+
+	private boolean enchantPresent(Player player, ItemStack newItem)
+	{
+		Enchantment flight = EnchantmentFlight.INSTANCE;
+
+		return newItem.enchants().contains(flight);
+
 	}
 
 	@Override

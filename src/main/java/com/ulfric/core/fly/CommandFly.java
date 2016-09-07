@@ -1,5 +1,6 @@
 package com.ulfric.core.fly;
 
+import com.ulfric.core.enchant.ModuleFlightEnchant;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
@@ -18,16 +19,25 @@ public final class CommandFly extends Command {
 	{
 		Player player = (Player) this.getSender();
 
-		player.setCanFly(!player.canFly());
+		boolean flying;
 
-		if (player.canFly())
+		if (player.containsMetadata("flight"))
 		{
-			player.sendLocalizedMessage("fly-toggle-on");
+			flying = !player.getMetadataAsBoolean("flight");
 		}
 		else
 		{
-			player.sendLocalizedMessage("fly-toggle-off");
+			flying = true;
 		}
+
+		player.setMetadata("flight", flying);
+
+		if (!ModuleFlightEnchant.INSTANCE.enchantPresent(player))
+		{
+			player.setCanFly(flying);
+		}
+
+		player.sendLocalizedMessage("fly-toggle-" + (flying ? "on" : "off"));
 	}
 
 }
