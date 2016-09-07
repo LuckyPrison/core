@@ -10,20 +10,15 @@ final class CommandFeed extends Command {
 	{
 		super("feed", base, "eat");
 
-		super.addEnforcer(Enforcers.IS_PLAYER, "feed-is-not-player");
+		this.addPermission("feed.use");
+
+		this.addEnforcer(Enforcers.IS_PLAYER, "feed-is-not-player");
 	}
 
 	@Override
 	public void run()
 	{
-		Player player = (Player) super.getSender();
-
-		if (!player.hasPermission("feed.use"))
-		{
-			player.sendLocalizedMessage("feed-no-permission");
-
-			return;
-		}
+		Player player = (Player) this.getSender();
 
 		player.setFoodLevel(20);
 	}
