@@ -1,12 +1,13 @@
 package com.ulfric.core.echest;
 
 import com.ulfric.lib.coffee.command.Command;
+import com.ulfric.lib.coffee.module.ModuleBase;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 
-public final class CommandEnderchest extends Command {
+final class CommandEnderChest extends Command {
 
-	public CommandEnderchest(ModuleEnderchest owner)
+	public CommandEnderChest(ModuleBase owner)
 	{
 		super("enderchest", owner, "echest");
 
