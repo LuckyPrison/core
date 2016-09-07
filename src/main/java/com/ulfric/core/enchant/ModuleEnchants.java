@@ -45,6 +45,7 @@ public final class ModuleEnchants extends Module {
 	{
 		this.addModule(new ModuleDropModifier());
 		this.addModule(new ModuleFlightEnchant());
+		this.addModule(new ModuleAutosellEnchant());
 
 		this.enchants = Sets.newHashSet();
 		this.addCommand(new CommandEnchant(this));
