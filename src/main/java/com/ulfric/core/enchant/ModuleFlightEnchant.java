@@ -33,20 +33,19 @@ public final class ModuleFlightEnchant extends Module {
 
 				if (creative.equals(player.getGameMode())) return;
 
+				if (player.containsMetadata("flight")) return;
+
 				if (newItem != null)
 				{
 					if (ModuleFlightEnchant.this.enchantPresent(player, newItem))
 					{
 						player.setCanFly(true);
-					}
-					else
-					{
-						if (!player.containsMetadata("flight") || !player.getMetadataAsBoolean("flight"))
-						{
-							player.setCanFly(false);
-						}
+
+						return;
 					}
 				}
+
+				player.setCanFly(false);
 			}
 		});
 	}
@@ -56,12 +55,11 @@ public final class ModuleFlightEnchant extends Module {
 		return this.enchantPresent(player, player.getMainHand());
 	}
 
-	private boolean enchantPresent(Player player, ItemStack newItem)
+	boolean enchantPresent(Player player, ItemStack newItem)
 	{
 		Enchantment flight = EnchantmentFlight.INSTANCE;
 
 		return newItem.enchants().contains(flight);
-
 	}
 
 	@Override
