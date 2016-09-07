@@ -13,6 +13,7 @@ import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.enchant.ModuleEnchants;
 import com.ulfric.core.feed.ModuleFeed;
 import com.ulfric.core.fix.ModuleFix;
+import com.ulfric.core.fly.ModuleFly;
 import com.ulfric.core.gangs.ModuleGangs;
 import com.ulfric.core.homes.ModuleHomes;
 import com.ulfric.core.kit.ModuleKits;
@@ -93,6 +94,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleDonorParticle());
 		this.addModule(new ModuleFeed());
 		this.addModule(new ModuleEnderChest());
+		this.addModule(new ModuleFly());
 	}
 
 }
