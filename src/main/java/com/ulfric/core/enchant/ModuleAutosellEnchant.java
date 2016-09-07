@@ -13,10 +13,8 @@ import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.npermission.Group;
 import com.ulfric.lib.craft.entity.player.Player;
-import com.ulfric.lib.craft.event.block.BlockBreakEvent;
 import com.ulfric.lib.craft.event.player.PlayerItemHeldEvent;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
-import com.ulfric.lib.craft.inventory.item.enchant.Enchant;
 
 final class ModuleAutosellEnchant extends Module {
 
@@ -32,11 +30,6 @@ final class ModuleAutosellEnchant extends Module {
 	{
 		this.addListener(new Listener(this)
 		{
-			@Handler
-			public void onBreak(BlockBreakEvent event)
-			{
-				event.getPlayer().getMainHand().enchants().add(Enchant.of(EnchantmentAutoSell.INSTANCE, 1));
-			}
 			@Handler
 			public void onItem(PlayerItemHeldEvent event)
 			{
