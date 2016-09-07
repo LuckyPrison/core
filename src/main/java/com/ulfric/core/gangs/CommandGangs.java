@@ -1,8 +1,6 @@
 package com.ulfric.core.gangs;
 
-import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.BaseCommand;
-import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.module.ModuleBase;
 
 public final class CommandGangs extends BaseCommand {
@@ -29,8 +27,6 @@ public final class CommandGangs extends BaseCommand {
 		this.addCommand(new SubCommandNeutral(owner));
 		this.addCommand(new SubCommandEnemy(owner));
 		this.addCommand(new SubCommandChat(owner));
-
-		this.addOptionalArgument(Argument.builder().setPath("page").addResolver(Resolvers.INTEGER).setDefaultValue(0).build());
 	}
 
 }

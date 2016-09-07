@@ -38,7 +38,6 @@ final class CommandPay extends Command {
 
 		CurrencyAmount amount = (CurrencyAmount) this.getObject("price");
 		Currency currency = amount.getCurrency();
-		long amt = amount.getAmount();
 
 		String payeeName = player.getName();
 		UUID uuid = sender.getUniqueId();
@@ -66,10 +65,10 @@ final class CommandPay extends Command {
 
 			long senderBalance = senderAccount.getBalance(currency);
 
-			long difference = amt - senderBalance;
+			long difference = amount.getAmount() - senderBalance;
 			if (difference > 0)
 			{
-				sender.sendLocalizedMessage("economy-pay-cannot-afford", new MoneyFormatter(difference).dualFormatWord());
+				sender.sendLocalizedMessage("economy-pay-cannot-afford", new MoneyFormatter(currency.getFormat(), difference).dualFormatWord());
 
 				return;
 			}
@@ -83,7 +82,7 @@ final class CommandPay extends Command {
 
 		recipientAccount.give(amount, "Payment from " + senderName);
 
-		String amtFormat = new MoneyFormatter(amt).dualFormatWord().toString();
+		String amtFormat = amount.toFormatter().dualFormatWord().toString();
 
 		sender.sendLocalizedMessage("economy-payment-sent", payeeName, amtFormat);
 
