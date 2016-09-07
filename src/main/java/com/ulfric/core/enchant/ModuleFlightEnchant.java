@@ -27,19 +27,20 @@ final class ModuleFlightEnchant extends Module {
 			{
 				ItemStack newItem = event.getNewItem();
 
-				if (newItem == null) return;
-
 				Player player = event.getPlayer();
 
 				if (creative.equals(player.getGameMode())) return;
 
-				Enchantment flight = EnchantmentFlight.INSTANCE;
-
-				if (newItem.enchants().contains(flight))
+				if (newItem != null)
 				{
-					player.setCanFly(true);
+					Enchantment flight = EnchantmentFlight.INSTANCE;
 
-					return;
+					if (newItem.enchants().contains(flight))
+					{
+						player.setCanFly(true);
+
+						return;
+					}
 				}
 
 				player.setCanFly(false);
