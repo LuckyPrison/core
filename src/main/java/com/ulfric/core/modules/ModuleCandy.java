@@ -86,7 +86,7 @@ public class ModuleCandy extends Module {
 	}
 
 	private final List<String> strings = Arrays.asList("munch", "crunch");
-	private final PlayableSound sound = PlayableSound.builder().setSound("ENTITY_GENERIC_EAT").setVolume(5).setPitch(4).build();
+	private final PlayableSound sound = PlayableSound.builder().setSound("ENTITY_PLAYER_BURP").setVolume(5).setPitch(4).build();
 	private Candy fromDocument(Document document)
 	{
 		MaterialData material = MaterialData.of(document.getString("material"));
