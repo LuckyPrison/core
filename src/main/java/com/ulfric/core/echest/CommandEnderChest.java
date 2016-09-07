@@ -14,8 +14,6 @@ final class CommandEnderChest extends Command {
 		this.addPermission("enderchest.use");
 
 		this.addEnforcer(Enforcers.IS_PLAYER, "enderchest-is-not-player");
-
-		this.addPermission("enderchest.use");
 	}
 
 	@Override
