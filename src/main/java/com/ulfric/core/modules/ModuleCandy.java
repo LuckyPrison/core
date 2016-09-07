@@ -20,6 +20,7 @@ import com.ulfric.lib.craft.inventory.item.Consumables;
 import com.ulfric.lib.craft.inventory.item.ItemUtils;
 import com.ulfric.lib.craft.inventory.item.Recipe;
 import com.ulfric.lib.craft.inventory.item.ShapelessRecipe;
+import com.ulfric.lib.craft.note.PlayableSound;
 
 public class ModuleCandy extends Module {
 
@@ -84,6 +85,8 @@ public class ModuleCandy extends Module {
 		this.registeredCandies.clear();
 	}
 
+	private final List<String> strings = Arrays.asList("munch", "crunch");
+	private final PlayableSound sound = PlayableSound.builder().setSound("ENTITY_GENERIC_EAT").setVolume(5).setPitch(4).build();
 	private Candy fromDocument(Document document)
 	{
 		MaterialData material = MaterialData.of(document.getString("material"));
@@ -93,8 +96,6 @@ public class ModuleCandy extends Module {
 		Validate.notNull(material);
 		Validate.notNull(reward);
 		Validate.notNull(recipe);
-
-		List<String> strings = Arrays.asList("munch", "crunch");
 
 		return new Candy(material, (player, times) ->
 		{
@@ -107,10 +108,12 @@ public class ModuleCandy extends Module {
 
 			for (int x = 0, n = RandomUtils.randomRange(3, 5); x < n; x++)
 			{
-				joiner.append(RandomUtils.randomValue(strings));
+				joiner.append(RandomUtils.randomValue(this.strings));
 			}
 
 			player.sendLocalizedMessage("candy-use", joiner.toString());
+
+			player.playSound(this.sound);
 
 			// TODO support times on all the reward types, not just potions
 			reward.give(player, "Candy", "times", times);
