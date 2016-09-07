@@ -9,6 +9,7 @@ import com.ulfric.core.control.ModuleCloseInventory;
 import com.ulfric.core.control.ModuleControl;
 import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.enchant.ModuleEnchants;
+import com.ulfric.core.fix.ModuleFix;
 import com.ulfric.core.gangs.ModuleGangs;
 import com.ulfric.core.homes.ModuleHomes;
 import com.ulfric.core.kit.ModuleKits;
@@ -85,6 +86,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleHomes());
 		this.addModule(new ModuleRenameFix());
 		this.addModule(ModuleMinebuddy.INSTANCE);
+		this.addModule(new ModuleFix());
 	}
 
 }
