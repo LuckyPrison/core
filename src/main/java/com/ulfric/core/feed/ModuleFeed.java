@@ -2,7 +2,7 @@ package com.ulfric.core.feed;
 
 import com.ulfric.lib.coffee.module.Module;
 
-public class ModuleFeed extends Module {
+public final class ModuleFeed extends Module {
 
 	public ModuleFeed()
 	{
@@ -12,7 +12,7 @@ public class ModuleFeed extends Module {
 	@Override
 	public void onFirstEnable()
 	{
-		super.addCommand(new CommandFeed(this));
+		this.addCommand(new CommandFeed(this));
 	}
 
 }

@@ -4,7 +4,7 @@ import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 
-public class CommandFeed extends Command {
+final class CommandFeed extends Command {
 
 	public CommandFeed(ModuleFeed base)
 	{
