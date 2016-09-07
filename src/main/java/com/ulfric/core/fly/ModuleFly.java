@@ -2,7 +2,7 @@ package com.ulfric.core.fly;
 
 import com.ulfric.lib.coffee.module.Module;
 
-public class ModuleFly extends Module {
+public final class ModuleFly extends Module {
 
 	public ModuleFly()
 	{
