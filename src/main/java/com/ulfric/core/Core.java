@@ -19,6 +19,7 @@ import com.ulfric.core.homes.ModuleHomes;
 import com.ulfric.core.kit.ModuleKits;
 import com.ulfric.core.luckyblocks.ModuleLuckyBlocks;
 import com.ulfric.core.lwe.ModuleLWE;
+import com.ulfric.core.serverstats.ModuleServerStats;
 import com.ulfric.core.minebuddy.ModuleMinebuddy;
 import com.ulfric.core.mines.ModuleMines;
 import com.ulfric.core.modules.ModuleBeheading;
@@ -100,6 +101,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleFly());
 		this.addModule(new ModulePlayerTime());
 		this.addModule(new ModulePlayerWeather());
+		this.addModule(new ModuleServerStats());
 		this.addModule(new ModuleShutdown());
 	}
 
