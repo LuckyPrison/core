@@ -2,9 +2,9 @@ package com.ulfric.core.echest;
 
 import com.ulfric.lib.coffee.module.Module;
 
-public final class ModuleEnderchest extends Module {
+public final class ModuleEnderChest extends Module {
 
-	public ModuleEnderchest()
+	public ModuleEnderChest()
 	{
 		super("ender-chest", "Enderchest command", "1.0.0", "insou");
 	}
@@ -12,7 +12,7 @@ public final class ModuleEnderchest extends Module {
 	@Override
 	public void onFirstEnable()
 	{
-		this.addCommand(new CommandEnderchest(this));
+		this.addCommand(new CommandEnderChest(this));
 	}
 
 }

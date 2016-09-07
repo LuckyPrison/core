@@ -8,7 +8,7 @@ import com.ulfric.core.control.ModuleClearChat;
 import com.ulfric.core.control.ModuleCloseInventory;
 import com.ulfric.core.control.ModuleControl;
 import com.ulfric.core.donorpart.ModuleDonorParticle;
-import com.ulfric.core.echest.ModuleEnderchest;
+import com.ulfric.core.echest.ModuleEnderChest;
 import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.enchant.ModuleEnchants;
 import com.ulfric.core.feed.ModuleFeed;
@@ -92,7 +92,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleFix());
 		this.addModule(new ModuleDonorParticle());
 		this.addModule(new ModuleFeed());
-		this.addModule(new ModuleEnderchest());
+		this.addModule(new ModuleEnderChest());
 	}
 
 }

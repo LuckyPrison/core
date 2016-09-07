@@ -10,9 +10,9 @@ final class CommandFeed extends Command {
 	{
 		super("feed", base, "eat");
 
-		this.addEnforcer(Enforcers.IS_PLAYER, "feed-is-not-player");
-
 		this.addPermission("feed.use");
+
+		this.addEnforcer(Enforcers.IS_PLAYER, "feed-is-not-player");
 	}
 
 	@Override
