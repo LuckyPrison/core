@@ -41,6 +41,7 @@ import com.ulfric.core.modules.ModuleWelcome;
 import com.ulfric.core.permissions.ModulePermissionInterface;
 import com.ulfric.core.playerlist.ModulePlayerList;
 import com.ulfric.core.ptime.ModulePlayerTime;
+import com.ulfric.core.pweather.ModulePlayerWeather;
 import com.ulfric.core.rankup.ModuleRankup;
 import com.ulfric.core.regions.ModuleRegionInterface;
 import com.ulfric.core.settings.ModuleSettings;
@@ -97,6 +98,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleEnderChest());
 		this.addModule(new ModuleFly());
 		this.addModule(new ModulePlayerTime());
+		this.addModule(new ModulePlayerWeather());
 	}
 
 }
