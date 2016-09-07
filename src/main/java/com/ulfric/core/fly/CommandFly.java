@@ -5,9 +5,9 @@ import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 
-public final class CommandFly extends Command {
+final class CommandFly extends Command {
 
-	public CommandFly(ModuleFly owner)
+	CommandFly(ModuleFly owner)
 	{
 		super("fly", owner);
 
