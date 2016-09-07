@@ -7,6 +7,7 @@ import com.ulfric.core.combattag.ModuleCombatTag;
 import com.ulfric.core.control.ModuleClearChat;
 import com.ulfric.core.control.ModuleCloseInventory;
 import com.ulfric.core.control.ModuleControl;
+import com.ulfric.core.donorpart.ModuleDonorParticle;
 import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.enchant.ModuleEnchants;
 import com.ulfric.core.fix.ModuleFix;
@@ -87,6 +88,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleRenameFix());
 		this.addModule(ModuleMinebuddy.INSTANCE);
 		this.addModule(new ModuleFix());
+		this.addModule(new ModuleDonorParticle());
 	}
 
 }
