@@ -32,10 +32,21 @@ final class MultiItemReward implements Reward {
 
 	private final ItemStack[] stacks;
 
+	private ItemStack[] cloneItems()
+	{
+		int length = this.stacks.length;
+		ItemStack[] items = new ItemStack[length];
+		for (int x = 0; x < length; x++)
+		{
+			items[x] = this.stacks[x].copy();
+		}
+		return items;
+	}
+
 	@Override
 	public void give(Player player, String reason, Object... objects)
 	{
-		List<ItemStack> unadded = player.getInventory().addItems(this.stacks);
+		List<ItemStack> unadded = player.getInventory().addItems(this.cloneItems());
 
 		if (ListUtils.isEmpty(unadded)) return;
 

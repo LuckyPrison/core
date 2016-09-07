@@ -10,6 +10,8 @@ import org.apache.commons.collections4.map.CaseInsensitiveMap;
 
 import com.ulfric.config.ConfigFile;
 import com.ulfric.config.MutableDocument;
+import com.ulfric.core.minebuddy.Minebuddy;
+import com.ulfric.core.minebuddy.ModuleMinebuddy;
 import com.ulfric.lib.coffee.collection.ListUtils;
 import com.ulfric.lib.coffee.collection.SetUtils;
 import com.ulfric.lib.coffee.economy.Bank;
@@ -21,14 +23,17 @@ import com.ulfric.lib.coffee.string.Patterns;
 import com.ulfric.lib.craft.block.MaterialData;
 import com.ulfric.lib.craft.block.Sign;
 import com.ulfric.lib.craft.entity.player.Player;
+import com.ulfric.lib.craft.entity.player.PlayerUtils;
 import com.ulfric.lib.craft.event.SignListener;
 import com.ulfric.lib.craft.event.player.PlayerUseSignEvent;
 import com.ulfric.lib.craft.inventory.Inventory;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
 
-final class ModuleSell extends Module {
+public final class ModuleSell extends Module {
 
-	public ModuleSell()
+	public static final ModuleSell INSTANCE = new ModuleSell();
+
+	private ModuleSell()
 	{
 		super("sell", "responsible for selling items", "1.0.0", "Packet");
 	}
@@ -158,72 +163,126 @@ final class ModuleSell extends Module {
 			@Override
 			public void handle(Player player, Sign sign)
 			{
-				String line = sign.getLine(1);
-
-				if (line == null)
-				{
-					player.sendLocalizedMessage("economy-sellall-sign-broken");
-
-					return;
-				}
-
-				line = line.replace(" ", "");
-
-				if (!player.hasPermission("sellsigns." + line.toLowerCase()))
-				{
-					player.sendLocalizedMessage("economy-sellall-missing-permission", line);
-
-					return;
-				}
-
-				Map<MaterialData, Long> values = ModuleSell.this.prices.get(line);
-
-				if (values == null)
-				{
-					player.sendLocalizedMessage("economy-sellall-missing-resource", line);
-
-					return;
-				}
-
-				Inventory inventory = player.getInventory();
-
-				int size = inventory.getSize();
-
-				long total = 0;
-				int count = 0;
-
-				for (int location = 0; location < size; location++)
-				{
-					ItemStack item = inventory.getItem(location);
-
-					if (item == null) continue;
-
-					Long value = values.get(item.toMaterialData());
-
-					if (value == null) continue;
-
-					int amount = item.getAmount();
-
-					total += (value * amount);
-					count += amount;
-
-					inventory.setItem(location, null);
-				}
-
-				if (total == 0)
-				{
-					player.sendLocalizedMessage("economy-sellall-no-items", line);
-
-					return;
-				}
-
-				CurrencyAmount amt = CurrencyAmount.of(Currency.getDefaultCurrency(), total);
-
-				player.sendLocalizedMessage("economy-sellall", count, amt.toFormatter().dualFormatWord());
-
-				Bank.getOnlineAccount(player.getUniqueId()).give(amt, "SellAll " + line);
+				ModuleSell.this.sellAll(player, sign.getLine(1));
 			}
 		});
+	}
+
+	public void sellAll(Player player, String key)
+	{
+		String line = key;
+
+		if (line == null)
+		{
+			player.sendLocalizedMessage("economy-sellall-sign-broken");
+
+			return;
+		}
+
+		line = line.replace(" ", "");
+
+		if (!player.hasPermission("sellsigns." + line.toLowerCase()))
+		{
+			player.sendLocalizedMessage("economy-sellall-missing-permission", line);
+
+			return;
+		}
+
+		Map<MaterialData, Long> values = ModuleSell.this.prices.get(line);
+
+		if (values == null)
+		{
+			player.sendLocalizedMessage("economy-sellall-missing-resource", line);
+
+			return;
+		}
+
+		Inventory inventory;
+		Minebuddy mb = ModuleMinebuddy.INSTANCE.getBuddy(player.getUniqueId());
+		Player partner = null;
+		double split = 0;
+
+		if (mb != null)
+		{
+			partner = PlayerUtils.getPlayer(mb.getOther(player.getUniqueId()));
+
+			if (partner != null)
+			{
+				inventory = partner.getInventory();
+				split = mb.getSplit();
+			}
+			else
+			{
+				inventory = player.getInventory();
+			}
+		}
+
+		else
+		{
+			inventory = player.getInventory();
+		}
+
+		int size = inventory.getSize();
+
+		long total = 0;
+		int count = 0;
+
+		for (int location = 0; location < size; location++)
+		{
+			ItemStack item = inventory.getItem(location);
+
+			if (item == null) continue;
+
+			Long value = values.get(item.toMaterialData());
+
+			if (value == null) continue;
+
+			int amount = item.getAmount();
+
+			total += (value * amount);
+			count += amount;
+
+			inventory.setItem(location, null);
+		}
+
+		if (total == 0)
+		{
+			player.sendLocalizedMessage("economy-sellall-no-items", line);
+
+			return;
+		}
+
+		CurrencyAmount amt = CurrencyAmount.of(Currency.getDefaultCurrency(), total);
+		String totalStr = amt.toFormatter().dualFormatWord().toString();
+
+		player.sendLocalizedMessage("economy-sellall", count, totalStr);
+
+		if (partner != null)
+		{
+			partner.sendLocalizedMessage("minebuddy-sold", player.getName(), count, totalStr);
+
+			if (split == 0)
+			{
+				Bank.getOnlineAccount(partner.getUniqueId()).give(amt, "SellAll " + line);
+
+				return;
+			}
+
+			if (split < 1)
+			{
+				long tote = (long) (amt.getAmount() * 0.9D);
+
+				CurrencyAmount toSeller = CurrencyAmount.of(amt.getCurrency(), (long) (split * tote));
+				CurrencyAmount toMiner = CurrencyAmount.of(amt.getCurrency(), (long) ((1 - split) * tote));
+
+				Bank.getOnlineAccount(player.getUniqueId()).give(toSeller, "SellAll " + line);
+				Bank.getOnlineAccount(partner.getUniqueId()).give(toMiner, "SellAll " + line);
+
+				return;
+			}
+		}
+
+		Bank.getOnlineAccount(player.getUniqueId()).give(amt, "SellAll " + line);
 	}
 
 }

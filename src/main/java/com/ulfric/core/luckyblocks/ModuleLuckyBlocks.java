@@ -5,10 +5,13 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
+import com.ulfric.core.reward.Reward;
+import com.ulfric.core.reward.Rewards;
 import com.ulfric.lib.coffee.collection.EnumishMap;
 import com.ulfric.lib.coffee.collection.SetUtils;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
+import com.ulfric.lib.coffee.event.Priority;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.block.Block;
 import com.ulfric.lib.craft.block.MaterialData;
@@ -41,7 +44,7 @@ public final class ModuleLuckyBlocks extends Module {
 	{
 		this.addListener(new Listener(this)
 		{
-			@Handler(ignoreCancelled = true)
+			@Handler(ignoreCancelled = true, priority = Priority.LOW)
 			public void onBlockBreak(BlockBreakEvent event)
 			{
 				Block block = event.getBlock();
@@ -114,6 +117,26 @@ public final class ModuleLuckyBlocks extends Module {
 
 					builder.setPermissionError(error);
 					builder.setPermissionErrorDelayInMillis(millisDelay);
+				}
+			}
+
+			Document rewardsDocument = luckyblockDocument.getDocument("rewards");
+
+			if (rewardsDocument != null)
+			{
+				for (String rewardKey : rewardsDocument.getKeys(false))
+				{
+					Document rewardDocument = rewardsDocument.getDocument(rewardKey);
+
+					if (rewardDocument == null) continue;
+
+					int weight = rewardDocument.getInteger("weight", 1);
+
+					boolean multi = rewardDocument.getBoolean("multi", false);
+
+					Reward reward = multi ? Rewards.parseMultiReward(rewardDocument) : Rewards.parseReward(rewardDocument);
+
+					builder.addReward(weight, reward);
 				}
 			}
 

@@ -48,7 +48,7 @@ final class MultiPotionReward implements Reward {
 				{
 					PotionEffect clonedEffect = PotionUtils.newEffect(o.getType(), o.getDuration() * get, o.getAmplifier(), o.isAmbient(), o.hasParticles());
 
-					clonedEffect.apply(player);
+					clonedEffect.add(player);
 				}
 
 				return;

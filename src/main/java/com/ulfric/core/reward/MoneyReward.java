@@ -18,14 +18,17 @@ final class MoneyReward implements Reward {
 	private MoneyReward(CurrencyAmount amount)
 	{
 		this.amount = amount;
+		this.format = amount.toFormatter().dualFormatWord().toString();
 	}
 
 	private final CurrencyAmount amount;
+	private final String format;
 
 	@Override
 	public void give(Player player, String reason, Object... objects)
 	{
 		Bank.getOnlineAccount(player.getUniqueId()).give(this.amount, reason);
+		player.sendLocalizedMessage("luckyblock-money", this.format);
 	}
 
 }

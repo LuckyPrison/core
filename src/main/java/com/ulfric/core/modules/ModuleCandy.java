@@ -87,7 +87,7 @@ public class ModuleCandy extends Module {
 	private Candy fromDocument(Document document)
 	{
 		MaterialData material = MaterialData.of(document.getString("material"));
-		Reward reward = Rewards.parseMultiReward(document.getDocument("rewards"));
+		Reward reward = document.getBoolean("multi", false) ? Rewards.parseMultiReward(document) : Rewards.parseReward(document);
 		Recipe recipe = ShapelessRecipe.fromDocument(document.getDocument("recipe"));
 
 		Validate.notNull(material);
@@ -103,7 +103,7 @@ public class ModuleCandy extends Module {
 				reward.give(player, "Candy");
 			}
 
-			Joiner joiner = Joiner.space().addAfterEffect(StringUtils::capitalize);
+			Joiner joiner = Joiner.on(", ").addAfterEffect(StringUtils::capitalize);
 
 			for (int x = 0, n = RandomUtils.randomRange(3, 5); x < n; x++)
 			{

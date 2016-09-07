@@ -30,7 +30,7 @@ final class ItemReward implements Reward {
 	@Override
 	public void give(Player player, String reason, Object... objects)
 	{
-		List<ItemStack> unadded = player.getInventory().addItem(this.stack);
+		List<ItemStack> unadded = player.getInventory().addItem(this.stack.copy());
 
 		if (ListUtils.isEmpty(unadded)) return;
 

@@ -27,7 +27,7 @@ public class ModuleEconomyInterface extends Module {
 	@Override
 	public void onFirstEnable()
 	{
-		this.addModule(new ModuleSell());
+		this.addModule(ModuleSell.INSTANCE);
 
 		this.addCommand(new CommandBalance(this));
 		this.addCommand(new CommandPay(this));

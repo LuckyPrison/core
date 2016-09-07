@@ -14,6 +14,7 @@ import com.ulfric.core.homes.ModuleHomes;
 import com.ulfric.core.kit.ModuleKits;
 import com.ulfric.core.luckyblocks.ModuleLuckyBlocks;
 import com.ulfric.core.lwe.ModuleLWE;
+import com.ulfric.core.minebuddy.ModuleMinebuddy;
 import com.ulfric.core.mines.ModuleMines;
 import com.ulfric.core.modules.ModuleBeheading;
 import com.ulfric.core.modules.ModuleCandy;
@@ -83,6 +84,7 @@ public class Core extends Plugin {
 		this.addModule(new ModulePermissionInterface());
 		this.addModule(new ModuleHomes());
 		this.addModule(new ModuleRenameFix());
+		this.addModule(ModuleMinebuddy.INSTANCE);
 	}
 
 }

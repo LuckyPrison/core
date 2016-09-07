@@ -57,7 +57,7 @@ final class CommandRankup extends Command {
 
 			if (diff > 0)
 			{
-				player.sendLocalizedMessage("rankup-cannot-afford", new MoneyFormatter(currency.getCharacter(), diff).dualFormatWord(), name);
+				player.sendLocalizedMessage("rankup-cannot-afford", new MoneyFormatter(currency.getFormat(), diff).dualFormatWord(), name);
 
 				return;
 			}

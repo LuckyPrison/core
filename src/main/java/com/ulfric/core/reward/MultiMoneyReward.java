@@ -1,6 +1,7 @@
 package com.ulfric.core.reward;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
@@ -23,9 +24,11 @@ final class MultiMoneyReward implements Reward {
 	private MultiMoneyReward(List<CurrencyAmount> amounts)
 	{
 		this.amounts = amounts;
+		this.formats = amounts.stream().map(CurrencyAmount::toFormatter).map(form -> form.dualFormatWord().toString()).collect(Collectors.toList());
 	}
 
 	private final List<CurrencyAmount> amounts;
+	private final List<String> formats;
 
 	@Override
 	public void give(Player player, String reason, Object... objects)
@@ -35,6 +38,11 @@ final class MultiMoneyReward implements Reward {
 		for (CurrencyAmount amount : this.amounts)
 		{
 			account.give(amount, reason);
+		}
+
+		for (String format : this.formats)
+		{
+			player.sendLocalizedMessage("luckyblock-money", format);
 		}
 	}
 

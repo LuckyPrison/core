@@ -11,12 +11,13 @@ import com.ulfric.config.Document;
 import com.ulfric.lib.coffee.ApiInstantiationException;
 import com.ulfric.lib.coffee.economy.CurrencyAmount;
 import com.ulfric.lib.coffee.script.Script;
+import com.ulfric.lib.craft.entity.EntityType;
 import com.ulfric.lib.craft.inventory.item.ItemStack;
 import com.ulfric.lib.craft.inventory.item.ItemUtils;
 import com.ulfric.lib.craft.potion.PotionEffect;
 import com.ulfric.lib.craft.potion.PotionUtils;
 
-public class Rewards {
+public final class Rewards {
 
 	public static Reward parseMultiReward(Document document)
 	{
@@ -59,6 +60,9 @@ public class Rewards {
 			case "multiitem":
 			case "multi-item":
 				return Rewards.newItemMultiReward(document);
+
+			case "entity":
+				return Rewards.newEntityReward(document);
 
 			case "potion":
 				return Rewards.newPotionReward(document);
@@ -125,6 +129,15 @@ public class Rewards {
 		List<ItemStack> items = strings.stream().map(ItemUtils::getItem).filter(Objects::nonNull).collect(Collectors.toList());
 
 		return MultiItemReward.valueOf(items);
+	}
+
+	private static Reward newEntityReward(Document document)
+	{
+		EntityType entity = EntityType.of(document.getString("entity"));
+
+		Validate.notNull(entity);
+
+		return EntityReward.valueOf(entity);
 	}
 
 	private static Reward newPotionReward(Document document)
