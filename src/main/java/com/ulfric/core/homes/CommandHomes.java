@@ -18,9 +18,9 @@ public class CommandHomes extends Command {
 
 		this.base = owner;
 
-		super.addEnforcer(Enforcers.IS_PLAYER, "home.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "home.must_be_player");
 
-		super.addOptionalArgument(OfflinePlayer.ARGUMENT);
+		this.addOptionalArgument(OfflinePlayer.ARGUMENT);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class CommandHomes extends Command {
 	{
 		Player sender = (Player) getSender();
 
-		OfflinePlayer target = (OfflinePlayer) super.getObj("offline-player").orElse(sender);
+		OfflinePlayer target = (OfflinePlayer) this.getObj("offline-player").orElse(sender);
 
 		List<Home> homes = this.base.getHomes(target);
 

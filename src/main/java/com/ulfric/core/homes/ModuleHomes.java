@@ -15,15 +15,9 @@ import com.ulfric.data.DataContainer;
 import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
-import com.ulfric.lib.coffee.command.Argument;
-import com.ulfric.lib.coffee.command.Command;
-import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.function.FunctionUtils;
 import com.ulfric.lib.coffee.module.Module;
-import com.ulfric.lib.coffee.npermission.Limit;
-import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
-import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
 
 public class ModuleHomes extends Module {
@@ -47,42 +41,10 @@ public class ModuleHomes extends Module {
 				Document.class, PlayerScopes.ONLINE, new DataAddress<>("homes", "data")
 		).blockOnSubscribe(true).blockOnUnsubscribe(true).subscribe();
 
-		super.addCommand(new CommandHome(this));
-		super.addCommand(new CommandSethome(this));
-		super.addCommand(new CommandDelhome(this));
-		super.addCommand(new CommandHomes(this));
-		super.addCommand(new SetLimit());
-	}
-
-	public class SetLimit extends Command {
-
-		public SetLimit()
-		{
-			super("setlimit", ModuleHomes.this);
-
-			this.addEnforcer(Enforcers.IS_PLAYER, "home.is_not_player");
-
-			this.addArgument(Argument.builder().addResolver(Resolvers.STRING).setPath("node").build());
-			this.addOptionalArgument(Argument.builder().addResolver(Resolvers.INTEGER).setPath("amount").build());
-		}
-
-		@Override
-		public void run()
-		{
-			Player player = (Player) getSender();
-
-			String node = (String) getObject("node");
-			Integer amount = (Integer) getObject("amount");
-
-			if (amount != null)
-			{
-				player.setLimit(node, Limit.valueOf(amount));
-			}
-			else
-			{
-				player.sendMessage(node + ": " + player.getLimit(node).toInt());
-			}
-		}
+		this.addCommand(new CommandHome(this));
+		this.addCommand(new CommandSethome(this));
+		this.addCommand(new CommandDelhome(this));
+		this.addCommand(new CommandHomes(this));
 	}
 
 	@Override

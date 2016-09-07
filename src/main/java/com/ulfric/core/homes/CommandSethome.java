@@ -18,17 +18,17 @@ public class CommandSethome extends Command {
 
 		this.base = owner;
 
-		super.addEnforcer(Enforcers.IS_PLAYER, "home.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "home.must_be_player");
 
-		super.addOptionalArgument(Argument.builder().addResolver(Resolvers.STRING).setPath("home-name").build());
+		this.addOptionalArgument(Argument.builder().addResolver(Resolvers.STRING).setPath("home-name").build());
 	}
 
 	@Override
 	public void run()
 	{
-		Player sender = (Player) super.getSender();
+		Player sender = (Player) this.getSender();
 
-		String name = (String) super.getObj("home-name").orElse("home");
+		String name = (String) this.getObj("home-name").orElse("home");
 
 		List<Home> homes = this.base.getHomes(sender);
 

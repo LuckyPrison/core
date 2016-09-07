@@ -17,33 +17,33 @@ public class CommandBackpack extends Command {
 
 		this.base = base;
 
-		super.addPermission("core.backpack");
+		this.addPermission("core.backpack");
 
-		super.addEnforcer(Enforcers.IS_PLAYER, "backpacks-must-be-player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "backpacks-must-be-player");
 
-		super.addOptionalArgument(OfflinePlayer.ARGUMENT);
-		super.addOptionalArgument(Argument.builder().addResolver(Resolvers.INTEGER).setPath("page").setDefaultValue(1).build());
+		this.addOptionalArgument(OfflinePlayer.ARGUMENT);
+		this.addOptionalArgument(Argument.builder().addResolver(Resolvers.INTEGER).setPath("page").setDefaultValue(1).build());
 	}
 
 	@Override
 	public void run()
 	{
-		OfflinePlayer owner = (OfflinePlayer) super.getObject(OfflinePlayer.ARGUMENT.getPath());
+		OfflinePlayer owner = (OfflinePlayer) this.getObject(OfflinePlayer.ARGUMENT.getPath());
 
 		if (owner == null)
 		{
-			owner = (Player) super.getSender();
+			owner = (Player) this.getSender();
 		}
 
 		Backpack backpack = this.base.getBackpack(owner);
 
 		backpack.checkPotentialLimit(getSender());
 
-		int page = (int) super.getObject("page");
+		int page = (int) this.getObject("page");
 
 		if (!backpack.inBounds(page))
 		{
-			super.getSender().sendLocalizedMessage("backpacks-invalid-page", page);
+			this.getSender().sendLocalizedMessage("backpacks-invalid-page", page);
 
 			return;
 		}

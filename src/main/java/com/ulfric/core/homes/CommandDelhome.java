@@ -18,9 +18,9 @@ public class CommandDelhome extends Command {
 
 		this.base = owner;
 
-		super.addEnforcer(Enforcers.IS_PLAYER, "home.must_be_player");
+		this.addEnforcer(Enforcers.IS_PLAYER, "home.must_be_player");
 
-		super.addOptionalArgument(Argument.builder().addResolver(Resolvers.STRING).setPath("home-name").build());
+		this.addOptionalArgument(Argument.builder().addResolver(Resolvers.STRING).setPath("home-name").build());
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class CommandDelhome extends Command {
 	{
 		Player sender = (Player) getSender();
 
-		String name = (String) super.getObj("home-name").orElse(this.base.getDefault(sender));
+		String name = (String) this.getObj("home-name").orElse(this.base.getDefault(sender));
 
 		if (StringUtils.isBlank(name))
 		{

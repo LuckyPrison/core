@@ -11,19 +11,14 @@ public final class CommandEnderchest extends Command {
 		super("enderchest", owner, "echest");
 
 		this.addEnforcer(Enforcers.IS_PLAYER, "enderchest-is-not-player");
+
+		this.addPermission("enderchest.use");
 	}
 
 	@Override
 	public void run()
 	{
 		Player sender = (Player) this.getSender();
-
-		if (!sender.hasPermission("enderchest.use"))
-		{
-			sender.sendLocalizedMessage("enderchest-no-permission");
-
-			return;
-		}
 
 		// Pretty sure this is all you have to do, no listening required
 		sender.openInventory(sender.getEnderChest());

@@ -23,7 +23,7 @@ public class ModuleDonorParticle extends Module {
 	@Override
 	public void onFirstEnable()
 	{
-		ConfigFile config = super.getModuleConfig();
+		ConfigFile config = this.getModuleConfig();
 		MutableDocument document = config.getRoot();
 
 		if (!document.contains("effect"))
