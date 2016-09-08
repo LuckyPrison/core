@@ -40,7 +40,7 @@ final class CommandBalance extends Command {
 
 			String money = new MoneyFormatter(currency.getFormat(), balance).dualFormatWord().toString();
 
-			if (sender == player)
+			if (player.getUniqueId().equals(sender.getUniqueId()))
 			{
 				sender.sendLocalizedMessage("economy-balance", money);
 
