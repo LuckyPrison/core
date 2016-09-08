@@ -59,8 +59,13 @@ public final class ModuleShutdown extends Module {
 
 			ThreadUtils.runAsync(() ->
 			{
+				int x = 0;
 				while (!PlayerScopes.ONLINE.isEmpty())
 				{
+					if (x++ == 50)
+					{
+						System.out.println("SHUTDOWN DEBUG: " + PlayerScopes.ONLINE.get());
+					}
 					try
 					{
 						Thread.sleep(50L);
