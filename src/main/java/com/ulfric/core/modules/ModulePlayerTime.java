@@ -1,41 +1,57 @@
-package com.ulfric.core.ptime;
+package com.ulfric.core.modules;
 
 import com.ulfric.lib.coffee.command.ArgFunction;
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
+import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.numbers.NumberUtils;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.Player;
 
-final class CommandPlayerTime extends Command {
+public final class ModulePlayerTime extends Module {
 
-	public CommandPlayerTime(ModulePlayerTime owner)
+	public ModulePlayerTime()
 	{
-		super("playertime", owner, "ptime");
-
-		this.addEnforcer(Enforcers.IS_PLAYER, "playertime-is-not-player");
-
-		this.addArgument(Argument.builder().addResolver(TimeResolver.ARGUMENT).setPath("time").build());
+		super("playertime", "playertime command", "1.0.0", "insou");
 	}
 
 	@Override
-	public void run()
+	public void onFirstEnable()
 	{
-		Player player = (Player) this.getSender();
+		this.addCommand(new CommandPlayerTime());
+	}
 
-		Long time = (Long) this.getObject("time");
+	private final class CommandPlayerTime extends Command {
 
-		if (time == null)
+		CommandPlayerTime()
 		{
-			player.sendLocalizedMessage("playertime-bad-input");
+			super("playertime", ModulePlayerTime.this, "ptime");
 
-			return;
+			this.addEnforcer(Enforcers.IS_PLAYER, "playertime-is-not-player");
+
+			this.addArgument(Argument.builder().addResolver(TimeResolver.ARGUMENT).setPath("time").build());
 		}
 
-		player.setPlayerTime(time, false);
+		@Override
+		public void run()
+		{
+			Player player = (Player) this.getSender();
 
-		player.sendLocalizedMessage("playertime-set-time", time);
+			Long time = (Long) this.getObject("time");
+
+			if (time == null)
+			{
+				player.sendLocalizedMessage("playertime-bad-input");
+
+				return;
+			}
+
+			player.setPlayerTime(time, false);
+
+			player.sendLocalizedMessage("playertime-set-time", time);
+		}
+
 	}
 
 	// This definitely has room for improvement, but it should work
@@ -73,5 +89,6 @@ final class CommandPlayerTime extends Command {
 		}
 
 	}
+
 
 }

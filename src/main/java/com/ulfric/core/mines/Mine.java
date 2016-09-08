@@ -67,7 +67,7 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 	private final MultiBlockChange change;
 	private int counter;
 
-	private volatile AtomicBoolean resetting = new AtomicBoolean(false);
+	private AtomicBoolean resetting = new AtomicBoolean(false);
 
 	public boolean containsRegion(Region region)
 	{

@@ -1,4 +1,4 @@
-package com.ulfric.core.donorpart;
+package com.ulfric.core.modules;
 
 import com.ulfric.config.ConfigFile;
 import com.ulfric.config.MutableDocument;
@@ -40,7 +40,7 @@ public class ModuleDonorParticle extends Module {
 
 	private class JoinListener extends Listener {
 
-		public JoinListener()
+		JoinListener()
 		{
 			super(ModuleDonorParticle.this);
 		}
