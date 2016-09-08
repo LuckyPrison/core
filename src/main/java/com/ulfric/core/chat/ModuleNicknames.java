@@ -1,5 +1,6 @@
 package com.ulfric.core.chat;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -68,7 +69,7 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 		String nickname = player.getNickname();
 		String name = player.getName();
 
-		if (nickname == null || nickname == name) return name;
+		if (nickname == null || Objects.equals(nickname, name)) return name;
 
 		State state = this.setting == null ? this.disabled : this.setting.getState(observer.getUniqueId());
 
@@ -149,7 +150,7 @@ public final class ModuleNicknames extends Module implements ScopeListener<UUID>
 
 	private class CommandNickname extends Command
 	{
-		public CommandNickname()
+		CommandNickname()
 		{
 			super("nickname", ModuleNicknames.this, "nick");
 
