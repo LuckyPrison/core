@@ -48,6 +48,7 @@ import com.ulfric.core.regions.ModuleRegionInterface;
 import com.ulfric.core.settings.ModuleSettings;
 import com.ulfric.core.shutdown.ModuleShutdown;
 import com.ulfric.core.teleport.ModuleTeleport;
+import com.ulfric.core.workbench.ModuleWorkbench;
 import com.ulfric.lib.bukkit.module.Plugin;
 
 public class Core extends Plugin {
@@ -103,6 +104,7 @@ public class Core extends Plugin {
 		this.addModule(new ModulePlayerWeather());
 		this.addModule(new ModuleServerStats());
 		this.addModule(new ModuleShutdown());
+		this.addModule(new ModuleWorkbench());
 	}
 
 }
