@@ -27,13 +27,15 @@ final class ModuleAutoSmeltEnchant extends Module {
 
 				if (hand == null) return;
 
+				ItemStack item = event.getCustomItem();
+
+				if (item == null) return;
+
 				EnchantList enchants = hand.enchants();
 
 				int level = enchants.getLevel(EnchantmentAutoSmelt.INSTANCE);
 
 				if (level <= 0) return;
-
-				ItemStack item = event.getCustomItem();
 
 				MaterialData smelt = item.getType().smelt();
 
