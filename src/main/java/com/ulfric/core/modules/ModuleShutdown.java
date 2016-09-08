@@ -57,11 +57,6 @@ public final class ModuleShutdown extends Module {
 				}
 			});
 
-			for (Player player : PlayerUtils.getOnlinePlayers())
-			{
-				player.kick(player.getLocalizedMessage("shutdown-kick"));
-			}
-
 			ThreadUtils.runAsync(() ->
 			{
 				while (!PlayerScopes.ONLINE.isEmpty())
@@ -78,6 +73,11 @@ public final class ModuleShutdown extends Module {
 
 				ThreadUtils.run(ServerUtils::shutdown);
 			});
+
+			for (Player player : PlayerUtils.getOnlinePlayers())
+			{
+				player.kick(player.getLocalizedMessage("shutdown-kick"));
+			}
 		}
 
 	}
