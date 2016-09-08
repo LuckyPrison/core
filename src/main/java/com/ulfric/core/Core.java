@@ -12,6 +12,7 @@ import com.ulfric.core.echest.ModuleEnderChest;
 import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.enchant.ModuleEnchants;
 import com.ulfric.core.feed.ModuleFeed;
+import com.ulfric.core.fireball.ModuleFireball;
 import com.ulfric.core.fix.ModuleFix;
 import com.ulfric.core.fly.ModuleFly;
 import com.ulfric.core.gangs.ModuleGangs;
@@ -105,6 +106,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleServerStats());
 		this.addModule(new ModuleShutdown());
 		this.addModule(new ModuleWorkbench());
+		this.addModule(new ModuleFireball());
 	}
 
 }
