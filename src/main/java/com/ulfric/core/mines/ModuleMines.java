@@ -115,7 +115,7 @@ public class ModuleMines extends Module {
 
 		this.addListener(new Listener(this)
 		{
-			@Handler(ignoreCancelled = true, priority = Priority.LOWEST)
+			@Handler(priority = Priority.LOWEST)
 			public void onBreak(BlockBreakEvent event)
 			{
 				RegionList list = RegionColl.at(event.getBlock().getLocation());
