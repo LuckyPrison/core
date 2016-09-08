@@ -11,6 +11,7 @@ import com.ulfric.lib.coffee.collection.SetUtils;
 import com.ulfric.lib.coffee.concurrent.ThreadUtils;
 import com.ulfric.lib.coffee.event.Handler;
 import com.ulfric.lib.coffee.event.Listener;
+import com.ulfric.lib.coffee.event.Priority;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.coffee.region.Region;
 import com.ulfric.lib.coffee.region.RegionList;
@@ -114,7 +115,7 @@ public class ModuleMines extends Module {
 
 		this.addListener(new Listener(this)
 		{
-			@Handler(ignoreCancelled = true)
+			@Handler(ignoreCancelled = true, priority = Priority.LOWEST)
 			public void onBreak(BlockBreakEvent event)
 			{
 				RegionList list = RegionColl.at(event.getBlock().getLocation());
@@ -126,6 +127,13 @@ public class ModuleMines extends Module {
 					Mine mine = Mines.INSTANCE.getByRegion(region);
 
 					if (mine == null) continue;
+
+					if (mine.isResetting())
+					{
+						event.setCancelled(true);
+
+						event.getPlayer().sendLocalizedMessage("mines-mine-resetting");
+					}
 
 					ModuleMines.this.resetQueue.add(mine);
 
