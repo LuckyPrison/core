@@ -38,7 +38,7 @@ public class ModuleFix extends Module {
 
 	public CurrencyAmount getAmount()
 	{
-		return amount;
+		return this.amount;
 	}
 
 	private final class CommandFix extends Command {

@@ -77,8 +77,9 @@ public final class ModuleShutdown extends Module {
 			for (Player player : PlayerUtils.getOnlinePlayers())
 			{
 				player.kick(player.getLocalizedMessage("shutdown-kick"));
-				ThreadUtils.runAsync(() -> PlayerScopes.ONLINE.removeReference(player.getUniqueId()));
 			}
+
+			PlayerScopes.ONLINE.get().forEach(uuid -> ThreadUtils.runAsync(() -> PlayerScopes.ONLINE.removeReference(uuid)));
 		}
 
 	}

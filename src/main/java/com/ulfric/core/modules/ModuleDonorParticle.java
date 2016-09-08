@@ -13,7 +13,7 @@ import com.ulfric.lib.craft.world.Effect;
 
 public class ModuleDonorParticle extends Module {
 
-	private Effect effect;
+	Effect effect;
 
 	public ModuleDonorParticle()
 	{
@@ -28,7 +28,7 @@ public class ModuleDonorParticle extends Module {
 
 		if (!document.contains("effect"))
 		{
-			document.set("effect", Effect.of("EXPLOSION_LARGE").getName());
+			document.set("effect", Effect.of("COLOURED_DUST").getName());
 
 			config.save();
 		}

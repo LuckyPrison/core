@@ -49,7 +49,7 @@ public class ModulePlayerList extends Module {
 			@Override
 			public void run()
 			{
-				this.getSender().sendLocalizedMessage("list-count", PlayerUtils.countOnlinePlayers() * ModulePlayerList.this.multiplier);
+				this.getSender().sendLocalizedMessage("list-count", (int) (PlayerUtils.countOnlinePlayers() * ModulePlayerList.this.multiplier));
 			}
 		});
 

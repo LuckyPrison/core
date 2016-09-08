@@ -83,9 +83,9 @@ public final class ModulePlayerTime extends Module {
 					return 12000L;
 				case "midnight":
 					return 18000L;
+				default:
+					return null;
 			}
-
-			return null;
 		}
 
 	}

@@ -77,8 +77,9 @@ public final class ModulePlayerWeather extends Module {
 				case "overcast":
 				case "downfall":
 					return WeatherType.of("DOWNFALL");
+				default:
+					return null;
 			}
-			return null;
 		}
 
 	}
