@@ -128,13 +128,6 @@ public class ModuleMines extends Module {
 
 					if (mine == null) continue;
 
-					if (mine.isResetting())
-					{
-						event.setCancelled(true);
-
-						event.getPlayer().sendLocalizedMessage("mines-mine-resetting");
-					}
-
 					ModuleMines.this.resetQueue.add(mine);
 
 					mine.increaseCounter();
