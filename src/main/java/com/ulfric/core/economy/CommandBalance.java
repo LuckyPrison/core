@@ -38,7 +38,7 @@ final class CommandBalance extends Command {
 		{
 			long balance = Bank.getOnlineAccount(player.getUniqueId()).getBalance(currency);
 
-			String money = new MoneyFormatter(balance).dualFormatWord().toString();
+			String money = new MoneyFormatter(currency.getFormat(), balance).dualFormatWord().toString();
 
 			if (sender == player)
 			{
@@ -64,7 +64,7 @@ final class CommandBalance extends Command {
 
 			long balance = bal == null ? 0L : bal;
 
-			sender.sendLocalizedMessage("economy-balance-other", playerName, new MoneyFormatter(balance).dualFormatWord());
+			sender.sendLocalizedMessage("economy-balance-other", playerName, new MoneyFormatter(currency.getFormat(), balance).dualFormatWord());
 		});
 	}
 
