@@ -32,7 +32,7 @@ final class CommandMutatelimit extends BaseCommand {
 
 		Mutable<Command> observe = new MutableObject<>();
 		Argument observeArg = this.newArg(observe);
-		Command observeCommand = new CommandRemove(owner, observeArg);
+		Command observeCommand = new CommandObserve(owner, observeArg);
 		observe.setValue(observeCommand);
 		this.addCommand(observeCommand);
 	}
