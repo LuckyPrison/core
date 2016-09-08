@@ -2,6 +2,8 @@ package com.ulfric.core.homes;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ulfric.lib.coffee.command.Argument;
 import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.Resolvers;
@@ -30,9 +32,16 @@ public class CommandSethome extends Command {
 
 		String name = (String) this.getObj("home-name").orElse("home");
 
+		if (!StringUtils.isAlphanumeric(name))
+		{
+			sender.sendLocalizedMessage("home-must-be-alphanumeric");
+
+			return;
+		}
+
 		List<Home> homes = this.base.getHomes(sender);
 
-		if (homes.size() >= sender.getLimit("home.amount").toInt())
+		if (homes.size() >= sender.getLimit("homes").toInt())
 		{
 
 			boolean contained = false;

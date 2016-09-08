@@ -37,13 +37,13 @@ public class CommandBackpack extends Command {
 
 		Backpack backpack = this.base.getBackpack(owner);
 
-		backpack.checkPotentialLimit(getSender());
+		backpack.checkLimit();
 
 		int page = (int) this.getObject("page");
 
 		if (!backpack.inBounds(page))
 		{
-			this.getSender().sendLocalizedMessage("backpacks-invalid-page", page);
+			this.getSender().sendLocalizedMessage("backpacks-invalid-page", page, backpack.getMaxPage());
 
 			return;
 		}
