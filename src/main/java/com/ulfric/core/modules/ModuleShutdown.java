@@ -62,9 +62,11 @@ public final class ModuleShutdown extends Module {
 				int x = 0;
 				while (!PlayerScopes.ONLINE.isEmpty())
 				{
-					if (x++ == 50)
+					if (x++ % 200 == 0)
 					{
 						System.out.println("SHUTDOWN DEBUG: " + PlayerScopes.ONLINE.get());
+
+						PlayerScopes.ONLINE.get().forEach(PlayerScopes.ONLINE::removeReference);
 					}
 					try
 					{
