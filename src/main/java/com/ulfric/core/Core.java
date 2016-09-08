@@ -7,32 +7,35 @@ import com.ulfric.core.combattag.ModuleCombatTag;
 import com.ulfric.core.control.ModuleClearChat;
 import com.ulfric.core.control.ModuleCloseInventory;
 import com.ulfric.core.control.ModuleControl;
-import com.ulfric.core.modules.ModuleDonorParticle;
-import com.ulfric.core.modules.ModuleEnderChest;
 import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.enchant.ModuleEnchants;
-import com.ulfric.core.modules.ModuleFeed;
-import com.ulfric.core.modules.ModuleFireball;
-import com.ulfric.core.modules.ModuleFix;
 import com.ulfric.core.fly.ModuleFly;
 import com.ulfric.core.gangs.ModuleGangs;
 import com.ulfric.core.homes.ModuleHomes;
 import com.ulfric.core.kit.ModuleKits;
 import com.ulfric.core.luckyblocks.ModuleLuckyBlocks;
 import com.ulfric.core.lwe.ModuleLWE;
-import com.ulfric.core.serverstats.ModuleServerStats;
 import com.ulfric.core.minebuddy.ModuleMinebuddy;
 import com.ulfric.core.mines.ModuleMines;
 import com.ulfric.core.modules.ModuleBeheading;
 import com.ulfric.core.modules.ModuleCandy;
 import com.ulfric.core.modules.ModuleColoredSigns;
+import com.ulfric.core.modules.ModuleDonorParticle;
 import com.ulfric.core.modules.ModuleEmailInterface;
+import com.ulfric.core.modules.ModuleEnderChest;
 import com.ulfric.core.modules.ModuleEntityDisabler;
+import com.ulfric.core.modules.ModuleFeed;
+import com.ulfric.core.modules.ModuleFireball;
+import com.ulfric.core.modules.ModuleFix;
 import com.ulfric.core.modules.ModuleGameModeInterface;
 import com.ulfric.core.modules.ModuleGodmodeInterface;
+import com.ulfric.core.modules.ModuleLJMessages;
 import com.ulfric.core.modules.ModuleNameplates;
+import com.ulfric.core.modules.ModulePlayerTime;
+import com.ulfric.core.modules.ModulePlayerWeather;
 import com.ulfric.core.modules.ModulePrivateMessaging;
 import com.ulfric.core.modules.ModuleRenameFix;
+import com.ulfric.core.modules.ModuleShutdown;
 import com.ulfric.core.modules.ModuleSpeed;
 import com.ulfric.core.modules.ModuleSpeedyGonzales;
 import com.ulfric.core.modules.ModuleStackSize;
@@ -40,16 +43,14 @@ import com.ulfric.core.modules.ModuleTrample;
 import com.ulfric.core.modules.ModuleTrash;
 import com.ulfric.core.modules.ModuleVanishInterface;
 import com.ulfric.core.modules.ModuleWelcome;
+import com.ulfric.core.modules.ModuleWorkbench;
 import com.ulfric.core.permissions.ModulePermissionInterface;
 import com.ulfric.core.playerlist.ModulePlayerList;
-import com.ulfric.core.modules.ModulePlayerTime;
-import com.ulfric.core.modules.ModulePlayerWeather;
 import com.ulfric.core.rankup.ModuleRankup;
 import com.ulfric.core.regions.ModuleRegionInterface;
+import com.ulfric.core.serverstats.ModuleServerStats;
 import com.ulfric.core.settings.ModuleSettings;
-import com.ulfric.core.modules.ModuleShutdown;
 import com.ulfric.core.teleport.ModuleTeleport;
-import com.ulfric.core.modules.ModuleWorkbench;
 import com.ulfric.lib.bukkit.module.Plugin;
 
 public class Core extends Plugin {
@@ -107,6 +108,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleShutdown());
 		this.addModule(new ModuleWorkbench());
 		this.addModule(new ModuleFireball());
+		this.addModule(new ModuleLJMessages());
 	}
 
 }
