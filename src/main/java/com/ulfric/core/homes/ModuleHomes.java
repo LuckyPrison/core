@@ -3,11 +3,11 @@ package com.ulfric.core.homes;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
+import com.ulfric.config.ImmutableDocument;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.config.SimpleDocument;
 import com.ulfric.data.DataAddress;
@@ -15,6 +15,7 @@ import com.ulfric.data.DataContainer;
 import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
+import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.function.FunctionUtils;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
@@ -35,7 +36,7 @@ public class ModuleHomes extends Module {
 	{
 		DocumentStore database = PlayerUtils.getPlayerData();
 
-		database.ensureTableCreated("homes");
+		DataManager.get().ensureTableCreated(database, "homes");
 
 		this.subscription = database.multi(
 				Document.class, PlayerScopes.ONLINE, new DataAddress<>("homes", "data")
@@ -64,7 +65,7 @@ public class ModuleHomes extends Module {
 
 		homes = Lists.newArrayList();
 
-		Document document = this.subscription.get(owner.getUniqueId()).getValue();
+		Document document = this.subscription.subscribeToForeign(owner.getUniqueId(), FunctionUtils.self()).getValue();
 
 		for (String key : document.getKeys())
 		{
@@ -114,17 +115,17 @@ public class ModuleHomes extends Module {
 	{
 		this.getHomes(home.getOwner()).remove(home);
 
-		DataContainer<UUID, Document> container = this.subscription.retrieveForeignContainer(home.getOwner().getUniqueId(), FunctionUtils.self());
+		DataContainer<UUID, Document> container = this.subscription.subscribeToForeign(home.getOwner().getUniqueId(), FunctionUtils.self());
 
-		try
-		{
-			container.execute("removeField", home.getName().toLowerCase()).get();
-		}
-		catch (InterruptedException | ExecutionException e)
-		{
-			e.printStackTrace();
-		}
+		Document document = container.getValue();
 
+		Map<String, Object> copy = document.deepCopy();
+
+		copy.remove(home.getName().toLowerCase());
+
+		ImmutableDocument mut = new ImmutableDocument(copy);
+
+		container.setValue(mut);
 	}
 
 }

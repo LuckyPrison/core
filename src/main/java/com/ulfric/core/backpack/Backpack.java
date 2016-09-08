@@ -9,7 +9,7 @@ import com.ulfric.config.Document;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.config.SimpleDocument;
 import com.ulfric.data.DataContainer;
-import com.ulfric.lib.coffee.command.CommandSender;
+import com.ulfric.lib.coffee.npermission.Permissions;
 import com.ulfric.lib.coffee.numbers.NumberUtils;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
@@ -98,11 +98,15 @@ class Backpack {
 		new BackpackPage(this.base, this, viewer, page).open();
 	}
 
-	public void checkPotentialLimit(CommandSender potentialOwner)
+	public void checkLimit()
 	{
-		if (potentialOwner.getUniqueId().equals(this.owner.getUniqueId()))
+		int limit = Permissions.getEntity(this.owner.getUniqueId()).getLimit("backpacks").toInt();
+
+		if (limit != this.maxPage)
 		{
-			this.maxPage = potentialOwner.getLimit("backpacks.max").toInt();
+			this.maxPage = limit;
+
+			this.save();
 		}
 	}
 

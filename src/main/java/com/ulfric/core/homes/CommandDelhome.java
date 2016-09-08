@@ -30,6 +30,13 @@ public class CommandDelhome extends Command {
 
 		String name = (String) this.getObj("home-name").orElse(this.base.getDefault(sender));
 
+		if (true)
+		{
+			sender.sendLocalizedMessage("home-cannot-delete-currently");
+
+			return;
+		}
+
 		if (StringUtils.isBlank(name))
 		{
 			sender.sendLocalizedMessage("home.specify_home");
