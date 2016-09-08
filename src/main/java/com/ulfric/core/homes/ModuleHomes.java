@@ -15,6 +15,7 @@ import com.ulfric.data.DataContainer;
 import com.ulfric.data.DocumentStore;
 import com.ulfric.data.MultiSubscription;
 import com.ulfric.data.scope.PlayerScopes;
+import com.ulfric.lib.coffee.data.DataManager;
 import com.ulfric.lib.coffee.function.FunctionUtils;
 import com.ulfric.lib.coffee.module.Module;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
@@ -35,7 +36,7 @@ public class ModuleHomes extends Module {
 	{
 		DocumentStore database = PlayerUtils.getPlayerData();
 
-		database.ensureTableCreated("homes");
+		DataManager.get().ensureTableCreated(database, "homes");
 
 		this.subscription = database.multi(
 				Document.class, PlayerScopes.ONLINE, new DataAddress<>("homes", "data")
