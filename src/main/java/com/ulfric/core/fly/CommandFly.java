@@ -12,6 +12,8 @@ final class CommandFly extends Command {
 	{
 		super("fly", owner);
 
+		this.addPermission("fly.use");
+
 		this.addEnforcer(Enforcers.IS_PLAYER, "fly-is-not-player");
 	}
 
