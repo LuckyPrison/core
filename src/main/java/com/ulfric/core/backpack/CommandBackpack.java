@@ -17,7 +17,7 @@ public class CommandBackpack extends Command {
 
 		this.base = base;
 
-		this.addPermission("core.backpack");
+		this.addPermission("backpack.use");
 
 		this.addEnforcer(Enforcers.IS_PLAYER, "backpacks-must-be-player");
 

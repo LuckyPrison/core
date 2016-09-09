@@ -23,7 +23,7 @@ final class CommandInvite extends Command {
 			if (iv == null) return null;
 
 			return Math.max(Math.min(iv, 0), 100);
-		}).setDefaultValue(100).build());
+		}).setDefaultValue(50).build());
 		this.addArgument(Argument.builder().setPath("player").addResolver(PlayerUtils::getOnlinePlayer).setUsage("minebuddy-specify-player").build());
 	}
 
@@ -33,7 +33,7 @@ final class CommandInvite extends Command {
 		Player player = (Player) this.getSender();
 		Player target = (Player) this.getObject("player");
 
-		if (player == target)
+		if (player.getUniqueId().equals(target.getUniqueId()))
 		{
 			player.sendLocalizedMessage("minebuddy-invite-self");
 
