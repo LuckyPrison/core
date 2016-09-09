@@ -26,7 +26,7 @@ public class Punisher extends NamedBase implements Unique {
 
 		if (uuid.equals(Punisher.AGENT_UUID)) return Punisher.AGENT;
 
-		return Punishments.getInstance().getPunisher(uuid);
+		return PunishmentHolder.valueOf(sender.getUniqueId(), sender.getName());
 	}
 
 	public static Punisher valueOf(String contextual)

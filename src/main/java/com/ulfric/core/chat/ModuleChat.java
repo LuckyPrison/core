@@ -241,7 +241,7 @@ public final class ModuleChat extends Module {
 					}
 					catch (GoogleAPIException exception)
 					{
-						exception.printStackTrace();
+						//exception.printStackTrace();
 
 						String formatted = format.replace("{message}", message);
 
