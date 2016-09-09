@@ -104,7 +104,7 @@ interface Addable {
 
 	public static final class LimitAddable implements Addable
 	{
-		private static final Pattern PATTERN = Pattern.compile(":", Pattern.LITERAL);
+		private static final Pattern PATTERN = Pattern.compile("(:|;)");
 		public static LimitAddable valueOf(Permissible permissible, String context)
 		{
 			// homes:+10
