@@ -32,8 +32,7 @@ final class Crate implements Named {
 	private final List<Reward> rewards;
 	private final List<Location> locations;
 
-
-	Crate(MultiSubscription<UUID, Document> subscription, int id, String name, List<Reward> rewards, List<Location> locations)
+	private Crate(MultiSubscription<UUID, Document> subscription, int id, String name, List<Reward> rewards, List<Location> locations)
 	{
 		this.subscription = subscription;
 		this.id = id;
@@ -72,6 +71,16 @@ final class Crate implements Named {
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public void removeKeys(OfflinePlayer player, int amount)
+	{
+		this.giveKeys(player, -amount);
+	}
+
+	public boolean canOpen(OfflinePlayer player)
+	{
+		return this.getKeys(player) > 0;
 	}
 
 	public static Builder builder()
