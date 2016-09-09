@@ -59,15 +59,8 @@ public final class ModuleShutdown extends Module {
 
 			ThreadUtils.runAsync(() ->
 			{
-				int x = 0;
 				while (!PlayerScopes.ONLINE.isEmpty())
 				{
-					if (x++ % 200 == 0)
-					{
-						System.out.println("SHUTDOWN DEBUG: " + PlayerScopes.ONLINE.get());
-
-						PlayerScopes.ONLINE.get().forEach(PlayerScopes.ONLINE::removeReference);
-					}
 					try
 					{
 						Thread.sleep(50L);
@@ -76,6 +69,7 @@ public final class ModuleShutdown extends Module {
 					{
 						e.printStackTrace();
 					}
+					System.out.println("Scope: " + PlayerScopes.ONLINE);
 				}
 
 				ThreadUtils.run(ServerUtils::shutdown);
@@ -84,9 +78,8 @@ public final class ModuleShutdown extends Module {
 			for (Player player : PlayerUtils.getOnlinePlayers())
 			{
 				player.kick(player.getLocalizedMessage("shutdown-kick"));
+				ThreadUtils.runAsync(() -> PlayerScopes.ONLINE.removeReference(player.getUniqueId()));
 			}
-
-			PlayerScopes.ONLINE.get().forEach(uuid -> ThreadUtils.runAsync(() -> PlayerScopes.ONLINE.removeReference(uuid)));
 		}
 
 	}
