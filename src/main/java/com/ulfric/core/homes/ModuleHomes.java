@@ -3,11 +3,11 @@ package com.ulfric.core.homes;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.ulfric.config.Document;
-import com.ulfric.config.ImmutableDocument;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.config.SimpleDocument;
 import com.ulfric.data.DataAddress;
@@ -117,15 +117,14 @@ public class ModuleHomes extends Module {
 
 		DataContainer<UUID, Document> container = this.subscription.subscribeToForeign(home.getOwner().getUniqueId(), FunctionUtils.self());
 
-		Document document = container.getValue();
-
-		Map<String, Object> copy = document.deepCopy();
-
-		copy.remove(home.getName().toLowerCase());
-
-		ImmutableDocument mut = new ImmutableDocument(copy);
-
-		container.setValue(mut);
+		try
+		{
+			container.execute("removeField", home.getName().toLowerCase()).get();
+		}
+		catch (InterruptedException | ExecutionException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 }
