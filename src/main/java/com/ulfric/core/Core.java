@@ -7,6 +7,7 @@ import com.ulfric.core.combattag.ModuleCombatTag;
 import com.ulfric.core.control.ModuleClearChat;
 import com.ulfric.core.control.ModuleCloseInventory;
 import com.ulfric.core.control.ModuleControl;
+import com.ulfric.core.crate.ModuleCrates;
 import com.ulfric.core.economy.ModuleEconomyInterface;
 import com.ulfric.core.enchant.ModuleEnchants;
 import com.ulfric.core.fly.ModuleFly;
@@ -109,6 +110,7 @@ public class Core extends Plugin {
 		this.addModule(new ModuleWorkbench());
 		this.addModule(new ModuleFireball());
 		this.addModule(new ModuleLJMessages());
+		this.addModule(ModuleCrates.INSTANCE);
 	}
 
 }
