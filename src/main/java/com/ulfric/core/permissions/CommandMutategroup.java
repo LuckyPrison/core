@@ -23,6 +23,7 @@ final class CommandMutategroup extends BaseCommand {
 
 		this.addCommand(new CommandAdd(owner, addable));
 		this.addCommand(new CommandRemove(owner, addable));
+		this.addCommand(new CommandSwap(owner));
 		this.addCommand(new CommandObserve(owner, addable));
 	}
 
