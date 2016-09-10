@@ -34,6 +34,7 @@ public class ModuleEconomyInterface extends Module {
 		this.addCommand(new CommandSetbalance(this));
 
 		this.addListener(new SignBalance(this));
+		this.addListener(new SignBuy(this));
 
 		this.addListener(new Listener(this)
 		{

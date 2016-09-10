@@ -122,7 +122,7 @@ public final class Mine extends NamedBase implements Comparable<Mine> {
 
 					if (!shape.containsPoint(player.getLocation())) continue;
 
-					ThreadUtils.run(() -> player.teleport(player.getLocation().setY(shape.getMaxPoint().getIntY() + 3)));
+					ThreadUtils.runLater(() -> player.teleport(player.getLocation().setY(shape.getMaxPoint().getIntY() + 3)), 20L);
 				}
 			}
 

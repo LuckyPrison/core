@@ -296,11 +296,6 @@ public final class Punishments {
 		}
 	}
 
-	public Punisher getPunisher(UUID uuid)
-	{
-		return this.holders.get(uuid);
-	}
-
 	public List<Punishment> getAllPunishments(PunishmentType type)
 	{
 		if (type == null)
