@@ -1,9 +1,11 @@
 package com.ulfric.core.crate;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import com.google.common.collect.Lists;
+import com.ulfric.config.ConfigFile;
 import com.ulfric.config.Document;
 import com.ulfric.config.MutableDocument;
 import com.ulfric.core.reward.Rewards;
@@ -16,12 +18,22 @@ import com.ulfric.lib.coffee.command.Command;
 import com.ulfric.lib.coffee.command.CommandSender;
 import com.ulfric.lib.coffee.command.Resolvers;
 import com.ulfric.lib.coffee.data.DataManager;
+import com.ulfric.lib.coffee.economy.Currency;
+import com.ulfric.lib.coffee.economy.CurrencyAmount;
+import com.ulfric.lib.coffee.event.Handler;
+import com.ulfric.lib.coffee.event.Listener;
 import com.ulfric.lib.coffee.module.Module;
+import com.ulfric.lib.craft.block.Block;
 import com.ulfric.lib.craft.command.Enforcers;
 import com.ulfric.lib.craft.entity.player.OfflinePlayer;
 import com.ulfric.lib.craft.entity.player.Player;
 import com.ulfric.lib.craft.entity.player.PlayerUtils;
+import com.ulfric.lib.craft.event.player.PlayerInteractEvent;
+import com.ulfric.lib.craft.inventory.item.ItemParts;
+import com.ulfric.lib.craft.inventory.item.ItemStack;
+import com.ulfric.lib.craft.inventory.item.Material;
 import com.ulfric.lib.craft.location.LocationUtils;
+import com.ulfric.lib.craft.world.WorldUtils;
 
 public final class ModuleCrates extends Module {
 
@@ -44,6 +56,38 @@ public final class ModuleCrates extends Module {
 
 		this.addCommand(new CommandKeys());
 		this.addCommand(new CommandGivekey());
+
+		this.addListener(new Listener(this) {
+
+			@Handler
+			public void on(PlayerInteractEvent event)
+			{
+				if (event.getAction() != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
+				{
+					return;
+				}
+
+				Block block = event.getBlock();
+
+				if (block == null || block.getType() != Material.of("CHEST"))
+				{
+					return;
+				}
+
+				for (Crate crate : ModuleCrates.this.crates)
+				{
+					if (crate.atLocation(block.getLocation()))
+					{
+						crate.open(event.getPlayer());
+
+						event.setCancelled(true);
+
+						break;
+					}
+				}
+			}
+
+		});
 	}
 
 	private void loadSubscription()
@@ -61,6 +105,11 @@ public final class ModuleCrates extends Module {
 	{
 		MutableDocument document = this.getModuleConfig().getRoot();
 
+		if (document.getDocument("crates") == null)
+		{
+			saveDefault();
+		}
+
 		document.getDocument("crates").getKeys().forEach(key ->
 		{
 			MutableDocument section = document.getDocument("crates." + key);
@@ -72,10 +121,59 @@ public final class ModuleCrates extends Module {
 
 			section.getStringList("locations").stream().map(LocationUtils::fromString).forEach(builder::withLocation);
 
-			builder.withReward(Rewards.parseMultiReward(section.getDocument("rewards")));
+			section.getDocument("rewards").getKeys().forEach(rewardKey ->
+			{
+				Document rewardSection = section.getDocument("rewards." + rewardKey);
+
+				builder.withReward(new IconnedReward(
+						Rewards.parseReward(rewardSection.getDocument("reward")),
+						ItemParts.stringToItem(rewardSection.getString("icon"))
+				), rewardSection.getInteger("weight"));
+			});
 
 			this.crates.add(builder.build());
 		});
+	}
+
+	private void saveDefault()
+	{
+		ConfigFile config = this.getModuleConfig();
+
+		MutableDocument document = config.getRoot();
+
+		document.set("crates.0.id", 0);
+		document.set("crates.0.name", "DefaultCrate");
+		document.set("crates.0.locations",
+				Collections.singletonList(
+						LocationUtils.toString(LocationUtils.getLocationAt(WorldUtils.getWorlds().get(0), 0, 100, 0))
+				)
+		);
+		document.set("crates.0.rewards.0.icon", ItemParts.itemToString(ItemStack.builder().setType(Material.of("DIRT")).build()));
+		document.set("crates.0.rewards.0.weight", 10);
+		document.set("crates.0.rewards.0.reward.type", "money");
+		document.set("crates.0.rewards.0.reward.amount", CurrencyAmount.of(Currency.getDefaultCurrency(), 100L).toString());
+
+		document.set("crates.0.rewards.1.icon", ItemParts.itemToString(ItemStack.builder().setType(Material.of("STONE")).build()));
+		document.set("crates.0.rewards.1.weight", 20);
+		document.set("crates.0.rewards.1.reward.type", "money");
+		document.set("crates.0.rewards.1.reward.amount", CurrencyAmount.of(Currency.getDefaultCurrency(), 200L).toString());
+
+		document.set("crates.0.rewards.2.icon", ItemParts.itemToString(ItemStack.builder().setType(Material.of("APPLE")).build()));
+		document.set("crates.0.rewards.2.weight", 30);
+		document.set("crates.0.rewards.2.reward.type", "money");
+		document.set("crates.0.rewards.2.reward.amount", CurrencyAmount.of(Currency.getDefaultCurrency(), 300L).toString());
+
+		document.set("crates.0.rewards.3.icon", ItemParts.itemToString(ItemStack.builder().setType(Material.of("DIAMOND")).build()));
+		document.set("crates.0.rewards.3.weight", 20);
+		document.set("crates.0.rewards.3.reward.type", "money");
+		document.set("crates.0.rewards.3.reward.amount", CurrencyAmount.of(Currency.getDefaultCurrency(), 400L).toString());
+
+		document.set("crates.0.rewards.4.icon", ItemParts.itemToString(ItemStack.builder().setType(Material.of("GOLD_INGOT/")).build()));
+		document.set("crates.0.rewards.4.weight", 10);
+		document.set("crates.0.rewards.4.reward.type", "money");
+		document.set("crates.0.rewards.4.reward.amount", CurrencyAmount.of(Currency.getDefaultCurrency(), 500L).toString());
+
+		config.save();
 	}
 
 	public MultiSubscription<UUID, Document> getSubscription()
